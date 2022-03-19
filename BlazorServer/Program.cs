@@ -1,5 +1,5 @@
-using BlazorSrever.Areas.Identity;
-using BlazorSrever.Data;
+using BlazorServer.Areas.Identity;
+using BlazorServer.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

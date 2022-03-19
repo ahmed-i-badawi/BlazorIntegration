@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "BlazorSrever": {
+    "BlazorServer": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

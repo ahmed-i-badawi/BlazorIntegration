@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["BlazorSrever/BlazorSrever.csproj", "BlazorSrever/"]
-RUN dotnet restore "BlazorSrever/BlazorSrever.csproj"
+COPY ["BlazorServer/BlazorServer.csproj", "BlazorServer/"]
+RUN dotnet restore "BlazorServer/BlazorServer.csproj"
 COPY . .
-WORKDIR "/src/BlazorSrever"
-RUN dotnet build "BlazorSrever.csproj" -c Release -o /app/build
+WORKDIR "/src/BlazorServer"
+RUN dotnet build "BlazorServer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "BlazorSrever.csproj" -c Release -o /app/publish
+RUN dotnet publish "BlazorServer.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BlazorSrever.dll"]
+ENTRYPOINT ["dotnet", "BlazorServer.dll"]
