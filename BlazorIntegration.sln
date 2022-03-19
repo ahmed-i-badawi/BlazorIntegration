@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32210.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSrever", "BlazorSrever\BlazorSrever.csproj", "{C42467E1-6607-4AF2-BED5-14943B1938BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C42467E1-6607-4AF2-BED5-14943B1938BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42467E1-6607-4AF2-BED5-14943B1938BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42467E1-6607-4AF2-BED5-14943B1938BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42467E1-6607-4AF2-BED5-14943B1938BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDC9D85C-9DB4-4F11-8FBA-431C47723D0D}
+	EndGlobalSection
+EndGlobal
