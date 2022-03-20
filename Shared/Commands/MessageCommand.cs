@@ -12,5 +12,6 @@ namespace Shared.Commands
         public int BrandId { get; set; }
         public string Notes { get; set; }
         public int StatusId { get; set; }
+        public string connId { get; set; }
     }
 }

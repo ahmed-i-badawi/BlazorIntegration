@@ -17,7 +17,14 @@ namespace WebAPi.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> GetMessageStatus([FromBody] MessageCommand request)
         {
+            // send all opened connections
             await _hubContext.Clients.All.SendAsync("ReceiveMessage", request);
+
+            //send user by id (no)
+            //await _hubContext.Clients.User("daa62ebc-edd9-4efe-8ad0-88c07fd707da").SendAsync("ReceiveMessage", request);
+
+            // to send connectionId
+            //await _hubContext.Clients.Client(request.connId).SendAsync("ReceiveMessage", request);
 
             return Ok("done");
         }

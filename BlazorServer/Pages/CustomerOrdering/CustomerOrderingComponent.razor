@@ -36,12 +36,11 @@
     {
         if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
-
             _hubUrl = "https://localhost:7029/MessagingHub";
             connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
             await connection.StartAsync();
             IsConnected = true;
-
+            MessageFM.connId = connection.ConnectionId;
             connection.Closed += async (e) =>
             {
                 IsConnected = false;
