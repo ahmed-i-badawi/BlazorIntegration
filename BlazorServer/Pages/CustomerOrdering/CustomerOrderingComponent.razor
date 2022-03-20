@@ -1,0 +1,71 @@
+﻿@using global::Shared.Commands
+@using Microsoft.AspNetCore.SignalR.Client
+@using BlazorServer.Services
+@inject IHttpContextAccessor httpContextAccessor
+
+<h1>Blazor Hub</h1>
+
+@if (MessageFM != null)
+{
+    <div class="container">
+        <input type="number" id="BrandId" class="form-control" @bind="@MessageFM.BrandId" placeholder="BrandId" /><br />
+        <input type="number" id="BranchId" class="form-control" @bind="@MessageFM.BranchId" placeholder="BranchId" /><br />
+        <input type="number" id="ProductId" class="form-control" @bind="@MessageFM.ProductId" placeholder="ProductId" /><br />
+        <input type="text" id="Notes" class="form-control" @bind="@MessageFM.Notes" placeholder="Notes" /><br />
+
+        <input type="button" id="Send Order" value="Send Order" class="btn btn-primary" @onclick="@Connect" disabled="@IsConnected"/>
+        <ul id="discussion">
+            @foreach (var message in _messages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+
+
+@code {
+    public MessageCommand MessageFM { get; set; } = new MessageCommand();
+    HubConnection connection = null;
+    private IList<string> _messages = new List<string>();
+    private string _hubUrl;
+    private string _username;
+    public bool IsConnected { get; set; } = false;
+
+    protected async Task ConnectionHandler()
+    {
+        if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        {
+
+            _hubUrl = "https://localhost:7029/MessagingHub";
+            connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
+            await connection.StartAsync();
+            IsConnected = true;
+
+            connection.Closed += async (e) =>
+            {
+                IsConnected = false;
+                await connection.StartAsync();
+                IsConnected = true;
+            };
+
+            connection.On<MessageCommand>("ReceiveMessage", this.ReceiveMessage);
+        }
+    }
+
+    protected async Task Connect()
+    {
+
+        await ConnectionHandler();
+    }
+
+    Task ReceiveMessage(MessageCommand dto)
+    {
+        _messages.Add($"Branch: {dto.BranchId} - Brand: {dto.BranchId} - Product Id: {dto.ProductId} - Notes: {dto.Notes} - Time: {DateTime.Now} - Status: {dto.StatusId}");
+        StateHasChanged();
+        IsConnected = false;
+        return Task.CompletedTask;
+    }
+
+}
