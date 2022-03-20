@@ -10,7 +10,6 @@ namespace Shared.Commands
     {
         public int BranchId { get; set; }
         public int BrandId { get; set; }
-        public int ProductId { get; set; }
         public string Notes { get; set; }
         public int StatusId { get; set; }
     }

@@ -10,7 +10,6 @@
     <div class="container">
         <input type="number" id="BrandId" class="form-control" @bind="@MessageFM.BrandId" placeholder="BrandId" /><br />
         <input type="number" id="BranchId" class="form-control" @bind="@MessageFM.BranchId" placeholder="BranchId" /><br />
-        <input type="number" id="ProductId" class="form-control" @bind="@MessageFM.ProductId" placeholder="ProductId" /><br />
         <input type="text" id="Notes" class="form-control" @bind="@MessageFM.Notes" placeholder="Notes" /><br />
 
         <input type="button" id="Send Order" value="Send Order" class="btn btn-primary" @onclick="@Connect" disabled="@IsConnected"/>
@@ -62,7 +61,7 @@
 
     Task ReceiveMessage(MessageCommand dto)
     {
-        _messages.Add($"Branch: {dto.BranchId} - Brand: {dto.BranchId} - Product Id: {dto.ProductId} - Notes: {dto.Notes} - Time: {DateTime.Now} - Status: {dto.StatusId}");
+        _messages.Add($"Branch: {dto.BranchId} - Brand: {dto.BranchId} - Notes: {dto.Notes} - Time: {DateTime.Now} - Status: {dto.StatusId}");
         StateHasChanged();
         IsConnected = false;
         return Task.CompletedTask;
