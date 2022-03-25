@@ -21,12 +21,13 @@ namespace WebAPi.Controllers
         public async Task<ActionResult<string>> GetMessageStatus([FromBody] MessageCommand request)
         {
 
-            bool isExist = UserHandler.Connections.Any(e => e.BrandId == request.BrandId && e.BranchId == request.BranchId);
+            MessageCommand obj = UserHandler.Connections.FirstOrDefault(e => e.BrandId == request.BrandId && e.BranchId == request.BranchId);
           
 
-            if (isExist)
+            if (obj != null)
             {
-
+                await _hubContext.Clients.Client(obj.connId).SendAsync("ReceiveMessage", request);
+                return Ok("done");
             }
             //else
             //{
@@ -35,12 +36,11 @@ namespace WebAPi.Controllers
             //}
 
             // to send connectionId
-            await _hubContext.Clients.Client(request.connId).SendAsync("ReceiveMessage", request);
 
             //send user by id (no)
             //await _hubContext.Clients.User("daa62ebc-edd9-4efe-8ad0-88c07fd707da").SendAsync("ReceiveMessage", request);
+            return NotFound("NotFoundddddddddd");
 
-            return Ok("done");
         }
     }
 }

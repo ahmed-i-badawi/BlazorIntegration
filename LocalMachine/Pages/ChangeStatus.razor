@@ -5,18 +5,19 @@
 @inject HttpClient _http
 
 <div class="container">
+    <input type="text" id="StatusId" class="form-control" @bind="@StatusId" placeholder="StatusId" /><br />
+    <input type="text" id="BrandId" class="form-control" @bind="@BrandId" placeholder="BrandId" /><br />
+    <input type="text" id="BranchId" class="form-control" @bind="@BranchId" placeholder="BranchId" /><br />
     <input type="text" id="Notes" class="form-control" @bind="@Notes" placeholder="Notes" /><br />
-    <input type="text" id="ConnectionId" class="form-control" @bind="@ConnectionId" placeholder="ConnectionId" /><br />
     @*<input type="number" id="StatusId" class="form-control" @bind="@StatusId" placeholder="StatusId" /><br />*@
     <input type="button" id="Update Order" value="Update Order" class="btn btn-primary" @onclick="@Submit" />
 </div>
 
 @code {
     public string Notes { get; set; }
-    public string ConnectionId { get; set; }
     public int StatusId { get; set; }
-    public int BrandId { get; set; } = 22;
-    public int BranchId { get; set; } = 11;
+    public int BrandId { get; set; }
+    public int BranchId { get; set; }
     public MessageCommand Request { get; set; }
     //HubConnection connection = null;
     //private string _hubUrl;
@@ -44,8 +45,8 @@
                 BrandId = BrandId,
                 BranchId = BranchId,
                 Notes = Notes,
-                connId = ConnectionId,
-                StatusId = StatusId
+                connId = " ",
+                StatusId = StatusId,
             };
         // -------------
         var Url = "https://localhost:7029/api/";

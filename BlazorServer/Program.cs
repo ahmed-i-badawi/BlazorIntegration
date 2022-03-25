@@ -53,6 +53,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseWebSockets();
 app.UseAuthentication();
 app.UseAuthorization();
 

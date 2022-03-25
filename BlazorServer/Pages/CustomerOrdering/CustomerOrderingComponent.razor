@@ -1,5 +1,6 @@
 ﻿@using System.Net.NetworkInformation
 @using BlazorServer.Extensions
+@using System.Net.Http.Headers
 @using global::Shared.Commands
 @using Microsoft.AspNetCore.SignalR.Client
 @using BlazorServer.Services
@@ -69,8 +70,22 @@
 
             MessageFM.connId = connection.ConnectionId;
 
+             // -------------
+        var Url = "https://localhost:7029/api/";
+        var log = new
+        {
+            username = "jason_admin",
+            password = "MyPass_w0rd"
+        };
+        var loginTokenReq = _http.PostAsJsonAsync($"{Url}login", log);
+        string loginToken = await loginTokenReq.Result.Content.ReadAsStringAsync();
+
+        _http.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", loginToken);
+        // -------------
+
             // --------------------
-            var response = _http.PostAsJsonAsync("https://localhost:7029/api/Message/GetMessageStatus", MessageFM);
+            var response = _http.PostAsJsonAsync($"{Url}/Message/GetMessageStatus", MessageFM);
             Status = await response.Result.Content.ReadAsStringAsync();
             // --------------------
 
