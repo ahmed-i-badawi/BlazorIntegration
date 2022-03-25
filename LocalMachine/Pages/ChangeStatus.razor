@@ -1,0 +1,68 @@
+﻿@page "/ChangeStatus"
+@using System.Net.Http.Headers
+@using global::Shared.Commands
+@using Microsoft.AspNetCore.SignalR.Client
+@inject HttpClient _http
+
+<div class="container">
+    <input type="text" id="Notes" class="form-control" @bind="@Notes" placeholder="Notes" /><br />
+    <input type="text" id="ConnectionId" class="form-control" @bind="@ConnectionId" placeholder="ConnectionId" /><br />
+    @*<input type="number" id="StatusId" class="form-control" @bind="@StatusId" placeholder="StatusId" /><br />*@
+    <input type="button" id="Update Order" value="Update Order" class="btn btn-primary" @onclick="@Submit" />
+</div>
+
+@code {
+    public string Notes { get; set; }
+    public string ConnectionId { get; set; }
+    public int StatusId { get; set; }
+    public int BrandId { get; set; } = 22;
+    public int BranchId { get; set; } = 11;
+    public MessageCommand Request { get; set; }
+    //HubConnection connection = null;
+    //private string _hubUrl;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //_hubUrl = "https://localhost:7029/MessagingHub";
+        //connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
+
+        //connection.On<MessageCommand>("ReceiveMessage", this.ReceiveMessage);
+    }
+
+    //Task ReceiveMessage(MessageCommand dto)
+    //{
+    //    StatusId = dto.StatusId;
+    //    StateHasChanged();
+    //    return Task.CompletedTask;
+    //}
+
+    private async Task Submit()
+    {
+        Request = new MessageCommand()
+            {
+                BrandId = BrandId,
+                BranchId = BranchId,
+                Notes = Notes,
+                connId = ConnectionId,
+                StatusId = StatusId
+            };
+        // -------------
+        var Url = "https://localhost:7029/api/";
+        var log = new
+        {
+            username = "jason_admin",
+            password = "MyPass_w0rd"
+        };
+        var loginTokenReq = _http.PostAsJsonAsync($"{Url}login", log);
+        string loginToken = await loginTokenReq.Result.Content.ReadAsStringAsync();
+
+        _http.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", loginToken);
+        // -------------
+        var respone = _http.PostAsJsonAsync($"{Url}Message/GetMessageStatus", Request);
+        string res = await respone.Result.Content.ReadAsStringAsync();
+
+    }
+
+}
