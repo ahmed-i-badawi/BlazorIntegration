@@ -45,13 +45,15 @@ public class LoginController : ApiControllerBase
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        string serialNo = "";
+
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Username),
             new Claim(ClaimTypes.Email, user.EmailAddress),
             new Claim(ClaimTypes.GivenName, user.GivenName),
             new Claim(ClaimTypes.Surname, user.Surname),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.SerialNumber, user.Role)
         };
 
         var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -66,10 +68,15 @@ public class LoginController : ApiControllerBase
     private UserModel Authenticate(UserLogin userLogin)
     {
         var currentUser = UserConstants.Users.FirstOrDefault(o => o.Username.ToLower() == userLogin.Username.ToLower() && o.Password == userLogin.Password);
+        string serialNo = UserConstants.Serials.FirstOrDefault(e => e == userLogin.SerialNumber);
+
 
         if (currentUser != null)
         {
-            return currentUser;
+            if ((currentUser.Role == "POS" && serialNo != null) || currentUser.Role == "Customer")
+            {
+                return currentUser;
+            }
         }
 
         return null;

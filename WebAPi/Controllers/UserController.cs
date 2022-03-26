@@ -16,7 +16,7 @@ public class UserController : ApiControllerBase
 {
 
     [HttpGet("Admins")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "POS")]
     public IActionResult AdminsEndpoint()
     {
         var currentUser = GetCurrentUser();
@@ -35,7 +35,7 @@ public class UserController : ApiControllerBase
     }
 
     [HttpGet("AdminsAndSellers")]
-    [Authorize(Roles = "Administrator,Seller")]
+    [Authorize(Roles = "POS,Customer")]
     public IActionResult AdminsAndSellersEndpoint()
     {
         var currentUser = GetCurrentUser();
