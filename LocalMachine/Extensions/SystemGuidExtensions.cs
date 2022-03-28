@@ -25,15 +25,15 @@ public class SystemGuid
 
     public string ValueAsync()
     {
-            var lVolSl = GetVolumeSerial();
-            //var lCompMod = GetComputerModel();
-            var lCpuId = GetCpuId();
-            var lBiosId = GetBiosId();
-            var lMainboard = GetMainboardId();
-            var lGpuId = GetGpuId();
-            var lMac = GetMac();
-            var lConcatStr = $"CPU: {lCpuId}\nBIOS:{lBiosId}\nMainboard: {lMainboard}\nGPU: {lGpuId}\nMAC: {lMac}\nVolume: {lVolSl}";
-            _systemGuid = GetHash(lConcatStr);
+        var lVolSl = GetRunningOSDriveSerialNumber();
+        //var lCompMod = GetComputerModel();
+        var lCpuId = GetCpuId();
+        var lBiosId = GetBiosId();
+        var lMainboard = GetMainboardId();
+        var lGpuId = GetGpuId();
+        var lMac = GetMac();
+        var lConcatStr = $"CPU: {lCpuId}\nBIOS:{lBiosId}\nMainboard: {lMainboard}\nGPU: {lGpuId}\nMAC: {lMac}\nVolume: {lVolSl}";
+        _systemGuid = GetHash(lConcatStr);
         return _systemGuid;
     }
 
@@ -127,8 +127,8 @@ public class SystemGuid
         return lResult;
     }
 
-    private static List<string> ListOfCpuProperties = new List<string> 
-    { 
+    private static List<string> ListOfCpuProperties = new List<string>
+    {
         "UniqueId",
         "ProcessorId",
         "Name",
@@ -146,76 +146,88 @@ public class SystemGuid
         return GetIdentifier("Win32_Processor", ListOfCpuProperties);
     }
 
-    private static List<string> ListOfBiosProperties = new List<string> { "Manufacturer", "SMBIOSBIOSVersion", "IdentificationCode", "SerialNumber", "ReleaseDate", "Version" };
+    private static List<string> ListOfBiosProperties = new List<string>
+    {
+        "Manufacturer",
+        "SMBIOSBIOSVersion",
+        "IdentificationCode",
+        "SerialNumber",
+        "ReleaseDate",
+        "Version"
+    };
     //BIOS Identifier
     private string GetBiosId()
     {
         return GetIdentifier("Win32_BIOS", ListOfBiosProperties);
     }
 
-    private static List<string> ListOfMainboardProperties = new List<string> { "Model", "Manufacturer", "Name", "SerialNumber" };
+    private static List<string> ListOfMainboardProperties = new List<string>
+    { "Model",
+        "Manufacturer",
+        "Name",
+        "SerialNumber"
+    };
     //Motherboard ID
     private string GetMainboardId()
     {
         return GetIdentifier("Win32_BaseBoard", ListOfMainboardProperties);
     }
 
-    private static List<string> ListOfGpuProperties = new List<string> { "Name", "Description" };
+    private static List<string> ListOfGpuProperties = new List<string>
+    {
+        "Name",
+        "Description"
+    };
     //Primary video controller ID
     private string GetGpuId()
     {
         return GetIdentifier("Win32_VideoController", ListOfGpuProperties);
     }
 
-    private static List<string> ListOfNetworkProperties = new List<string> { "MACAddress" };
+    private static List<string> ListOfNetworkProperties = new List<string>
+    {
+        "MACAddress"
+    };
     private string GetMac()
     {
         return GetIdentifier("Win32_NetworkAdapterConfiguration", ListOfNetworkProperties);
     }
 
-    private static List<string> ListOfGetVolumeProperties = new List<string> { "SerialNumber" };
-    private string GetVolumeSerial()
+    private string GetRunningOSDriveSerialNumber()
     {
-        return GetIdentifier("Win32_DiskDrive", ListOfGetVolumeProperties);
-
-        ManagementObjectSearcher searcher =
-              new ManagementObjectSearcher("root\\CIMV2",
-              "SELECT * FROM Win32_DiskDrive");
-
-        foreach (ManagementObject queryObj in searcher.Get())
+        try
         {
-            Console.WriteLine("SerialNumber: {0}", queryObj["SerialNumber"]);
-            Console.WriteLine("Signature: {0}", queryObj["Signature"]);
-        }
-    }
-    private static List<string> ListOfDriveProperties = new List<string> { "SerialNumber" };
+            string windir = Path.GetPathRoot(Environment.SystemDirectory);
 
-    public string GetDriveLetterAndLabelFromID(string id)
-    {
-        var rr =  GetIdentifier(@"Win32_Diskdrive", ListOfDriveProperties);
-
-
-        ManagementClass devs = new ManagementClass(@"Win32_Diskdrive");
-        {
-            ManagementObjectCollection moc = devs.GetInstances();
-            foreach (ManagementObject mo in moc)
+            var driveSerialnumber = string.Empty;
+            var pathRoot = Path.GetPathRoot(windir);
+            if (pathRoot == null)
             {
-                string a = (string)mo["SerialNumber"];
-                if (a == id)
+                return driveSerialnumber;
+            }
+            var driveFixed = pathRoot.Replace("\\", "");
+            if (driveFixed.Length == 1)
+            {
+                driveFixed = driveFixed + ":";
+            }
+            var wmiQuery = string.Format($"SELECT VolumeSerialNumber FROM Win32_LogicalDisk Where Name = '{driveFixed}'");
+            using (var driveSearcher = new ManagementObjectSearcher(wmiQuery))
+            {
+                using (var driveCollection = driveSearcher.Get())
                 {
-                    foreach (ManagementObject b in
-                    mo.GetRelated("Win32_DiskPartition"))
+                    foreach (var moItem in driveCollection.Cast<ManagementObject>())
                     {
-                        foreach (ManagementBaseObject c in b.GetRelated("Win32_LogicalDisk"))
-                        {
-                            string result = $"HardDrive Name: {c["VolumeName"].ToString()}\nHardDrive Letter: {c["DeviceID"]}";
-                            return result;
-                        }
+                        driveSerialnumber = Convert.ToString(moItem["VolumeSerialNumber"]);
                     }
                 }
             }
+            return driveSerialnumber;
         }
-        return null;
+        catch (Exception ex)
+        {
+            //handle the error your way
+            return string.Empty;
+        }
     }
 
     #endregion

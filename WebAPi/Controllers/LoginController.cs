@@ -1,4 +1,4 @@
-﻿using JwtApp.Models;
+﻿using WebAPi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -67,8 +67,8 @@ public class LoginController : ApiControllerBase
 
     private UserModel Authenticate(UserLogin userLogin)
     {
-        var currentUser = UserConstants.Users.FirstOrDefault(o => o.Username.ToLower() == userLogin.Username.ToLower() && o.Password == userLogin.Password);
-        string serialNo = UserConstants.Serials.FirstOrDefault(e => e == userLogin.SerialNumber);
+        var currentUser = Constants.Users.FirstOrDefault(o => o.Username.ToLower() == userLogin.Username.ToLower() && o.Password == userLogin.Password);
+        string serialNo = Constants.Serials.FirstOrDefault(e => e == userLogin.SerialNumber);
 
 
         if (currentUser != null)

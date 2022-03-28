@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JwtApp.Models
+namespace WebAPi.Models
 {
     public class UserLogin
     {
