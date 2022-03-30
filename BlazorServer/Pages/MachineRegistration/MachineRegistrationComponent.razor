@@ -1,0 +1,79 @@
+﻿@using BlazorServer.Services
+@using Microsoft.AspNetCore.SignalR.Client
+@using System.Net.Http.Headers
+@using global::Shared.Commands
+@inject HttpClient _http
+@inject ApiService apiService
+
+<h3>Machine Registration Component</h3>
+
+@if (FModel != null)
+{
+    <div class="container">
+        <input type="text" id="Hash" class="form-control" @bind="@FModel.Hash" placeholder="Hash" /><br />
+        <input type="text" id="MachineName" class="form-control" @bind="@FModel.MachineName" placeholder="MachineName" /><br />
+        <input type="text" id="Notes" class="form-control" @bind="@FModel.Notes" placeholder="Notes" /><br />
+
+        <input type="button" id="Add Machine" value="Add Machine" class="btn btn-primary" @onclick="@Submit" disabled="@IsConnected" />
+    </div>
+
+    <ul id="discussion">
+        @foreach (var message in _messages)
+        {
+            <li>@message</li>
+        }
+    </ul>
+
+}
+
+@code {
+    public MachineRegistrationCommand FModel { get; set; } = new MachineRegistrationCommand();
+    HubConnection connection = null;
+    private IList<string> _messages = new List<string>();
+    private string _hubUrl;
+    private string _username;
+    private bool IsConnected => HubConnectionState.Connected == connection?.State;
+    public string Status { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FModel = new MachineRegistrationCommand();
+    }
+
+    protected async Task Submit()
+    {
+        await ConnectionHandler();
+    }
+
+    protected async Task ConnectionHandler()
+    {
+        var isValidRegister = _http.PostAsJsonAsync($"api/MachineRegistration/ValidateRegister", FModel);
+        bool isValidRegisterRes = await isValidRegister.Result.Content.ReadFromJsonAsync<bool>();
+
+        if (isValidRegisterRes)
+        {
+            _hubUrl = apiService.HubUrl;
+            connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
+            await connection.StartAsync();
+
+            FModel.ConnectionId = connection.ConnectionId;
+            var register = _http.PostAsJsonAsync($"api/MachineRegistration/RegisterMachine", FModel);
+            bool registerRes = await register.Result.Content.ReadFromJsonAsync<bool>();
+
+            connection.Closed += async (e) =>
+            {
+                await connection.StartAsync();
+            };
+
+            connection.On<string>("ReceiveMessage", this.ReceiveMessage);
+        }
+    }
+
+    Task ReceiveMessage(string status)
+    {
+        _messages.Add($"Time: {DateTime.Now} - Your Machine {status} Successfully");
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+}

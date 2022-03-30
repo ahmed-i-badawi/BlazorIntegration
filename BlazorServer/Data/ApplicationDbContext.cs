@@ -11,7 +11,9 @@ namespace BlazorServer.Data
             : base(options)
         {
         }
-
-        public DbSet<Connection> Connections { get; }
+        public DbSet<Connection> Connections => Set<Connection>();
+        public DbSet<Brand> Brands => Set<Brand>();
+        public DbSet<Branch> Branchs => Set<Branch>();
+        public DbSet<Machine> Machines => Set<Machine>();
     }
 }
