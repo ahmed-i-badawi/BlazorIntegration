@@ -1,7 +1,9 @@
 ﻿using BlazorServer.Data;
+using BlazorServer.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Shared.Commands;
+using Shared.Enums;
 
 namespace BlazorServer.Services;
 
@@ -37,7 +39,13 @@ public class MessagingHub : Hub
         var machineDisconnected = _context.Machines.FirstOrDefault(e => e.ConnectionId == e.ConnectionId);
         if (machineDisconnected != null)
         {
-            _context.Machines.Remove(machineDisconnected);
+            MachineLog machineLog = new MachineLog()
+            {
+                MachineId = machineDisconnected.Id,
+                OccurredAt = DateTime.Now,
+                Status = MachineStatus.Closed
+            };
+            _context.MachineLogs.Add(machineLog);
             _context.SaveChanges();
         }
 

@@ -9,6 +9,7 @@ namespace WorkerService
         private readonly ILogger<Worker> _logger;
 
         public HttpClient _httpClient;
+        public string _token;
 
         public Worker(IHttpClientFactory httpClient, ILogger<Worker> logger)
         {
@@ -19,16 +20,17 @@ namespace WorkerService
 
         private async Task RegisterCurrentMachine()
         {
-            SystemGuid systemGuid = new SystemGuid();
-            var fingerPrint = systemGuid.ValueAsync();
+            SystemInfo sysInfoObj = new SystemInfo(); 
+            var sysInfo = sysInfoObj.ValueAsync();
 
             var myObject = new
             {
-                FingerPrint = fingerPrint
+                SystemInfo = sysInfo
             };
 
-            var result = _httpClient.PostAsJsonAsync("api/MachineRegistration/SubmitMachine", myObject);
+            var result = _httpClient.PostAsJsonAsync("api/Machine/Login", myObject);
             var finalRes = result.Result.Content.ReadAsStringAsync();
+            _token = finalRes.Result;
         }
 
         public override async Task StartAsync(CancellationToken stoppingToken)

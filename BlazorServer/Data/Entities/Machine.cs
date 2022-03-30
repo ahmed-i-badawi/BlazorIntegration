@@ -8,9 +8,11 @@ public class Machine
     public string? FingerPrint { get; set; }
     public string Name { get; set; }
     public DateTime DateAdded { get; set; }
-    public MachineRegistrationStatus Status { get; set; }
+    public MachineStatus CurrentStatus { get; set; }
     public string? ConnectionId { get; set; }
 
     public int BrandId { get; set; }
     public Brand Brand { get; set; }
+
+    public List<MachineLog>? MachineLogs { get; set; }
 }

@@ -8,6 +8,6 @@ namespace Shared.Commands
 {
     public class SubmitMachineCommand
     {
-        public string FingerPrint { get; set; }
+        public string SystemInfo { get; set; }
     }
 }

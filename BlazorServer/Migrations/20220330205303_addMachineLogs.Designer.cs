@@ -4,6 +4,7 @@ using BlazorServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220330205303_addMachineLogs")]
+    partial class addMachineLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +113,7 @@ namespace BlazorServer.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Branchs", (string)null);
+                    b.ToTable("Branchs");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Brand", b =>
@@ -131,7 +133,7 @@ namespace BlazorServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Connection", b =>
@@ -148,7 +150,7 @@ namespace BlazorServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Connections", (string)null);
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>
@@ -165,9 +167,6 @@ namespace BlazorServer.Migrations
                     b.Property<string>("ConnectionId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CurrentStatus")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
@@ -178,11 +177,14 @@ namespace BlazorServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Machines", (string)null);
+                    b.ToTable("Machines");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.MachineLog", b =>
@@ -193,20 +195,20 @@ namespace BlazorServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ConnectionStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("MachineId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OccurredAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("MachineLogs", (string)null);
+                    b.ToTable("MachineLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
