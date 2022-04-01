@@ -32,7 +32,7 @@ namespace WorkerService
         
         Task NewOrder(string arg)
         {
-            _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
+            _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order");
             //connection.StopAsync();
             return Task.CompletedTask;
         }
