@@ -24,8 +24,21 @@ namespace WorkerService
             _httpClient.BaseAddress = new Uri($"https://localhost:7032/");
             _logger = logger;
         }
-        private async Task<string> OpenConnection()
+
+        Task MachineIsAdded(string arg)
         {
+            _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
+            connection.StopAsync();
+            return Task.CompletedTask;
+        }
+
+        private async Task RegisterCurrentMachine()
+        {
+            // start connection and send connId, sysInfo to server;
+            // if exist => log in
+            // if not => waiting registeration event from server Interface
+            // on server register on current systeminfo if machine status pending
+
 
             SystemInfo sysInfoObj = new SystemInfo();
             var sysInfo = sysInfoObj.ValueAsync();
@@ -41,47 +54,7 @@ namespace WorkerService
 
             connection.On<string>("MachineIsAdded", this.MachineIsAdded);
 
-            return connection.ConnectionId;
-        }
-
-        Task MachineIsAdded(string arg)
-        {
-            _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - Your Machine Added Successfully");
-            connection.StopAsync();
-            return Task.CompletedTask;
-        }
-
-        private async Task RegisterCurrentMachine()
-        {
-            // start connection and send connId, sysInfo to server;
-            // if exist => log in
-            // if not => waiting registeration event from server Interface
-            // on server register on current systeminfo if machine status pending
-
-            var connectionId = await OpenConnection();
-
- 
-
-            //var result = _httpClient.PostAsJsonAsync("api/Machine/MachineLogin", myObject);
-            //var finalRes = result.Result.Content.ReadAsStringAsync();
-            //_token = finalRes.Result;
-
             return;
-
-            // -----------------------------
-            // old
-
-            //SystemInfo sysInfoObj = new SystemInfo(); 
-            //var sysInfo = sysInfoObj.ValueAsync();
-
-            //var myObject = new
-            //{
-            //    SystemInfo = sysInfo
-            //};
-
-            //var result = _httpClient.PostAsJsonAsync("api/Machine/Login", myObject);
-            //var finalRes = result.Result.Content.ReadAsStringAsync();
-            //_token = finalRes.Result;
         }
 
         public override async Task StartAsync(CancellationToken stoppingToken)

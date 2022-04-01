@@ -40,5 +40,14 @@
     {
         var register = _http.PostAsJsonAsync($"api/Machine/RegisterMachine", FModel);
         bool registerRes = await register.Result.Content.ReadFromJsonAsync<bool>();
+        if (registerRes)
+        {
+            _messages.Add($"Machine {FModel.MachineName} Registered Successfully");
+        }
+        else
+        {
+            _messages.Add($"Machine {FModel.MachineName} Not Connected or Already Registered");
+        }
+        StateHasChanged();
     }
 }

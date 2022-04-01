@@ -35,26 +35,6 @@ public class MessagingHub : Hub
     public const string HubUrl = "/MessagingHub";
     private readonly IApplicationDbContext context;
 
-    //private async Task<string> GenerateToken(string fingerPrint)
-    //{
-    //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-    //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-    //    var claims = new[]
-    //    {
-    //        new Claim(ClaimTypes.SerialNumber, fingerPrint),
-    //        new Claim(ClaimTypes.Role, "Machine")
-    //    };
-
-    //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-    //      _config["Jwt:Audience"],
-    //      claims,
-    //      expires: DateTime.Now.AddMinutes(999),
-    //      signingCredentials: credentials);
-
-    //    return new JwtSecurityTokenHandler().WriteToken(token);
-    //}
-
     private async Task<string> RegisterIfNotThenLogin(Machine machineobj, string newConnectionId)
     {
         // if not registered yet
@@ -69,14 +49,9 @@ public class MessagingHub : Hub
         // if registered
         else if (machineobj.CurrentStatus == MachineStatus.Closed || machineobj.CurrentStatus == MachineStatus.Approved)
         {
-            // login current machine and stuaus to alive
-           // var token = await GenerateToken(machineobj.FingerPrint);
-
             // token is valid
             if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
             {
-                //machineobj.CurrentStatus = MachineStatus.Alive;
-
                 MachineLog log = new MachineLog()
                 {
                     MachineId = machineobj.Id,
@@ -120,7 +95,7 @@ public class MessagingHub : Hub
                 Machine machine = new Machine()
                 {
                     FingerPrint = machineFingerPrint,
-                    //CurrentStatus = MachineStatus.Pending,
+                    CurrentStatus = MachineStatus.Pending,
                     ConnectionId = connectionId,
                     MachineLogs = new List<MachineLog>()
                 {
@@ -155,15 +130,16 @@ public class MessagingHub : Hub
     public override async Task OnDisconnectedAsync(Exception e)
     {
         var httpContext = Context.GetHttpContext();
-        var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
-        var connectionId = httpContext.Request.Query["id"].ToString();
+        var sysInfo = httpContext?.Request?.Query?["sysInfo"].ToString();
+        var connectionId = httpContext?.Request?.Query?["id"].ToString();
+
         SystemInfo systemGuid = new SystemInfo();
         string machineFingerPrint = sysInfo.EncryptString();
 
         var machineDisconnected = _context.Machines.FirstOrDefault(m => m.ConnectionId == connectionId && m.FingerPrint == machineFingerPrint);
         if (machineDisconnected != null)
         {
-            // if registered
+            // if registered close connection log
             if (machineDisconnected.CurrentStatus != MachineStatus.Pending)
             {
                 MachineLog machineLog = new MachineLog()
