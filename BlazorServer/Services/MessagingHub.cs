@@ -77,8 +77,7 @@ public class MessagingHub : Hub
     {
         var httpContext = Context.GetHttpContext();
         var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
-        var connectionId = httpContext.Request.Query["id"].ToString();
-
+        var connectionId = Context.ConnectionId;
         SystemInfo systemGuid = new SystemInfo();
 
         string machineFingerPrint = sysInfo.EncryptString();
@@ -131,7 +130,7 @@ public class MessagingHub : Hub
     {
         var httpContext = Context.GetHttpContext();
         var sysInfo = httpContext?.Request?.Query?["sysInfo"].ToString();
-        var connectionId = httpContext?.Request?.Query?["id"].ToString();
+        var connectionId = Context.ConnectionId;
 
         SystemInfo systemGuid = new SystemInfo();
         string machineFingerPrint = sysInfo.EncryptString();

@@ -3,42 +3,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Shared.Commands;
 using BlazorServer.Services;
+using BlazorServer.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorServer.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class MessageController : ApiControllerBase
     {
+        private readonly ApplicationDbContext _context;
         private IHubContext<MessagingHub> _hubContext { get; }
 
-        public MessageController(IHubContext<MessagingHub> hubContext)
+        public MessageController(IHubContext<MessagingHub> hubContext, ApplicationDbContext context)
         {
             _hubContext = hubContext;
+            _context = context;
         }
 
-        [Authorize]
+        //[Authorize]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> GetMessageStatus([FromBody] MessageCommand request)
         {
-
-            MessageCommand obj = UserHandler.Connections.FirstOrDefault(e => e.BrandId == request.BrandId && e.BranchId == request.BranchId);
+            var machineObj = _context.Machines.Include(e=>e.Brand).FirstOrDefault(e => e.BrandId == request.BrandId);
           
-
-            if (obj != null)
+            if (machineObj != null)
             {
-                await _hubContext.Clients.Client(obj.connId).SendAsync("ReceiveMessage", request);
+                await _hubContext.Clients.Client(machineObj.ConnectionId).SendAsync("NewOrder", "");
                 return Ok("done");
             }
-            //else
-            //{
-            //    // new Connection
-            //    UserHandler.Connections.Add(request.connId, request.StatusId);
-            //}
 
-            // to send connectionId
-
-            //send user by id (no)
-            //await _hubContext.Clients.User("daa62ebc-edd9-4efe-8ad0-88c07fd707da").SendAsync("ReceiveMessage", request);
             return NotFound("NotFoundddddddddd");
 
         }

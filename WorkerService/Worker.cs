@@ -26,11 +26,18 @@ namespace WorkerService
         Task MachineIsAdded(string arg)
         {
             _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
-            connection.StopAsync();
+            //connection.StopAsync();
+            return Task.CompletedTask;
+        }   
+        
+        Task NewOrder(string arg)
+        {
+            _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
+            //connection.StopAsync();
             return Task.CompletedTask;
         }
 
-        private async Task RegisterCurrentMachine()
+        private async Task OpenConnectionToServer()
         {
             // start connection and send connId, sysInfo to server;
             // if exist => log in
@@ -51,13 +58,14 @@ namespace WorkerService
             };
 
             connection.On<string>("MachineIsAdded", this.MachineIsAdded);
+            connection.On<string>("NewOrder", this.NewOrder);
 
             return;
         }
 
         public override async Task StartAsync(CancellationToken stoppingToken)
         {
-            await RegisterCurrentMachine();
+            await OpenConnectionToServer();
             //await base.StartAsync(stoppingToken);
         }
 
