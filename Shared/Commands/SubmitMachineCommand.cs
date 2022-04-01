@@ -9,5 +9,6 @@ namespace Shared.Commands
     public class SubmitMachineCommand
     {
         public string SystemInfo { get; set; }
+        public string ConnectionId { get; set; } = "";
     }
 }

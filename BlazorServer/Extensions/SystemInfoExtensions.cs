@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
 
-namespace WorkerService.Extensions;
+namespace BlazorServer.Extensions;
 
 /// <summary>
 /// Generates Info based on the current computer hardware

@@ -19,6 +19,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BlazorServer.Extensions;
 
 namespace BlazorServer.Controllers;
 
@@ -197,161 +198,249 @@ public class MachineController : ApiControllerBase
     {
         var brandObj = _context.Brands.Include(e => e.Machines).FirstOrDefault(e => e.Hash == command.Hash);
 
-        SystemGuid guid = new SystemGuid();
-        var fingerPrint = guid.ValueAsync();
-
-        Machine machine = new Machine()
+        if (brandObj != null)
         {
-            Name = command.MachineName,
-            DateAdded = DateTime.Now,
-            CurrentStatus = MachineStatus.Pending,
-            ConnectionId = command.ConnectionId,
-            FingerPrint = fingerPrint
-        };
 
-
-        brandObj.Machines.Add(machine);
-
-        _context.SaveChanges();
-
-        var machineObj = _context.Machines.FirstOrDefault(e => e.FingerPrint == fingerPrint);
-
-        if (machineObj != null)
-        {
-            MachineLog machineLog = new MachineLog()
-            {
-                MachineId = machineObj.Id,
-                OccurredAt = DateTime.Now,
-                Status = MachineStatus.Pending
-            };
-            _context.MachineLogs.Add(machineLog);
-        }
-
-        return Ok(true);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<string>> Login([FromBody] SubmitMachineCommand request)
-    {
-        try
-        {
             SystemGuid systemGuid = new SystemGuid();
 
-            string machineFingerPrint = request.SystemInfo.EncryptString();
+            var machineFingerPrint = systemGuid.ValueAsync();
 
-            var machineobj = _context.Machines.Include(e => e.Brand).First(e => e.FingerPrint == machineFingerPrint);
+            var machineObj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint && e.CurrentStatus == MachineStatus.Pending);
 
-            // if Machine Exist
-            if (machineobj != null)
+            if (machineObj != null)
             {
-                // register machine with Pending Status
-                if (machineobj.CurrentStatus == MachineStatus.Pending)
-                {
-                    var isMachineAdded = await SubmitMachineHandler(machineobj, machineFingerPrint);
-                    if (isMachineAdded)
-                    {
-                        return Ok("Submitted Machine Successfully");
-                    }
-                    else
-                    {
-                        return NotFound("Submit Machine Failed");
-                    }
-                }
-                // log in machine with active status
-                else if (machineobj.CurrentStatus == MachineStatus.Active)
-                {
+                machineObj.Name = command.MachineName;
+                machineObj.BrandId = brandObj.Id;
+                machineObj.CurrentStatus = MachineStatus.Approved;
 
-                    var token = await LoggingHandler(machineobj, machineFingerPrint, "1111111111" );
-
-                    // token is valid
-                    if (!string.IsNullOrWhiteSpace(token))
-                    {
-                        return Ok(token);
-                    }
-                    // if token not valid
-                    else
-                    {
-                        return NotFound("Machine Not Valid");
-                    }
-                }
+                MachineLog machineLog = new MachineLog()
+                {
+                    MachineId = machineObj.Id,
+                    OccurredAt = DateTime.Now,
+                    Status = MachineStatus.Approved,
+                };
+                _context.MachineLogs.Add(machineLog);
+                _context.SaveChanges();
             }
+            return Ok(true);
 
-            return NotFound("Machine NotFound");
         }
-        catch (Exception ex)
-        {
-            return NotFound("Database Exception");
-        }
-
+        return Ok(false);
 
     }
 
-    private async Task<string> GenerateToken(string fingerPrint)
-    {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.SerialNumber, fingerPrint),
-            new Claim(ClaimTypes.Role, "Machine")
-        };
+    //private async Task<string> RegisterIfNotThenLogin(Machine machineobj)
+    //{
+    //    if (machineobj.CurrentStatus == MachineStatus.Pending)
+    //    {
+    //        // register current machine then login and stuaus to alive
+    //        // need to wait server for registeration
+    //        return String.Empty;
+    //    }
+    //    else if (machineobj.CurrentStatus == MachineStatus.Closed)
+    //    {
+    //        // login current machine and stuaus to alive
+    //        //var token = await GenerateToken(machineobj.FingerPrint);
 
-        var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-          _config["Jwt:Audience"],
-          claims,
-          expires: DateTime.Now.AddMinutes(999),
-          signingCredentials: credentials);
+    //        // token is valid
+    //        if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
+    //        {
+    //            //machineobj.CurrentStatus = MachineStatus.Alive;
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+    //            MachineLog log = new MachineLog()
+    //            {
+    //                MachineId = machineobj.Id,
+    //                OccurredAt = DateTime.Now,
+    //                Status = MachineStatus.Alive
+    //            };
+    //            _context.MachineLogs.Add(log);
+    //            _context.SaveChanges();
+    //            return machineobj.FingerPrint;
+    //        }
+    //        // if token not valid
+    //        else
+    //        {
+    //            return String.Empty;
+    //        }
+    //    }
 
-    private async Task<bool> LoginLog(Machine machineEntity, string connectionId)
-    {
-        MachineStatus status = MachineStatus.Alive;
+    //    return "";
+    //}
 
-        machineEntity.CurrentStatus = status;
-        machineEntity.ConnectionId = connectionId;
+    //[HttpPost]
+    //public async Task<ActionResult<string>> MachineLogin([FromBody] SubmitMachineCommand request)
+    //{
 
-        MachineLog log = new MachineLog()
-        {
-            MachineId = machineEntity.Id,
-            OccurredAt = DateTime.Now,
-            Status = status
-        };
-        _context.MachineLogs.Add(log);
-        _context.SaveChanges();
-        return true;
-    }
-    private async Task<string> LoggingHandler(Machine machineEntity, string fingerPrint, string connectionId)
-    {
-        var token = await GenerateToken(fingerPrint);
+    //    SystemGuid systemGuid = new SystemGuid();
 
-        if (!string.IsNullOrWhiteSpace(token))
-        {
-            bool isLogsSuccess = await LoginLog(machineEntity, connectionId);
-        }
+    //    string machineFingerPrint = request.SystemInfo.EncryptString();
+    //    var machineobj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
-        return token;
-    }
+    //    if (machineobj != null)
+    //    {
+    //        var token = await RegisterIfNotThenLogin(machineobj);
+    //        return token;
+    //    }
+    //    else
+    //    {
+    //        try
+    //        {
+    //            Machine machine = new Machine()
+    //            {
+    //                FingerPrint = machineFingerPrint,
+    //                //CurrentStatus = MachineStatus.Pending,
+    //                ConnectionId = request.ConnectionId,
+    //                MachineLogs = new List<MachineLog>()
+    //            {
+    //                new MachineLog()
+    //                {
+    //                    OccurredAt = DateTime.Now,
+    //                    Status=MachineStatus.Pending,
+    //                }
+    //            }
+    //            };
 
-    private async Task<bool> SubmitMachineHandler(Machine machineEntity, string fingerPrint)
-    {
-        if (machineEntity.FingerPrint == fingerPrint)
-        {
-            await _hubContext.Clients.Client(machineEntity.ConnectionId).SendAsync("MachineIsAdded", "");
-            machineEntity.CurrentStatus = MachineStatus.Active;
-            machineEntity.ConnectionId = null;
-            MachineLog log = new MachineLog()
-            {
-                MachineId = machineEntity.Id,
-                OccurredAt = DateTime.Now,
-                Status = MachineStatus.Active
-            };
-            _context.MachineLogs.Add(log);
-            _context.SaveChanges();
-            return true;
-        }
-        return false;
-    }
+    //            _context.Machines.Add(machine);
+    //            _context.SaveChanges();
+
+    //            var newMachineobj = _context.Machines.First(e => e.FingerPrint == machineFingerPrint);
+
+    //            var token = await RegisterIfNotThenLogin(newMachineobj);
+    //            return token;
+
+    //        }
+    //        catch (Exception)
+    //        {
+
+    //            throw;
+    //        }
+
+    //    }
+    //}
+
+    //[HttpPost]
+    //public async Task<ActionResult<string>> Login([FromBody] SubmitMachineCommand request)
+    //{
+    //    try
+    //    {
+    //        SystemGuid systemGuid = new SystemGuid();
+
+    //        string machineFingerPrint = request.SystemInfo.EncryptString();
+
+    //        var machineobj = _context.Machines.Include(e => e.Brand).First(e => e.FingerPrint == machineFingerPrint);
+
+    //        // if Machine Exist
+    //        if (machineobj != null)
+    //        {
+    //            // register machine with Pending Status
+    //            if (machineobj.CurrentStatus == MachineStatus.Pending)
+    //            {
+    //                var isMachineAdded = await SubmitMachineHandler(machineobj, machineFingerPrint);
+    //                if (isMachineAdded)
+    //                {
+    //                    return Ok("Submitted Machine Successfully");
+    //                }
+    //                else
+    //                {
+    //                    return NotFound("Submit Machine Failed");
+    //                }
+    //            }
+    //            // log in machine with active status
+    //            else if (machineobj.CurrentStatus == MachineStatus.Closed)
+    //            {
+    //                var token = await LoggingHandler(machineobj, machineFingerPrint, "1111111111");
+
+    //                // token is valid
+    //                if (!string.IsNullOrWhiteSpace(token))
+    //                {
+    //                    return Ok(token);
+    //                }
+    //                // if token not valid
+    //                else
+    //                {
+    //                    return NotFound("Machine Not Valid");
+    //                }
+    //            }
+    //        }
+
+    //        return NotFound("Machine NotFound");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return NotFound("Database Exception");
+    //    }
+
+
+    //}
+
+    //private async Task<string> GenerateToken(string fingerPrint)
+    //{
+    //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+    //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+    //    var claims = new[]
+    //    {
+    //        new Claim(ClaimTypes.SerialNumber, fingerPrint),
+    //        new Claim(ClaimTypes.Role, "Machine")
+    //    };
+
+    //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+    //      _config["Jwt:Audience"],
+    //      claims,
+    //      expires: DateTime.Now.AddMinutes(999),
+    //      signingCredentials: credentials);
+
+    //    return new JwtSecurityTokenHandler().WriteToken(token);
+    //}
+
+    //private async Task<bool> LoginLog(Machine machineEntity, string connectionId)
+    //{
+    //    MachineStatus status = MachineStatus.Alive;
+
+    //    //machineEntity.CurrentStatus = status;
+    //    machineEntity.ConnectionId = connectionId;
+
+    //    MachineLog log = new MachineLog()
+    //    {
+    //        MachineId = machineEntity.Id,
+    //        OccurredAt = DateTime.Now,
+    //        Status = status
+    //    };
+    //    _context.MachineLogs.Add(log);
+    //    _context.SaveChanges();
+    //    return true;
+    //}
+    //private async Task<string> LoggingHandler(Machine machineEntity, string fingerPrint, string connectionId)
+    //{
+    //    var token = await GenerateToken(fingerPrint);
+
+    //    if (!string.IsNullOrWhiteSpace(token))
+    //    {
+    //        bool isLogsSuccess = await LoginLog(machineEntity, connectionId);
+    //    }
+
+    //    return token;
+    //}
+
+    //private async Task<bool> SubmitMachineHandler(Machine machineEntity, string fingerPrint)
+    //{
+    //    if (machineEntity.FingerPrint == fingerPrint)
+    //    {
+    //        await _hubContext.Clients.Client(machineEntity.ConnectionId).SendAsync("MachineIsAdded", "");
+    //        //machineEntity.CurrentStatus = MachineStatus.Active;
+    //        machineEntity.ConnectionId = null;
+    //        MachineLog log = new MachineLog()
+    //        {
+    //            MachineId = machineEntity.Id,
+    //            OccurredAt = DateTime.Now,
+    //            Status = MachineStatus.Closed
+    //        };
+    //        _context.MachineLogs.Add(log);
+    //        _context.SaveChanges();
+    //        return true;
+    //    }
+    //    return false;
+    //}
+
 }
