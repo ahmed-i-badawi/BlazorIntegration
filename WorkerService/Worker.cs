@@ -10,8 +10,6 @@ namespace WorkerService
         private readonly ILogger<Worker> _logger;
 
         public HttpClient _httpClient;
-        public string _token="test";
-
         HubConnection connection = null;
         private string _hubUrl;
         private string _username;
