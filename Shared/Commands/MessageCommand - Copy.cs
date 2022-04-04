@@ -8,10 +8,10 @@ namespace Shared.Commands
 {
     public class MessageCommand
     {
-        public int BranchId { get; set; }
-        public int BrandId { get; set; }
-        public string Notes { get; set; }
+        //public int BranchId { get; set; }
+        //public int BrandId { get; set; }
+        public string Notes { get; set; } = "";
         public int StatusId { get; set; } = 0;
-        public string Hash { get; set; }
+        //public string Hash { get; set; }
     }
 }

@@ -55,7 +55,10 @@ builder.Services.AddResponseCompression(opt =>
         new[] { "application/octet-stream" });
 });
 builder.Services.AddControllers();
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Brand", policy => policy.RequireClaim("Brand"));
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
