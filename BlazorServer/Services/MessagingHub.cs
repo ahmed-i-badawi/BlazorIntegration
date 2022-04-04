@@ -135,7 +135,7 @@ public class MessagingHub : Hub
         SystemInfo systemGuid = new SystemInfo();
         string machineFingerPrint = sysInfo.EncryptString();
 
-        var machineDisconnected = _context.Machines.FirstOrDefault(m => m.ConnectionId == connectionId && m.FingerPrint == machineFingerPrint);
+        var machineDisconnected = _context.Machines.FirstOrDefault(m => m.FingerPrint == machineFingerPrint);
         if (machineDisconnected != null)
         {
             // if registered close connection log

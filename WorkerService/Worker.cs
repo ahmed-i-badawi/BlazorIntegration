@@ -28,7 +28,7 @@ namespace WorkerService
             _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
             //connection.StopAsync();
             return Task.CompletedTask;
-        }   
+        }
         
         Task NewOrder(string arg)
         {
