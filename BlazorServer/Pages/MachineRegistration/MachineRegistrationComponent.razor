@@ -3,6 +3,7 @@
 @using global::Shared.Commands
 @inject HttpClient _http
 @inject ApiService apiService
+@inject IConfiguration configuration
 
 <h3>Machine Registration Component</h3>
 
@@ -38,6 +39,7 @@
 
     protected async Task Submit()
     {
+        _http.BaseAddress = new Uri(configuration["API"]);
         var register = _http.PostAsJsonAsync($"api/Machine/RegisterMachine", FModel);
         bool registerRes = await register.Result.Content.ReadFromJsonAsync<bool>();
         if (registerRes)

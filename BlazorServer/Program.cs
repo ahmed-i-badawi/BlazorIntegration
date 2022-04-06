@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
-builder.Services.AddSignalR();
+//builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opt =>
 {
     opt.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -57,7 +57,7 @@ builder.Services.AddResponseCompression(opt =>
 builder.Services.AddControllers();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Brand", policy => policy.RequireClaim("Brand"));
+    options.AddPolicy("MachineToMachine", policy => policy.RequireClaim("MachineToMachine"));
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -112,6 +112,6 @@ app.UseCors("CorsPolicy");
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-app.MapHub<MessagingHub>(MessagingHub.HubUrl);
+//app.MapHub<MessagingHub>(MessagingHub.HubUrl);
 
 app.Run();

@@ -23,19 +23,17 @@ using BlazorServer.Extensions;
 
 namespace BlazorServer.Controllers;
 
+
 public class MachineController : ApiControllerBase
 {
     private readonly ApplicationDbContext _context;
-    private IHubContext<MessagingHub> _hubContext { get; }
     public IConfiguration _config { get; }
 
-    public MachineController(IHubContext<MessagingHub> hubContext, ApplicationDbContext context, IConfiguration config)
+    public MachineController(ApplicationDbContext context, IConfiguration config)
     {
-        _hubContext = hubContext;
         _context = context;
         _config = config;
     }
-
 
     [AllowAnonymous]
     [HttpGet]
@@ -166,10 +164,8 @@ public class MachineController : ApiControllerBase
 
         return Ok(true);
     }
-
-
     [HttpPost]
-    public async Task<ActionResult<bool>> RegisterMachine([FromBody] MachineRegistrationCommand command)
+    public async Task<ActionResult<string>> RegisterMachine([FromBody] MachineRegistrationCommand command)
     {
         var brandObj = _context.Brands.Include(e => e.Machines).FirstOrDefault(e => e.Hash == command.Hash);
 
@@ -195,13 +191,125 @@ public class MachineController : ApiControllerBase
                 };
                 _context.MachineLogs.Add(machineLog);
                 _context.SaveChanges();
-                string par = "adasdasd";
-                await _hubContext.Clients.Client(machineObj.ConnectionId).SendAsync("MachineIsAdded", par);
-                return Ok(true);
+                return Ok(machineObj.ConnectionId);
             }
             return Ok(false);
         }
         return Ok(false);
-
     }
+    [HttpPost]
+    public async Task<ActionResult<bool>> OnMachineConnect([FromBody] MachineModel machineModel)
+    {
+        SystemInfo systemGuid = new SystemInfo();
+
+        string machineFingerPrint = machineModel.sysInfo.EncryptString();
+        var machineobj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+
+        if (machineobj != null)
+        {
+            var token = await RegisterIfNotThenLogin(machineobj, machineModel.ConnectionId);
+            return Ok(true);
+        }
+        else
+        {
+            try
+            {
+                Machine machine = new Machine()
+                {
+                    FingerPrint = machineFingerPrint,
+                    CurrentStatus = MachineStatus.Pending,
+                    ConnectionId = machineModel.ConnectionId,
+                    MachineLogs = new List<MachineLog>()
+                {
+                    new MachineLog()
+                    {
+                        OccurredAt = DateTime.Now,
+                        Status=MachineStatus.Pending,
+                    }
+                }
+                };
+
+                _context.Machines.Add(machine);
+                _context.SaveChanges();
+
+                var newMachineobj = _context.Machines.First(e => e.FingerPrint == machineFingerPrint);
+
+                var token = await RegisterIfNotThenLogin(newMachineobj, machineModel.ConnectionId);
+                return Ok(true);
+            }
+            catch (Exception)
+            {
+                return Ok(false
+
+                    );
+            }
+
+        }
+    }
+    [HttpPost]
+    public async Task<ActionResult<bool>> OnMachineDisConnect([FromBody] MachineModel machineModel)
+    {
+        SystemInfo systemGuid = new SystemInfo();
+        string machineFingerPrint = machineModel.sysInfo.EncryptString();
+
+        var machineDisconnected = _context.Machines.FirstOrDefault(m => m.FingerPrint == machineFingerPrint);
+        if (machineDisconnected != null)
+        {
+            // if registered close connection log
+            if (machineDisconnected.CurrentStatus != MachineStatus.Pending)
+            {
+                MachineLog machineLog = new MachineLog()
+                {
+                    MachineId = machineDisconnected.Id,
+                    OccurredAt = DateTime.Now,
+                    Status = MachineStatus.Closed
+                };
+                _context.MachineLogs.Add(machineLog);
+                machineDisconnected.CurrentStatus = MachineStatus.Closed;
+            }
+            machineDisconnected.ConnectionId = string.Empty;
+            _context.SaveChanges();
+            return Ok(true);
+        }
+        return Ok(false);
+    }
+    private async Task<string> RegisterIfNotThenLogin(Machine machineobj, string newConnectionId)
+    {
+        // if not registered yet
+        if (machineobj.CurrentStatus == MachineStatus.Pending)
+        {
+            // register current machine then login and stuaus to alive
+            // need to wait server for registeration
+            machineobj.ConnectionId = newConnectionId;
+            _context.SaveChanges();
+            return String.Empty;
+        }
+        // if registered
+        else if (machineobj.CurrentStatus == MachineStatus.Closed || machineobj.CurrentStatus == MachineStatus.Approved)
+        {
+            // token is valid
+            if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
+            {
+                MachineLog log = new MachineLog()
+                {
+                    MachineId = machineobj.Id,
+                    OccurredAt = DateTime.Now,
+                    Status = MachineStatus.Alive
+                };
+                _context.MachineLogs.Add(log);
+                machineobj.ConnectionId = newConnectionId;
+                machineobj.CurrentStatus = MachineStatus.Alive;
+                _context.SaveChanges();
+                return machineobj.FingerPrint;
+            }
+            // if token not valid
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        return "";
+    }
+
 }

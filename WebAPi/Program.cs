@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opt =>
 {
@@ -26,6 +27,10 @@ builder.Services.AddResponseCompression(opt =>
         new[] {"application/octet-stream"});
 });
 builder.Services.AddControllers();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Brand", policy => policy.RequireClaim("Brand"));
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options => {
                   options.TokenValidationParameters = new TokenValidationParameters
@@ -60,6 +65,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<MessagingHub>(MessagingHub.HubUrl);
+app.MapHub<MessagingHub>(configuration["HubUrl"]);
 
 app.Run();

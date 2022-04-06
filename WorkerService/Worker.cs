@@ -19,7 +19,7 @@ namespace WorkerService
         public Worker(IHttpClientFactory httpClient, ILogger<Worker> logger)
         {
             _httpClient = httpClient.CreateClient();
-            _httpClient.BaseAddress = new Uri($"https://localhost:7032/");
+            _httpClient.BaseAddress = new Uri($"https://localhost:7029/");
             _logger = logger;
         }
 
@@ -48,7 +48,7 @@ namespace WorkerService
             SystemInfo sysInfoObj = new SystemInfo();
             var sysInfo = sysInfoObj.ValueAsync();
 
-            _hubUrl = $"https://localhost:7032/MessagingHub?sysInfo={sysInfo}";
+            _hubUrl = $"https://localhost:7029/MessagingHub?sysInfo={sysInfo}";
             connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
             await connection.StartAsync();
 

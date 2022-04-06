@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Shared.Commands;
+//using Shared.Commands;
 using BlazorServer.Services;
 using BlazorServer.Data;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +17,10 @@ namespace BlazorServer.Controllers
     public class MessageController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private IHubContext<MessagingHub> _hubContext { get; }
         public IConfiguration _config { get; }
 
-        public MessageController(IHubContext<MessagingHub> hubContext, ApplicationDbContext context, IConfiguration config)
+        public MessageController(ApplicationDbContext context, IConfiguration config)
         {
-            _hubContext = hubContext;
             _context = context;
             _config = config;
         }
@@ -75,22 +73,21 @@ namespace BlazorServer.Controllers
             return NotFound("Brand not found");
         }
 
-        [Authorize(Policy = "Brand")]
+        //[Authorize(Policy = "MachineToMachine")]
         [HttpPost]
-        public async Task<ActionResult<string>> GetMessageStatus()
+        public async Task<ActionResult<string>> GetMessageStatus([FromBody] int brandId)
         {
-            var hash = User.Claims.FirstOrDefault(e=>e.Type == "Hash")?.Value;
-            var brand = int.TryParse(User.Claims.FirstOrDefault(e=>e.Type == "Brand")?.Value, out int brandInt);
-
-            var machineObj = _context.Machines.Include(e => e.Brand).FirstOrDefault(e => e.BrandId == brandInt);
+            var machineObj = _context.Machines.Include(e => e.Brand).FirstOrDefault(e => e.BrandId == brandId);
 
             if (machineObj != null)
             {
-                await _hubContext.Clients.Client(machineObj.ConnectionId).SendAsync("NewOrder", "");
-                return Ok("done");
+                return Ok(machineObj?.ConnectionId);
             }
+            else
+            {
+                return NotFound();
 
-            return NotFound("NotFoundddddddddd");
+            }
         }
     }
 }
