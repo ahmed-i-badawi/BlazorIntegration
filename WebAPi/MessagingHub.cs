@@ -84,7 +84,8 @@ public class MessagingHub : Hub
                     machineName = machine.MachineName,
                     notes = machine.Notes,
                 };
-
+                // toDo
+                // redesign login logic
                 var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
                 bool machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
                 if (machineObjRes)

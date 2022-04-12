@@ -1,4 +1,5 @@
 ﻿using Shared.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities;
 
@@ -8,6 +9,8 @@ public class Machine
     {
         MachineLogs = new List<MachineLog>();
     }
+
+    //[DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
     public string? FingerPrint { get; set; }
     public string? Name { get; set; }
@@ -17,10 +20,10 @@ public class Machine
     //        return MachineLogs?.MaxBy(i => i.OccurredAt).Status?? MachineStatus.Pending;
     //    } 
     //}
-    public string? ConnectionId { get; set; }
+    //public string? ConnectionId { get; set; }
 
-    public int? BrandId { get; set; }
-    public Brand? Brand { get; set; }
+    public int BranchId { get; set; }
+    public Branch Branch { get; set; }
 
     public List<MachineLog>? MachineLogs { get; set; }
 }

@@ -46,44 +46,30 @@ public class MachineController : ApiControllerBase
             new Brand()
             {
                 Id = 1,
-                Hash = "uyhdjnfuirdfjkruhjdn",
-                MaxNumberOfMachines = 10,
                 Name = "Brand1"
             },new Brand()
             {
                 Id = 2,
-                Hash = "4rfteddsf",
-                MaxNumberOfMachines = 4,
                 Name = "Brand2"
             },new Brand()
             {
                 Id = 3,
-                Hash = "sdfgerfgregrg",
-                MaxNumberOfMachines = 6,
                 Name = "Brand3"
             },new Brand()
             {
                 Id = 4,
-                Hash = "dfgergdrfghsdfa2334",
-                MaxNumberOfMachines = 5,
                 Name = "Brand4"
             },new Brand()
             {
                 Id = 5,
-                Hash = "32rewsdc3evdxv",
-                MaxNumberOfMachines = 1,
                 Name = "Brand5"
             },new Brand()
             {
                 Id = 6,
-                Hash = "467yrtgdtrefdfsdf",
-                MaxNumberOfMachines = 2,
                 Name = "Brand6"
             },new Brand()
             {
                 Id = 7,
-                Hash = "uyhdjnfuirdfjkruhjdn",
-                MaxNumberOfMachines = 22,
                 Name = "Brand7"
             },
         };
@@ -100,42 +86,49 @@ public class MachineController : ApiControllerBase
                 {
                     Id = 1,
                     Name = "Branch01",
+                    Hash = "uyhdjnfuirdfjkruhjdn",
                     Address = "AddressBranch01",
                     BrandId = 1,
                 },new Branch()
                 {
                     Id = 2,
                     Name = "Branch02",
+                    Hash = "4rfteddsf",
                     Address = "AddressBranch02",
                     BrandId = 1,
                 },new Branch()
                 {
                     Id = 3,
                     Name = "Branch03",
+                Hash = "sdfgerfgregrg",
                     Address = "AddressBranch0222",
                     BrandId = 1,
                 },new Branch()
                 {
                     Id = 4,
                     Name = "Branch01",
+                Hash = "dfgergdrfghsdfa2334",
                     Address = "AddressBranch0333",
                     BrandId = 2,
                 },new Branch()
                 {
                     Id = 5,
                     Name = "Branch02",
+                Hash = "32rewsdc3evdxv",
                     Address = "AddressBranch01",
                     BrandId = 1,
                 },new Branch()
                 {
                     Id = 6,
                     Name = "Branch01",
+                Hash = "467yrtgdtrefdfsdf",
                     Address = "AddressBranch01",
                     BrandId = 3,
                 },new Branch()
                 {
                     Id = 7,
                     Name = "Branch01",
+                Hash = "uyhdjnfuirdfjkruhjdn",
                     Address = "AddressBranch01",
                     BrandId = 4,
                 },new Branch()
@@ -168,7 +161,7 @@ public class MachineController : ApiControllerBase
     [HttpPost]
     public async Task<ActionResult<string>> HashChecker([FromBody] MachineRegistrationCommand command)
     {
-        var brandObj = _context.Brands.FirstOrDefault(e => e.Hash == command.Hash);
+        var brandObj = _context.Branchs.FirstOrDefault(e => e.Hash == command.Hash);
         if (brandObj != null)
         {
             SystemGuid systemGuid = new SystemGuid();
@@ -201,14 +194,15 @@ public class MachineController : ApiControllerBase
         {
             try
             {
-                var brand = _context.Brands.FirstOrDefault(e => e.Hash == machineModel.Hash);
+                var branch = _context.Branchs.FirstOrDefault(e => e.Hash == machineModel.Hash);
 
                 Machine machine = new Machine()
                 {
-                    BrandId = brand.Id,
+                    //Id = branch.Id,
+                    BranchId = branch.Id,
                     FingerPrint = machineFingerPrint,
                     CurrentStatus = MachineStatus.Alive,
-                    ConnectionId = machineModel.ConnectionId,
+                    //ConnectionId = machineModel.ConnectionId,
                     Name = machineModel.MachineName,
                     MachineLogs = new List<MachineLog>()
                 {
@@ -255,7 +249,7 @@ public class MachineController : ApiControllerBase
                 _context.MachineLogs.Add(machineLog);
                 machineDisconnected.CurrentStatus = MachineStatus.Closed;
             }
-            machineDisconnected.ConnectionId = string.Empty;
+            //machineDisconnected.ConnectionId = string.Empty;
             _context.SaveChanges();
             return Ok(true);
         }
@@ -277,7 +271,7 @@ public class MachineController : ApiControllerBase
                     Status = MachineStatus.Alive
                 };
                 _context.MachineLogs.Add(log);
-                machineobj.ConnectionId = newConnectionId;
+                //machineobj.ConnectionId = newConnectionId;
                 machineobj.CurrentStatus = MachineStatus.Alive;
                 _context.SaveChanges();
                 return machineobj.FingerPrint;

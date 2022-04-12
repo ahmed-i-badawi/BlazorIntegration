@@ -54,26 +54,11 @@ namespace BlazorServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaxNumberOfMachines = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Connections",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Connections", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,6 +172,7 @@ namespace BlazorServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
+                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false)
@@ -208,19 +194,39 @@ namespace BlazorServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FingerPrint = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrandId = table.Column<int>(type: "int", nullable: false)
+                    FingerPrint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentStatus = table.Column<int>(type: "int", nullable: false),
+                    BranchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Machines", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Machines_Brands_BrandId",
-                        column: x => x.BrandId,
-                        principalTable: "Brands",
+                        name: "FK_Machines_Branchs_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branchs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MachineLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OccurredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    MachineId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MachineLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MachineLogs_Machines_MachineId",
+                        column: x => x.MachineId,
+                        principalTable: "Machines",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -270,9 +276,15 @@ namespace BlazorServer.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Machines_BrandId",
+                name: "IX_MachineLogs_MachineId",
+                table: "MachineLogs",
+                column: "MachineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Machines_BranchId",
                 table: "Machines",
-                column: "BrandId");
+                column: "BranchId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -293,19 +305,19 @@ namespace BlazorServer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Branchs");
-
-            migrationBuilder.DropTable(
-                name: "Connections");
-
-            migrationBuilder.DropTable(
-                name: "Machines");
+                name: "MachineLogs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Machines");
+
+            migrationBuilder.DropTable(
+                name: "Branchs");
 
             migrationBuilder.DropTable(
                 name: "Brands");

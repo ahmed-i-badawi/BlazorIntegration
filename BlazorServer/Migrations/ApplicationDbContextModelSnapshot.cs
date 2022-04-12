@@ -103,6 +103,9 @@ namespace BlazorServer.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Hash")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -119,12 +122,6 @@ namespace BlazorServer.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Hash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxNumberOfMachines")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -132,23 +129,6 @@ namespace BlazorServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
-                });
-
-            modelBuilder.Entity("BlazorServer.Data.Entities.Connection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ConnectionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>
@@ -159,11 +139,8 @@ namespace BlazorServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BrandId")
+                    b.Property<int>("BranchId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CurrentStatus")
                         .HasColumnType("int");
@@ -176,7 +153,8 @@ namespace BlazorServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex("BranchId")
+                        .IsUnique();
 
                     b.ToTable("Machines");
                 });
@@ -355,11 +333,13 @@ namespace BlazorServer.Migrations
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>
                 {
-                    b.HasOne("BlazorServer.Data.Entities.Brand", "Brand")
-                        .WithMany("Machines")
-                        .HasForeignKey("BrandId");
+                    b.HasOne("BlazorServer.Data.Entities.Branch", "Branch")
+                        .WithOne("Machine")
+                        .HasForeignKey("BlazorServer.Data.Entities.Machine", "BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Brand");
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.MachineLog", b =>
@@ -424,11 +404,15 @@ namespace BlazorServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BlazorServer.Data.Entities.Branch", b =>
+                {
+                    b.Navigation("Machine")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BlazorServer.Data.Entities.Brand", b =>
                 {
                     b.Navigation("Branches");
-
-                    b.Navigation("Machines");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>

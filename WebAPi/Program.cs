@@ -30,7 +30,7 @@ builder.Services.AddResponseCompression(opt =>
 builder.Services.AddControllers();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Brand", policy => policy.RequireClaim("Brand"));
+    options.AddPolicy("Branch", policy => policy.RequireClaim("Branch"));
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options => {

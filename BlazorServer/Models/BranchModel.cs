@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BlazorServer.Models
 {
-    public class BrandModel
+    public class BranchModel
     {
         public string Hash { get; set; }
     }

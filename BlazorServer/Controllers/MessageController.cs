@@ -25,7 +25,7 @@ namespace BlazorServer.Controllers
             _config = config;
         }
 
-        private string Generate(Brand brand)
+        private string Generate(Branch branch)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -33,8 +33,8 @@ namespace BlazorServer.Controllers
 
             var claims = new[]
             {
-            new Claim("Hash", brand.Hash),
-            new Claim("Brand", brand.Id.ToString())
+            new Claim("Hash", branch.Hash),
+            new Claim("Branch", branch.Id.ToString())
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -46,13 +46,13 @@ namespace BlazorServer.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private Brand Authenticate(BrandModel brandLogin)
+        private Branch Authenticate(BranchModel branchLogin)
         {
-            var currentBrand = _context.Brands.FirstOrDefault(b => b.Hash == brandLogin.Hash);
+            var currentBranch = _context.Branchs.FirstOrDefault(b => b.Hash == branchLogin.Hash);
 
-            if (currentBrand != null)
+            if (currentBranch != null)
             {
-                return currentBrand;
+                return currentBranch;
             }
 
             return null;
@@ -60,9 +60,9 @@ namespace BlazorServer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] BrandModel brandLogin)
+        public IActionResult Login([FromBody] BranchModel branchLogin)
         {
-            var user = Authenticate(brandLogin);
+            var user = Authenticate(branchLogin);
 
             if (user != null)
             {
@@ -77,17 +77,22 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> GetMessageStatus([FromBody] int brandId)
         {
-            var machineObj = _context.Machines.Include(e => e.Brand).FirstOrDefault(e => e.BrandId == brandId);
+            // toDo
+            // get connection from cached list
 
-            if (machineObj != null)
-            {
-                return Ok(machineObj?.ConnectionId);
-            }
-            else
-            {
-                return NotFound();
+            return Ok();
+            // -----old-------
+            //var machineObj = _context.Machines.Include(e => e.Branch).FirstOrDefault(e => e.BrandId == brandId);
 
-            }
+            //if (machineObj != null)
+            //{
+            //    return Ok(machineObj?.ConnectionId);
+            //}
+            //else
+            //{
+            //    return NotFound();
+
+            //}
         }
     }
 }
