@@ -217,11 +217,9 @@ public class MachineController : ApiControllerBase
 
                 Machine machine = new Machine()
                 {
-                    //Id = branch.Id,
                     BranchId = branch.Id,
                     FingerPrint = machineFingerPrint,
                     CurrentStatus = MachineStatus.Alive,
-                    //ConnectionId = machineModel.ConnectionId,
                     Name = machineModel.MachineName,
                     MachineLogs = new List<MachineLog>()
                 {
@@ -229,6 +227,7 @@ public class MachineController : ApiControllerBase
                     {
                         OccurredAt = DateTime.Now,
                         Status=MachineStatus.Alive,
+                        ConnectionId=machineModel.ConnectionId,
                     }
                 }
                 };
@@ -263,7 +262,8 @@ public class MachineController : ApiControllerBase
                 {
                     MachineId = machineDisconnected.Id,
                     OccurredAt = DateTime.Now,
-                    Status = MachineStatus.Closed
+                    Status = MachineStatus.Closed,
+                    ConnectionId = machineModel.ConnectionId
                 };
                 _context.MachineLogs.Add(machineLog);
                 machineDisconnected.CurrentStatus = MachineStatus.Closed;
@@ -278,8 +278,8 @@ public class MachineController : ApiControllerBase
     private async Task<string> MachineLogin(Machine machineobj, string newConnectionId)
     {
         // if registered
-        if (machineobj.CurrentStatus == MachineStatus.Closed)
-        {
+        //if (machineobj.CurrentStatus == MachineStatus.Closed)
+        //{
             // token is valid
             if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
             {
@@ -287,7 +287,8 @@ public class MachineController : ApiControllerBase
                 {
                     MachineId = machineobj.Id,
                     OccurredAt = DateTime.Now,
-                    Status = MachineStatus.Alive
+                    Status = MachineStatus.Alive,
+                    ConnectionId=newConnectionId
                 };
                 _context.MachineLogs.Add(log);
                 //machineobj.ConnectionId = newConnectionId;
@@ -300,9 +301,9 @@ public class MachineController : ApiControllerBase
             {
                 return String.Empty;
             }
-        }
+        //}
 
-        return "";
+        //return "";
     }
 
 }

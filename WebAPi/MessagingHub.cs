@@ -93,9 +93,8 @@ public class MessagingHub : Hub
 
             await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
         }
-        else if (string.IsNullOrWhiteSpace(machineObjRes))
+        else if (!string.IsNullOrWhiteSpace(machineObjRes))
         {
-            // to be testing
             var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
             {
                 entry.AbsoluteExpiration = DateTime.UtcNow.AddDays(30);
@@ -104,7 +103,7 @@ public class MessagingHub : Hub
                 return listMachinesLoggedIn;
             });
 
-            if(!machinesLoggedIn.Any(e => e.Hash == myObj.Hash && e.SystemInfo == myObj.SystemInfo))
+            if(!machinesLoggedIn.Any(e => e.ConnectionId == connectionId && e.SystemInfo == myObj.SystemInfo))
             {
                 machinesLoggedIn.Add(new MachineRegistrationCommand()
                 {
@@ -128,14 +127,32 @@ public class MessagingHub : Hub
         var sysInfo = httpContext?.Request?.Query?["sysInfo"].ToString();
         var connectionId = Context.ConnectionId;
 
-        object myObj = new
+        MachineModel myObj = new MachineModel()
         {
-            sysInfo = sysInfo,
-            connectionId = connectionId,
+            SystemInfo = sysInfo,
+            ConnectionId = connectionId,
         };
 
         var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineDisConnect", myObj);
         bool machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
+
+        var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
+        {
+            entry.AbsoluteExpiration = DateTime.UtcNow.AddDays(30);
+            var listMachinesLoggedIn = new List<MachineRegistrationCommand>();
+
+            return listMachinesLoggedIn;
+        });
+
+        var machineLoggedInObj = machinesLoggedIn.FirstOrDefault(e => e.ConnectionId == connectionId && e.SystemInfo == myObj.SystemInfo);
+        if (machineLoggedInObj != null)
+        {
+            machinesLoggedIn.Remove(machineLoggedInObj);
+
+            _cache.Remove("machinesLoggedIn");
+
+            _cache.Set("machinesLoggedIn", machinesLoggedIn, DateTime.UtcNow.AddDays(30));
+        }
 
         await base.OnDisconnectedAsync(e);
     }
