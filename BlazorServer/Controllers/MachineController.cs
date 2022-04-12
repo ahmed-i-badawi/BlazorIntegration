@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlazorServer.Extensions;
+using Shared.Dto;
 
 namespace BlazorServer.Controllers;
 
@@ -159,35 +160,53 @@ public class MachineController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> HashChecker([FromBody] MachineRegistrationCommand command)
+    public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] MachineRegistrationCommand command)
     {
-        var brandObj = _context.Branchs.FirstOrDefault(e => e.Hash == command.Hash);
+        var brandObj = _context.Branchs.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == command.Hash);
+        HashCheckerDto res = new HashCheckerDto();
+
         if (brandObj != null)
         {
-            SystemGuid systemGuid = new SystemGuid();
-            var systemInfo = systemGuid.SystemInfoAsync();
+            if (brandObj.Machine != null)
+            {
+                res.SystemInfo = null;
+                res.Message = "this branch has a machine";
 
-            return Ok(systemInfo);
+                return Ok(res);
+            }
+            else
+            {
+                SystemGuid systemGuid = new SystemGuid();
+                var systemInfo = systemGuid.SystemInfoAsync();
+
+                res.SystemInfo = systemInfo;
+                res.Message = null;
+
+                return Ok(res);
+            }
         }
         else
         {
-            return NotFound("");
+            res.SystemInfo = null;
+            res.Message = "No hash available";
+
+            return Ok(res);
         }
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> OnMachineConnect([FromBody] MachineModel machineModel)
+    public async Task<ActionResult<string>> OnMachineConnect([FromBody] MachineModel machineModel)
     {
         SystemInfo systemGuid = new SystemInfo();
 
-        string machineFingerPrint = machineModel.sysInfo.EncryptString();
+        string machineFingerPrint = machineModel.SystemInfo.EncryptString();
         var machineobj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
         // if machine exist
         if (machineobj != null)
         {
             var token = await MachineLogin(machineobj, machineModel.ConnectionId);
-            return Ok(true);
+            return Ok(token);
         }
         // if machine not exist, create one
         else
@@ -219,11 +238,11 @@ public class MachineController : ApiControllerBase
 
                 var token = machineFingerPrint;
 
-                return Ok(true);
+                return Ok(token);
             }
             catch (Exception)
             {
-                return Ok(false);
+                return Ok("");
             }
         }
     }
@@ -232,7 +251,7 @@ public class MachineController : ApiControllerBase
     public async Task<ActionResult<bool>> OnMachineDisConnect([FromBody] MachineModel machineModel)
     {
         SystemInfo systemGuid = new SystemInfo();
-        string machineFingerPrint = machineModel.sysInfo.EncryptString();
+        string machineFingerPrint = machineModel.SystemInfo.EncryptString();
 
         var machineDisconnected = _context.Machines.FirstOrDefault(m => m.FingerPrint == machineFingerPrint);
         if (machineDisconnected != null)

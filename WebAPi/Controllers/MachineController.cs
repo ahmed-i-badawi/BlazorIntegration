@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Commands;
+using Shared.Dto;
 using Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -111,24 +112,24 @@ public class MachineController : ApiControllerBase
 
 
         var response = _http.PostAsJsonAsync<MachineRegistrationCommand>($"api/Machine/HashChecker", command);
-        var systemInfo = await response.Result.Content.ReadAsStringAsync();
+        HashCheckerDto result = await response.Result.Content.ReadFromJsonAsync<HashCheckerDto>();
 
         // ----------
-        if (!string.IsNullOrWhiteSpace(systemInfo))
+        if (!string.IsNullOrWhiteSpace(result.SystemInfo))
         {
-            if (!pendingMachinesRegistration.Any(e => e.Hash == command.Hash && e.SystemInfo == systemInfo))
+            if (!pendingMachinesRegistration.Any(e => e.Hash == command.Hash && e.SystemInfo == result.SystemInfo))
             {
                 pendingMachinesRegistration.Add(new MachineRegistrationCommand()
                 {
                     Hash = command.Hash,
-                    SystemInfo = systemInfo,
+                    SystemInfo = result.SystemInfo,
                     MachineName = command.MachineName,
                     Notes = command.Notes
                 });
 
                 _cache.Remove("pendingMachineRegistration");
 
-                _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(1));
+                _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
 
                 return Ok("Start Your Worker Now");
             }
@@ -139,7 +140,7 @@ public class MachineController : ApiControllerBase
         }
         else
         {
-            return NotFound("Hash Not Found");
+            return NotFound(result.Message);
         }
     }
 }

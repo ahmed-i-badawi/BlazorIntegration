@@ -1,10 +1,10 @@
 ﻿using Shared.Enums;
 
-namespace BlazorServer.Data.Entities;
+namespace Shared.Commands;
 
 public class MachineModel
 {
-    public string? sysInfo { get; set; }
+    public string? SystemInfo { get; set; }
     public string? ConnectionId { get; set; }
     public string? Hash { get; set; }
     public string? Notes { get; set; }

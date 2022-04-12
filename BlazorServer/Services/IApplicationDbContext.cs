@@ -9,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<Branch> Branchs { get; }
     DbSet<Machine> Machines { get; }
     DbSet<MachineLog> MachineLogs { get; }
+    DbSet<Integrator> Integrators { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

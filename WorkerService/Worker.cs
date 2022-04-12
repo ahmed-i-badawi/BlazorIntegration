@@ -35,7 +35,14 @@ public class Worker : BackgroundService
         //connection.StopAsync();
         return Task.CompletedTask;
     }
-    
+
+    Task MachineIsLoggedIn(bool arg)
+    {
+        _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Logging {arg}");
+        //connection.StopAsync();
+        return Task.CompletedTask;
+    }
+
     Task NewOrder(string arg)
     {
         _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order");
@@ -64,6 +71,7 @@ public class Worker : BackgroundService
 
         connection.On<string>("MachineIsAdded", this.MachineIsAdded);
         connection.On<string>("NewOrder", this.NewOrder);
+        connection.On<bool>("MachineIsLoggedIn", this.MachineIsLoggedIn);
 
         return;
     }

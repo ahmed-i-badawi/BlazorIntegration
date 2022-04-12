@@ -15,5 +15,6 @@ namespace BlazorServer.Data
         public DbSet<Branch> Branchs => Set<Branch>();
         public DbSet<Machine> Machines => Set<Machine>();
         public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
+        public DbSet<Integrator> Integrators => Set<Integrator>();
     }
 }

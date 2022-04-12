@@ -71,32 +71,53 @@ public class MessagingHub : Hub
 
 
         var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
-        if (isChache)
-        {
-            var machine = pendingMachinesRegistration.FirstOrDefault(e => e.SystemInfo == sysInfo);
-            if (machine != null)
-            {
-                object myObj = new
-                {
-                    sysInfo = sysInfo,
-                    connectionId = connectionId,
-                    hash = machine.Hash,
-                    machineName = machine.MachineName,
-                    notes = machine.Notes,
-                };
-                // toDo
-                // redesign login logic
-                var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
-                bool machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
-                if (machineObjRes)
-                {
-                    _cache.Remove("pendingMachineRegistration");
-                    pendingMachinesRegistration.Remove(machine);
-                    _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(1));
+        
+        var machine = pendingMachinesRegistration?.FirstOrDefault(e => e.SystemInfo == sysInfo);
 
-                    await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
-                }
+        MachineModel myObj = new MachineModel()
+        {
+            SystemInfo = sysInfo,
+            ConnectionId = connectionId,
+            Hash = machine?.Hash,
+            MachineName = machine?.MachineName,
+            Notes = machine?.Notes,
+        };
+
+        var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
+        string machineObjRes = await machineObjResponse.Result.Content.ReadAsStringAsync();
+        if (!string.IsNullOrWhiteSpace(machineObjRes) && machine != null)
+        {
+            _cache.Remove("pendingMachineRegistration");
+            pendingMachinesRegistration.Remove(machine);
+            _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(1));
+
+            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
+        }
+        else if (string.IsNullOrWhiteSpace(machineObjRes))
+        {
+            // to be testing
+            var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
+            {
+                entry.AbsoluteExpiration = DateTime.UtcNow.AddDays(30);
+                var listMachinesLoggedIn = new List<MachineRegistrationCommand>();
+
+                return listMachinesLoggedIn;
+            });
+
+            if(!machinesLoggedIn.Any(e => e.Hash == myObj.Hash && e.SystemInfo == myObj.SystemInfo))
+            {
+                machinesLoggedIn.Add(new MachineRegistrationCommand()
+                {
+                    SystemInfo = myObj.SystemInfo,
+                    ConnectionId = connectionId
+                });
+
+                _cache.Remove("machinesLoggedIn");
+
+                _cache.Set("machinesLoggedIn", machinesLoggedIn, DateTime.UtcNow.AddDays(30));
             }
+
+            await this.Clients.Client(connectionId).SendAsync("MachineIsLoggedIn", true);
         }
 
         return base.OnConnectedAsync();
