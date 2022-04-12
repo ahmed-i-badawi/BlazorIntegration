@@ -11,21 +11,22 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BlazorServer.Data.Entities;
+using Shared.Commands;
 
 namespace BlazorServer.Controllers
 {
-    public class MessageController : ApiControllerBase
+    public class IntegratorController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
         public IConfiguration _config { get; }
 
-        public MessageController(ApplicationDbContext context, IConfiguration config)
+        public IntegratorController(ApplicationDbContext context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
 
-        private string Generate(Branch branch)
+        private string Generate(Integrator integrator)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -33,8 +34,8 @@ namespace BlazorServer.Controllers
 
             var claims = new[]
             {
-            new Claim("Hash", branch.Hash),
-            new Claim("Branch", branch.Id.ToString())
+            new Claim("Hash", integrator.Hash),
+            new Claim("INTEGRATOR", integrator.Id.ToString())
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -46,53 +47,47 @@ namespace BlazorServer.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private Branch Authenticate(BranchModel branchLogin)
+        private Integrator Authenticate(IntegratorModel branchLogin)
         {
-            var currentBranch = _context.Branchs.FirstOrDefault(b => b.Hash == branchLogin.Hash);
+            var currentIntegrator = _context.Integrators.FirstOrDefault(b => b.Hash == branchLogin.Hash);
 
-            if (currentBranch != null)
+            if (currentIntegrator != null)
             {
-                return currentBranch;
+                return currentIntegrator;
             }
 
             return null;
         }
 
-        [AllowAnonymous]
+        [Authorize(Policy = "MachineToMachine")]
         [HttpPost]
-        public IActionResult Login([FromBody] BranchModel branchLogin)
+        public IActionResult Login([FromBody] IntegratorModel integratorLogin)
         {
-            var user = Authenticate(branchLogin);
+            var integrator = Authenticate(integratorLogin);
 
-            if (user != null)
+            if (integrator != null)
             {
-                var token = Generate(user);
+                var token = Generate(integrator);
                 return Ok(token);
             }
 
-            return NotFound("Brand not found");
+            return NotFound("Integrator not found");
         }
 
-        //[Authorize(Policy = "MachineToMachine")]
+        [Authorize(Policy = "MachineToMachine")]
         [HttpPost]
-        public async Task<ActionResult<string>> GetMessageStatus([FromBody] int brandId)
+        public async Task<ActionResult<bool>> CheckIntegratorAvaiability([FromBody] IntegratorModel model)
         {
-            // toDo
-            // get connection from cached list
+           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Hash == model.Hash && e.Id == model.Id);
 
-            return Ok();
-            // -----old-------
-            //var machineObj = _context.Machines.Include(e => e.Branch).FirstOrDefault(e => e.BrandId == brandId);
-
-            //if (machineObj != null)
-            //{
-            //    return Ok(machineObj?.ConnectionId);
-            //}
-            //else
-            //{
-            //    return NotFound();
-
-            //}
+            if (integratorObj != null)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
         }
     }
 }

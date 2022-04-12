@@ -156,20 +156,42 @@ public class MachineController : ApiControllerBase
             _context.SaveChanges();
         }
 
+        if (!_context.Integrators?.Any() ?? false)
+        {
+            List<Integrator> integrators = new List<Integrator>()
+            {
+                new Integrator()
+                {
+                    Id = 1,
+                    Name = "Integrator01",
+                    Hash = "sd56f45sd4f",
+                },new Integrator()
+                {
+                    Id = 2,
+                    Name = "Integrator02",
+                    Hash = "s8df4sd4f5sd45f",
+                }
+            };
+            _context.Integrators.AddRange(integrators);
+            _context.SaveChanges();
+        }
+
+
         return Ok(true);
     }
 
     [HttpPost]
-    public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] MachineRegistrationCommand command)
+    public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] string hash)
     {
-        var brandObj = _context.Branchs.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == command.Hash);
         HashCheckerDto res = new HashCheckerDto();
+
+        var brandObj = _context.Branchs.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == hash);
 
         if (brandObj != null)
         {
             if (brandObj.Machine != null)
             {
-                res.SystemInfo = null;
+                res.SystemInfo = string.Empty;
                 res.Message = "this branch has a machine";
 
                 return Ok(res);
@@ -180,14 +202,14 @@ public class MachineController : ApiControllerBase
                 var systemInfo = systemGuid.SystemInfoAsync();
 
                 res.SystemInfo = systemInfo;
-                res.Message = null;
+                res.Message = string.Empty;
 
                 return Ok(res);
             }
         }
         else
         {
-            res.SystemInfo = null;
+            res.SystemInfo = string.Empty;
             res.Message = "No hash available";
 
             return Ok(res);
@@ -195,18 +217,25 @@ public class MachineController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> OnMachineConnect([FromBody] MachineModel machineModel)
+    public async Task<ActionResult<MachineDto>> OnMachineConnect([FromBody] MachineModel machineModel)
     {
+
+        MachineDto result = new MachineDto();
+
         SystemInfo systemGuid = new SystemInfo();
 
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
-        var machineobj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+        var machineobj = _context.Machines.Include(e=>e.Branch).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
         // if machine exist
         if (machineobj != null)
         {
             var token = await MachineLogin(machineobj, machineModel.ConnectionId);
-            return Ok(token);
+            result.BranshId = machineobj.BranchId;
+            result.BrandId = machineobj.Branch.BrandId;
+            result.Token = token;
+
+            return Ok(result);
         }
         // if machine not exist, create one
         else
@@ -237,11 +266,15 @@ public class MachineController : ApiControllerBase
 
                 var token = machineFingerPrint;
 
-                return Ok(token);
+                result.BranshId = branch.Id;
+                result.BrandId = branch.BrandId;
+                result.Token = token;
+
+                return Ok(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Ok("");
+                return NotFound();
             }
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Commands;
+using Shared.Dto;
 using Shared.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
@@ -83,17 +84,19 @@ public class MessagingHub : Hub
             Notes = machine?.Notes,
         };
 
-        var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
-        string machineObjRes = await machineObjResponse.Result.Content.ReadAsStringAsync();
-        if (!string.IsNullOrWhiteSpace(machineObjRes) && machine != null)
+        var machineObjResponse = _http.PostAsJsonAsync<MachineModel>($"api/Machine/OnMachineConnect", myObj);
+        MachineDto machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<MachineDto>();
+
+        if (machineObjRes != null && machine != null)
         {
             _cache.Remove("pendingMachineRegistration");
             pendingMachinesRegistration.Remove(machine);
-            _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(1));
+            _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
 
             await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
+            await this.Clients.Client(connectionId).SendAsync("MachineIsLoggedIn", true);
         }
-        else if (!string.IsNullOrWhiteSpace(machineObjRes))
+        else if (machineObjRes != null)
         {
             var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
             {
@@ -108,7 +111,9 @@ public class MessagingHub : Hub
                 machinesLoggedIn.Add(new MachineRegistrationCommand()
                 {
                     SystemInfo = myObj.SystemInfo,
-                    ConnectionId = connectionId
+                    ConnectionId = connectionId,
+                    BrandId = machineObjRes.BrandId,
+                    BranchId = machineObjRes.BranshId,
                 });
 
                 _cache.Remove("machinesLoggedIn");

@@ -45,7 +45,7 @@ public class Worker : BackgroundService
 
     Task NewOrder(string arg)
     {
-        _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order");
+        _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order: {arg}");
         //connection.StopAsync();
         return Task.CompletedTask;
     }

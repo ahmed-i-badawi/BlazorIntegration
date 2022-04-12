@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Shared.Commands;
 
-public class BrandModel
+public class IntegratorModel
 {
+    public int? Id { get; set; }
     public string Hash { get; set; }
 }
