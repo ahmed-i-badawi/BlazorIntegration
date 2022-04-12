@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Net.Http;
 using System.Net.Http.Json;
-using WorkerService.Extensions;
+using SimpleTouchWorker.Extensions;
 using Microsoft.Extensions.Configuration;
 
-namespace WorkerService;
+namespace SimpleTouchWorker;
 
 public class Worker : BackgroundService
 {
@@ -35,7 +35,7 @@ public class Worker : BackgroundService
         //connection.StopAsync();
         return Task.CompletedTask;
     }
-    
+
     Task NewOrder(string arg)
     {
         _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order");

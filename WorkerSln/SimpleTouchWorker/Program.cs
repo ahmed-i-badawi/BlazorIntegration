@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Hosting;
-using WorkerService;
+using SimpleTouchWorker;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")

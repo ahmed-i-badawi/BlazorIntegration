@@ -7,53 +7,28 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
 
-namespace BlazorServer.Extensions;
+namespace SimpleTouchWorker.Extensions;
 
 /// <summary>
-/// Generates a Guid based on the current computer hardware
-/// Example: C384B159-8E36-6C85-8ED8-6897486500FF
+/// Generates Info based on the current computer hardware
 /// </summary>
-public class SystemGuid
+public class SystemInfo
 {
 
-    private static string _systemGuid = string.Empty;
+    private static string _systemInfo = string.Empty;
 
-    public string DecodeValue(string val)
-    {
-        return val.DecryptString();
-    }
-
-    public string SystemInfoAsync()
+    public string ValueAsync()
     {
         var lVolSl = GetRunningOSDriveSerialNumber();
-        //var lCompMod = GetComputerModel();
         var lCpuId = GetCpuId();
         var lBiosId = GetBiosId();
         var lMainboard = GetMainboardId();
         var lGpuId = GetGpuId();
         var lMac = GetMac();
-        var lConcatStr = $"CPU: {lCpuId}\nBIOS:{lBiosId}\nMainboard: {lMainboard}\nGPU: {lGpuId}\nMAC: {lMac}\nVolume: {lVolSl}";
-        return lConcatStr;
+        _systemInfo = $"CPU: {lCpuId}\nBIOS:{lBiosId}\nMainboard: {lMainboard}\nGPU: {lGpuId}\nMAC: {lMac}\nVolume: {lVolSl}";
+        return _systemInfo;
     }
 
-    public string ValueAsync()
-    {
-        var lConcatStr = SystemInfoAsync();
-        _systemGuid = GetHash(lConcatStr);
-        return _systemGuid;
-    }
-
-    private string GetHash(string s)
-    {
-        try
-        {
-            return s.EncryptString();
-        }
-        catch (Exception lEx)
-        {
-            return lEx.Message;
-        }
-    }
 
     #region Original Device ID Getting Code
 

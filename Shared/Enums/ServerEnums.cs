@@ -8,9 +8,7 @@ namespace Shared.Enums;
 
 public enum MachineStatus
 {
-    Pending = 0,
-    Approved = 1,
-    Alive = 2,
-    Closed = 3,
+    Alive = 1,
+    Closed = 2,
 }
 

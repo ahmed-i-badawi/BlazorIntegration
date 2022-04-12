@@ -164,39 +164,24 @@ public class MachineController : ApiControllerBase
 
         return Ok(true);
     }
-    [HttpPost]
-    public async Task<ActionResult<string>> RegisterMachine([FromBody] MachineRegistrationCommand command)
-    {
-        var brandObj = _context.Brands.Include(e => e.Machines).FirstOrDefault(e => e.Hash == command.Hash);
 
+    [HttpPost]
+    public async Task<ActionResult<string>> HashChecker([FromBody] MachineRegistrationCommand command)
+    {
+        var brandObj = _context.Brands.FirstOrDefault(e => e.Hash == command.Hash);
         if (brandObj != null)
         {
             SystemGuid systemGuid = new SystemGuid();
+            var systemInfo = systemGuid.SystemInfoAsync();
 
-            var machineFingerPrint = systemGuid.ValueAsync();
-
-            var machineObj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint && e.CurrentStatus == MachineStatus.Pending);
-
-            if (machineObj != null)
-            {
-                machineObj.Name = command.MachineName;
-                machineObj.BrandId = brandObj.Id;
-                machineObj.CurrentStatus = MachineStatus.Approved;
-
-                MachineLog machineLog = new MachineLog()
-                {
-                    MachineId = machineObj.Id,
-                    OccurredAt = DateTime.Now,
-                    Status = MachineStatus.Approved,
-                };
-                _context.MachineLogs.Add(machineLog);
-                _context.SaveChanges();
-                return Ok(machineObj.ConnectionId);
-            }
-            return Ok(false);
+            return Ok(systemInfo);
         }
-        return Ok(false);
+        else
+        {
+            return NotFound("");
+        }
     }
+
     [HttpPost]
     public async Task<ActionResult<bool>> OnMachineConnect([FromBody] MachineModel machineModel)
     {
@@ -205,26 +190,32 @@ public class MachineController : ApiControllerBase
         string machineFingerPrint = machineModel.sysInfo.EncryptString();
         var machineobj = _context.Machines.FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
+        // if machine exist
         if (machineobj != null)
         {
-            var token = await RegisterIfNotThenLogin(machineobj, machineModel.ConnectionId);
+            var token = await MachineLogin(machineobj, machineModel.ConnectionId);
             return Ok(true);
         }
+        // if machine not exist, create one
         else
         {
             try
             {
+                var brand = _context.Brands.FirstOrDefault(e => e.Hash == machineModel.Hash);
+
                 Machine machine = new Machine()
                 {
+                    BrandId = brand.Id,
                     FingerPrint = machineFingerPrint,
-                    CurrentStatus = MachineStatus.Pending,
+                    CurrentStatus = MachineStatus.Alive,
                     ConnectionId = machineModel.ConnectionId,
+                    Name = machineModel.MachineName,
                     MachineLogs = new List<MachineLog>()
                 {
                     new MachineLog()
                     {
                         OccurredAt = DateTime.Now,
-                        Status=MachineStatus.Pending,
+                        Status=MachineStatus.Alive,
                     }
                 }
                 };
@@ -232,20 +223,17 @@ public class MachineController : ApiControllerBase
                 _context.Machines.Add(machine);
                 _context.SaveChanges();
 
-                var newMachineobj = _context.Machines.First(e => e.FingerPrint == machineFingerPrint);
+                var token = machineFingerPrint;
 
-                var token = await RegisterIfNotThenLogin(newMachineobj, machineModel.ConnectionId);
                 return Ok(true);
             }
             catch (Exception)
             {
-                return Ok(false
-
-                    );
+                return Ok(false);
             }
-
         }
     }
+
     [HttpPost]
     public async Task<ActionResult<bool>> OnMachineDisConnect([FromBody] MachineModel machineModel)
     {
@@ -256,7 +244,7 @@ public class MachineController : ApiControllerBase
         if (machineDisconnected != null)
         {
             // if registered close connection log
-            if (machineDisconnected.CurrentStatus != MachineStatus.Pending)
+            if (machineDisconnected.CurrentStatus == MachineStatus.Alive)
             {
                 MachineLog machineLog = new MachineLog()
                 {
@@ -273,19 +261,11 @@ public class MachineController : ApiControllerBase
         }
         return Ok(false);
     }
-    private async Task<string> RegisterIfNotThenLogin(Machine machineobj, string newConnectionId)
+
+    private async Task<string> MachineLogin(Machine machineobj, string newConnectionId)
     {
-        // if not registered yet
-        if (machineobj.CurrentStatus == MachineStatus.Pending)
-        {
-            // register current machine then login and stuaus to alive
-            // need to wait server for registeration
-            machineobj.ConnectionId = newConnectionId;
-            _context.SaveChanges();
-            return String.Empty;
-        }
         // if registered
-        else if (machineobj.CurrentStatus == MachineStatus.Closed || machineobj.CurrentStatus == MachineStatus.Approved)
+        if (machineobj.CurrentStatus == MachineStatus.Closed)
         {
             // token is valid
             if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))

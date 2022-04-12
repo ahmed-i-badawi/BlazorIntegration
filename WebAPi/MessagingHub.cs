@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Commands;
 using Shared.Enums;
@@ -24,18 +25,23 @@ public static class UserHandler
 public class MessagingHub : Hub
 {
     private readonly HttpClient _http;
-    public IConfiguration _config { get; }
-    public  string HubUrl = "";
-    public string _machineToken { get; set; }
+    private readonly IMemoryCache _cache;
 
-    public MessagingHub(IConfiguration config, IHttpClientFactory http)
+    public IConfiguration _config { get; }
+    public string HubUrl = "";
+    public string _machineToken { get; set; }
+    public HashSet<MachineRegistrationCommand>? PendingRegisterationBrands { get; set; }
+
+    public MessagingHub(IConfiguration config, IHttpClientFactory http, IMemoryCache cache)
     {
         _config = config;
+        _cache = cache;
         _http = http.CreateClient();
         _http.BaseAddress = new Uri(_config["Server"]);
         HubUrl = _config["HubUrl"];
         Generate();
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _machineToken);
+        PendingRegisterationBrands = new HashSet<MachineRegistrationCommand>();
     }
 
     private void Generate()
@@ -63,14 +69,34 @@ public class MessagingHub : Hub
         var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
         var connectionId = Context.ConnectionId;
 
-        object myObj = new
-        {
-            sysInfo = sysInfo,
-            connectionId = connectionId,
-        };
 
-        var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
-        var machineObjRes = machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
+        var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
+        if (isChache)
+        {
+            var machine = pendingMachinesRegistration.FirstOrDefault(e => e.SystemInfo == sysInfo);
+            if (machine != null)
+            {
+                object myObj = new
+                {
+                    sysInfo = sysInfo,
+                    connectionId = connectionId,
+                    hash = machine.Hash,
+                    machineName = machine.MachineName,
+                    notes = machine.Notes,
+                };
+
+                var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineConnect", myObj);
+                bool machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
+                if (machineObjRes)
+                {
+                    _cache.Remove("pendingMachineRegistration");
+                    pendingMachinesRegistration.Remove(machine);
+                    _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(1));
+
+                    await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
+                }
+            }
+        }
 
         return base.OnConnectedAsync();
     }
@@ -87,7 +113,7 @@ public class MessagingHub : Hub
         };
 
         var machineObjResponse = _http.PostAsJsonAsync<object>($"api/Machine/OnMachineDisConnect", myObj);
-        var machineObjRes = machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
+        bool machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<bool>();
 
         await base.OnDisconnectedAsync(e);
     }

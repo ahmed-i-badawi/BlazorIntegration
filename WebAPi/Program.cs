@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opt =>
