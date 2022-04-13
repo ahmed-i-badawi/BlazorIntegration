@@ -1,4 +1,5 @@
 ﻿using Shared.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities;
@@ -10,8 +11,11 @@ public class Integrator
 
     }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public int Id { get; set; }
+    [Key]
+    public Guid Id { get; }
+    [NotMapped]
+    public string Hash { get { return Id.ToString(); } }
+
     public string? Name { get; set; }
-    public string? Hash { get; set; }
+    public string? Notes { get; set; }
 }

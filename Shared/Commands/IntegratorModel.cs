@@ -7,6 +7,5 @@ namespace Shared.Commands;
 
 public class IntegratorModel
 {
-    public int? Id { get; set; }
     public string Hash { get; set; }
 }

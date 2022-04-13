@@ -5,26 +5,37 @@
 @inject ApiService apiService
 @inject IConfiguration configuration
 
-<h3>Machine Registration Component</h3>
+<div class="container">
 
-@if (FModel != null)
-{
-    <div class="container">
-        <input type="text" id="Hash" class="form-control" @bind="@FModel.Hash" placeholder="Hash" /><br />
-        <input type="text" id="MachineName" class="form-control" @bind="@FModel.MachineName" placeholder="MachineName" /><br />
-        <input type="text" id="Notes" class="form-control" @bind="@FModel.Notes" placeholder="Notes" /><br />
+    <h3>Machine Registration Component</h3>
+
+    @if (FModel != null)
+    {
+        <div class="row">
+            <div class="col-6">
+                <input type="text" id="Hash" class="form-control" @bind="@FModel.Hash" placeholder="Hash" /><br />
+            </div>
+            <div class="col-6">
+                <input type="text" id="MachineName" class="form-control" @bind="@FModel.MachineName" placeholder="MachineName" /><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <input type="text" id="Notes" class="form-control" @bind="@FModel.Notes" placeholder="Notes" /><br />
+            </div>
+        </div>
 
         <input type="button" id="Add Machine" value="Add Machine" class="btn btn-primary" @onclick="@Submit" />
-    </div>
 
-    <ul id="discussion">
-        @foreach (var message in _messages)
-        {
-            <li>@message</li>
-        }
-    </ul>
+        <ul id="discussion">
+            @foreach (var message in _messages)
+            {
+                <li>@message</li>
+            }
+        </ul>
 
-}
+    }
+</div>
 
 @code {
     public MachineRegistrationCommand FModel { get; set; } = new MachineRegistrationCommand();

@@ -15,6 +15,7 @@ using Shared.Commands;
 
 namespace BlazorServer.Controllers
 {
+    [Authorize(Policy = "MachineToMachine")]
     public class IntegratorController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -78,7 +79,7 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> CheckIntegratorAvaiability([FromBody] IntegratorModel model)
         {
-           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Hash == model.Hash && e.Id == model.Id);
+           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Hash == model.Hash);
 
             if (integratorObj != null)
             {

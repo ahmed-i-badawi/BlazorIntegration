@@ -2,6 +2,7 @@ using BlazorServer.Areas.Identity;
 using BlazorServer.Data;
 using BlazorServer.Data.Entities;
 using BlazorServer.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shared;
+using System.Reflection;
 using System.Text;
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -32,6 +35,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<ApiService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddHttpClient("BlazorServer");
 
@@ -77,6 +81,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
 
 var app = builder.Build();
 
@@ -112,6 +117,5 @@ app.UseCors("CorsPolicy");
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-//app.MapHub<MessagingHub>(MessagingHub.HubUrl);
 
 app.Run();

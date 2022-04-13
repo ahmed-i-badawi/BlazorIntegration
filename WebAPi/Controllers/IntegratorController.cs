@@ -86,7 +86,6 @@ public class IntegratorController : ApiControllerBase
             IntegratorModel model = new IntegratorModel()
             {
                 Hash = hash,
-                Id = integratorInt
             };
 
             var connectionIdResponse = _http.PostAsJsonAsync<IntegratorModel>($"api/Integrator/CheckIntegratorAvaiability", model);

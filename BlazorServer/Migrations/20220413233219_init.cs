@@ -62,6 +62,19 @@ namespace BlazorServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Integrators",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Integrators", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -218,6 +231,7 @@ namespace BlazorServer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OccurredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MachineId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -303,6 +317,9 @@ namespace BlazorServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Integrators");
 
             migrationBuilder.DropTable(
                 name: "MachineLogs");

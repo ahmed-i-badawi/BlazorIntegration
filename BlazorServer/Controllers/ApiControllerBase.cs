@@ -6,7 +6,6 @@ using Shared.Commands;
 
 namespace BlazorServer.Controllers;
 
-[Authorize(Policy = "MachineToMachine")]
 [ApiController]
 [Route("api/[controller]/[action]")]
 public abstract class ApiControllerBase : ControllerBase

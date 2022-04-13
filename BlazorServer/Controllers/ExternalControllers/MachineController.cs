@@ -24,7 +24,7 @@ using Shared.Dto;
 
 namespace BlazorServer.Controllers;
 
-
+[Authorize(Policy = "MachineToMachine")]
 public class MachineController : ApiControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -155,27 +155,6 @@ public class MachineController : ApiControllerBase
             _context.Branchs.AddRange(branches);
             _context.SaveChanges();
         }
-
-        if (!_context.Integrators?.Any() ?? false)
-        {
-            List<Integrator> integrators = new List<Integrator>()
-            {
-                new Integrator()
-                {
-                    Id = 1,
-                    Name = "Integrator01",
-                    Hash = "sd56f45sd4f",
-                },new Integrator()
-                {
-                    Id = 2,
-                    Name = "Integrator02",
-                    Hash = "s8df4sd4f5sd45f",
-                }
-            };
-            _context.Integrators.AddRange(integrators);
-            _context.SaveChanges();
-        }
-
 
         return Ok(true);
     }

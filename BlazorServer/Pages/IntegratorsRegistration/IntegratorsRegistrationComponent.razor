@@ -1,0 +1,72 @@
+﻿@using BlazorServer.Services
+@using System.Net.Http.Headers
+@using global::Shared.Commands
+@inject HttpClient _http
+@inject ApiService apiService
+@inject IConfiguration configuration
+@using FluentValidation;
+@using FluentValidation.Validators;
+
+<div class="container">
+
+    <h3>Integrators Registration</h3>
+
+    @if (FModel != null)
+    {
+        <EditForm OnValidSubmit="Submit" Model="FModel">
+            <FluentValidator />
+            <ValidationSummary></ValidationSummary>
+
+            <div class="row">
+                <div class="col-6">
+                    <InputText id="Name" class="form-control" @bind-Value="@FModel.Name" placeholder="Name" /><br />
+                    <ValidationMessage For="() => FModel.Name"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <InputText id="Notes" class="form-control" @bind-Value="@FModel.Notes" placeholder="Notes" /><br />
+                    <ValidationMessage For="() => FModel.Notes"></ValidationMessage>
+                </div>
+            </div>
+            <button id="Save" type="submit" class="btn btn-primary">Save</button>
+            <button id="Cancel" type="button" class="btn btn-danger">Cancel</button>
+        </EditForm>
+        <ul id="discussion">
+            @foreach (var message in _messages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    public IntegratorsRegistrationCreateFM FModel { get; set; } = new IntegratorsRegistrationCreateFM();
+    private IList<string> _messages = new List<string>();
+    private string _username;
+    public string Status { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FModel = new IntegratorsRegistrationCreateFM();
+        //_http.BaseAddress = new Uri(configuration["API"]);
+    }
+
+    protected async Task Submit()
+    {
+        var response = _http.PostAsJsonAsync<IntegratorsRegistrationCreateFM>($"api/IntegratorsRegistration/PostIntegrator", FModel);
+        int result = await response.Result.Content.ReadFromJsonAsync<int>();
+        if (result > 0)
+        {
+            _messages.Add("saved");
+        }
+        else
+        {
+            _messages.Add("not saved");
+        }
+        StateHasChanged();
+    }
+}
