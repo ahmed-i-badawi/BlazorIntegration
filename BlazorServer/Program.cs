@@ -16,6 +16,10 @@ using Shared;
 using System.Reflection;
 using System.Text;
 using Syncfusion.Blazor;
+using System.Globalization;
+using BlazorServer.Shared;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Localization;
 using Syncfusion.Licensing;
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -30,15 +34,31 @@ if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/SyncfusionLicense.
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 // Add services to the container.
-builder.Services.AddSyncfusionBlazor();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddSyncfusionBlazor();
+            builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                // Define the list of cultures your app will support
+                var supportedCultures = new List<CultureInfo>()
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("de"),
+                    new CultureInfo("fr"),
+                    new CultureInfo("ar"),
+                    new CultureInfo("zh"),
+                };
+                    // Set the default culture
+                    options.DefaultRequestCulture = new RequestCulture("en-US");
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                }); 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
@@ -95,6 +115,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -123,6 +146,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
+app.MapDefaultControllerRoute();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
