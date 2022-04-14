@@ -1,0 +1,39 @@
+﻿@using Syncfusion.Blazor.Grids
+@using global::Shared.Commands
+@using global::Shared.Dto
+
+
+
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid TValue="IntegratorsDto"
+            AllowPaging="true"
+            AllowFiltering="true"
+            AllowReordering="true"
+            AllowResizing="true"
+            AllowSorting="true"
+            Toolbar="ToolbarItems"
+            Height="500"
+            Width="100%"
+            AllowTextWrap="true"
+            >
+            <GridFilterSettings Type="FilterType.Menu"></GridFilterSettings>
+            <Syncfusion.Blazor.Data.SfDataManager Adaptor="Syncfusion.Blazor.Adaptors.UrlAdaptor" Url="api/IntegratorsRegistration/GetIntegrators"></Syncfusion.Blazor.Data.SfDataManager>
+                <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(IntegratorsDto.Hash) HeaderText="Hash"></GridColumn>
+                    <GridColumn Field=@nameof(IntegratorsDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(IntegratorsDto.Notes) HeaderText="Notes"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<string> ToolbarItems { get; set; } = new List<string>() {"Search"};
+
+}

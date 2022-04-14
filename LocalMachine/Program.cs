@@ -1,4 +1,4 @@
-using LocalMachine.Areas.Identity;
+﻿using LocalMachine.Areas.Identity;
 using LocalMachine.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

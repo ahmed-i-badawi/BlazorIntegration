@@ -1,4 +1,4 @@
-namespace LocalMachine.Data
+﻿namespace LocalMachine.Data
 {
     public class WeatherForecast
     {

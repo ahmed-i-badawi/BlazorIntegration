@@ -1,4 +1,4 @@
-using BlazorServer.Areas.Identity;
+﻿using BlazorServer.Areas.Identity;
 using BlazorServer.Data;
 using BlazorServer.Data.Entities;
 using BlazorServer.Services;
@@ -15,16 +15,25 @@ using Microsoft.IdentityModel.Tokens;
 using Shared;
 using System.Reflection;
 using System.Text;
+using Syncfusion.Blazor;
+using Syncfusion.Licensing;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
                             .Build();
 
+if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt"))
+{
+    string licenseKey = System.IO.File.ReadAllText(System.IO.Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt");
+    SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Add services to the container.
+builder.Services.AddSyncfusionBlazor();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

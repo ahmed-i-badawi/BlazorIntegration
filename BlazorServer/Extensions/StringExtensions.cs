@@ -14,4 +14,11 @@ public static class StringExtensions
         }
     }
 
+    /// <summary>
+    /// returns true if string is not null or empty
+    /// </summary>
+    public static bool IsNotNullOrEmpty(this string str)
+    {
+        return !string.IsNullOrWhiteSpace(str);
+    }
 }

@@ -10,6 +10,9 @@ using BlazorServer.Data;
 using BlazorServer.Data.Entities;
 using Shared.Commands;
 using AutoMapper;
+using Syncfusion.Blazor;
+using BlazorServer.Extensions;
+using Shared.Dto;
 
 namespace BlazorServer.Controllers
 {
@@ -25,10 +28,19 @@ namespace BlazorServer.Controllers
         }
 
         // GET: api/IntegratorsRegistration
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Integrator>>> GetIntegrators()
+        [HttpPost]
+        public async Task<ActionResult> GetIntegrators([FromBody] DataManagerRequest dm)
         {
-            return await _context.Integrators.ToListAsync();
+            var query = _context.Integrators.AsQueryable();
+
+            query = await query.FilterBy(dm);
+            int count = await query.CountAsync();
+            query = await query.PageBy(dm);
+
+            List<IntegratorsDto> data = _mapper.Map<List<IntegratorsDto>>(query.ToList());
+            ResultDto<IntegratorsDto> res = new ResultDto<IntegratorsDto>(data, count);
+
+            return Ok(res);
         }
 
         // GET: api/IntegratorsRegistration/5
