@@ -1,4 +1,4 @@
-﻿using Shared.Enums;
+﻿using SharedLibrary.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities;

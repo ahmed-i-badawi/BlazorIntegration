@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Shared.Commands;
+using SharedLibrary.Commands;
 using BlazorServer.Data.Entities;
 
 namespace BlazorServer.Mapping;

@@ -1,33 +1,47 @@
 ﻿@inherits LayoutComponentBase
 @inject IJSRuntime JS
 @using Syncfusion.Blazor.Navigations
-<PageTitle>BlazorServer</PageTitle>
-<SfSidebar ID="Sidebar" Type="SidebarType.Push" Width="300px" DockSize="65px" EnableDock="true" @ref="Sidebar" @bind-IsOpen="SidebarToggle">
-    <div class="sidebar" style="position:fixed;z-index:1200">
-        <div class="topnav navbar navbar-dark">
-            <button class="navbar-toggler" @onclick="ToggleNavMenu" />
-            <a class="navbar-brand" href=""><span class="displayText" style="margin-right:30px">BlazorServer</span></a>
-        </div>
-        <div @onmouseover="MouseIn" @onmouseout="MouseOut">
-            <NavMenu />
-        </div>
-    </div>
-</SfSidebar>
+@using Syncfusion.Blazor.Notifications
+@using BlazorServer.Services
+@inject IClientOperations _clientOperations
 
-<div class="main">
-    <div class="top-row px-4" style="z-index:1111;padding-top:0px">
-        <a href="https://www.syncfusion.com/blazor-components/" target="_blank">Blazor Components</a>
-        <a href="https://blazor.syncfusion.com/documentation/" target="_blank">User Guide</a>
-        <a href="http://blazor.syncfusion.com/" target="_blank">View Demos</a>
-        <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
-        <LoginDisplay />        <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
-        <CultureSwitcher/>
-    </div>
+<AuthorizeView>
+    <NotAuthorized>
+        <PageTitle>BlazorServer</PageTitle>
+        <SfSidebar ID="Sidebar" Type="SidebarType.Push" Width="300px" DockSize="65px" EnableDock="true" @ref="Sidebar" @bind-IsOpen="SidebarToggle">
+            <div class="sidebar" style="position:fixed;z-index:1200">
+                <div class="topnav navbar navbar-dark">
+                    <button class="navbar-toggler" @onclick="ToggleNavMenu" />
+                    <a class="navbar-brand" href=""><span class="displayText" style="margin-right:30px">BlazorServer</span></a>
+                </div>
+                <div @onmouseover="MouseIn" @onmouseout="MouseOut">
+                    <NavMenu />
+                </div>
+                <div class="col-lg-12 control-section toast-default-section">
+                    <SfToast ID="toast_default" @ref="_clientOperations.ToastObj"
+                             Target="#Control-Region" ShowCloseButton="true"
+                             ShowProgressBar="true" Title="@_clientOperations.Title"
+                             Content="@_clientOperations.Content" Timeout="5000" Icon="e-meeting">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                </div>
+            </div>
+        </SfSidebar>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+        <div class="main">
+            <div class="top-row px-4" style="z-index:1111;padding-top:0px">
+                <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
+                <LoginDisplay />        <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
+                <CultureSwitcher/>
+            </div>
+
+            <div class="content px-4" id="Control-Region">
+                @Body
+            </div>
+        </div>
+
+    </NotAuthorized>
+</AuthorizeView>
 <style>
     .sidebar {
         width: 300px;
@@ -58,7 +72,7 @@
         font-size: 25px;
     }
     .e-sidebar:hover .e-open{
-         display:inline-block;
+        display:inline-block;
     }
     .e-sidebar:hover .e-close {
         display: none;
@@ -184,31 +198,31 @@
 
 @code
 {
-    SfSidebar Sidebar; 
-	public bool SidebarToggle = false; 
-	public bool SidebarToggleFixed = false; 
-	public void ToggleNavMenu() 
-    { 
-		SidebarToggle = !SidebarToggle; 
-		SidebarToggleFixed = !SidebarToggleFixed; 
-	} 
-	public async Task MouseIn(MouseEventArgs args) 
-	{ 
-		var isSidebar = await JS.InvokeAsync<bool>("isSidebar", args.ClientX, args.ClientY); 
-		if (!SidebarToggle && isSidebar) 
-		{ 
-			SidebarToggle = true; 
-		} 
-	} 
-	public async Task MouseOut(MouseEventArgs args) 
-	{ 
-		var isSidebar = await JS.InvokeAsync<bool>("isSidebar", args.ClientX, args.ClientY); 
-		if (SidebarToggle && !isSidebar) 
-		{ 
-			if(!SidebarToggleFixed) 
-			{ 
-				SidebarToggle = false; 
-			} 
-		} 
-	}
+    SfSidebar Sidebar;
+    public bool SidebarToggle = false;
+    public bool SidebarToggleFixed = false;
+    public void ToggleNavMenu()
+    {
+        SidebarToggle = !SidebarToggle;
+        SidebarToggleFixed = !SidebarToggleFixed;
+    }
+    public async Task MouseIn(MouseEventArgs args)
+    {
+        var isSidebar = await JS.InvokeAsync<bool>("isSidebar", args.ClientX, args.ClientY);
+        if (!SidebarToggle && isSidebar)
+        {
+            SidebarToggle = true;
+        }
+    }
+    public async Task MouseOut(MouseEventArgs args)
+    {
+        var isSidebar = await JS.InvokeAsync<bool>("isSidebar", args.ClientX, args.ClientY);
+        if (SidebarToggle && !isSidebar)
+        {
+            if(!SidebarToggleFixed)
+            {
+                SidebarToggle = false;
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Syncfusion.Blazor;
-using Shared.Dto;
+using SharedLibrary.Dto;
 
 namespace BlazorServer.Extensions;
 public static class LinqExtensions

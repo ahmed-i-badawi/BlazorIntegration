@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Commands;
-using Shared.Enums;
+using SharedLibrary.Commands;
+using SharedLibrary.Enums;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +20,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlazorServer.Extensions;
-using Shared.Dto;
+using SharedLibrary.Dto;
 
 namespace BlazorServer.Controllers;
 

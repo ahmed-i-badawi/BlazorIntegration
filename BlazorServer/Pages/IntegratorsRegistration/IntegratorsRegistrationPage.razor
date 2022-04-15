@@ -1,13 +1,101 @@
 ﻿@page "/IntegratorsRegistration"
+@using BlazorServer.Resources
+@using BlazorServer.Services
+@inject ApiService _apiService
 
 <div>
-    <IntegratorsRegistrationIndexComponent></IntegratorsRegistrationIndexComponent>
-</div>
-<hr />
-<div>
-    <IntegratorsRegistrationCreateOrUpdateComponent></IntegratorsRegistrationCreateOrUpdateComponent>
-</div>
+    @if (IsProcessingItem)
+    {
+        <div>
+            <IntegratorsRegistrationCreateOrUpdateComponent OnCancelClicked="CancelClicked" OnSubmitClicked="SubmitClicked"></IntegratorsRegistrationCreateOrUpdateComponent>
+        </div>
+    }
+    else
+    {
+        <div>
+            <IntegratorsRegistrationIndexComponent AllowAdd=true
+                                               Edit="Edit"
+                                               Delete="Delete"
+                                               OnAddItem="StartAddItem"/>
+        </div>
+    }
 
+</div>
 @code {
+    private bool IsProcessingItem { get; set; } = false;
+
+    public async Task StartAddItem()
+    {
+        IsProcessingItem = true;
+    }
+
+    public async Task SubmitClicked(bool success)
+    {
+        IsProcessingItem = false;
+
+        if(success)
+        {
+
+        }
+        else
+        {
+            
+        }
+
+    }
+
+    public async Task CancelClicked()
+    {
+        IsProcessingItem = false;
+    }
+
+    public async Task Edit(IntegratorsDto fm)
+    {
+        //if (fm is null)
+        //{
+        //    throw new ArgumentNullException(nameof(fm));
+        //}
+
+        //ActionsDisabled = true;
+
+        // args = new EventCallbackEdititngArgs<T>() { FM = fm, EditRoute = ColumnEditSettings.Route };
+
+        var response = await _apiService.HttpClient.PostAsJsonAsync("api/IntegratorsRegistration/EditIntegrator", fm);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"There was an error!");
+            //await GridSettings.ClientOperations.ShowToast("Error", "Mission Incompleted", "error");
+        }
+        else
+        {
+            //await GridSettings.ClientOperations.ShowToast("Update", "Updated Successfully", "success");
+            //GridRef.Refresh();
+            //ActionsDisabled = false;
+        }
+
+
+        //await IsEdititng.InvokeAsync(args);
+        //ActionsDisabled = false;
+    }
+
+    public async Task<bool> Delete(string id)
+    {
+        //ActionsDisabled = true;
+
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/IntegratorsRegistration/DeleteIntegrator", id);
+        bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+        if (!result)
+        {
+            Console.WriteLine($"There was an error!");
+            return result;
+        }
+        else
+        {
+            return result;
+
+            //ActionsDisabled = false;
+        }
+    }
 
 }

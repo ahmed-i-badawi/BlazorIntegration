@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Shared;
+using SharedLibrary;
 using System.Reflection;
 using System.Text;
 using Syncfusion.Blazor;
@@ -36,6 +36,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddHttpClient("BlazorServer");
+builder.Services.AddTransient<ApiService>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -58,19 +62,19 @@ builder.Services.AddSyncfusionBlazor();
                     options.DefaultRequestCulture = new RequestCulture("en-US");
                     options.SupportedCultures = supportedCultures;
                     options.SupportedUICultures = supportedCultures;
-                }); 
+                });
+builder.Services.AddSingleton<IClientOperations, ClientOperations>();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped<ApiService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddHttpClient("BlazorServer");
 
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
+//builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
 
 builder.Services.AddHttpContextAccessor();
 

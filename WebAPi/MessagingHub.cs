@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Commands;
-using Shared.Dto;
-using Shared.Enums;
+using SharedLibrary.Commands;
+using SharedLibrary.Dto;
+using SharedLibrary.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;

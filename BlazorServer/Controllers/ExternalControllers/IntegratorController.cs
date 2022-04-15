@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-//using Shared.Commands;
+//using SharedLibrary.Commands;
 using BlazorServer.Services;
 using BlazorServer.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BlazorServer.Data.Entities;
-using Shared.Commands;
+using SharedLibrary.Commands;
 
 namespace BlazorServer.Controllers
 {

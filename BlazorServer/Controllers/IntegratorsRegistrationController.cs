@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlazorServer.Data;
 using BlazorServer.Data.Entities;
-using Shared.Commands;
+using SharedLibrary.Commands;
 using AutoMapper;
 using Syncfusion.Blazor;
 using BlazorServer.Extensions;
-using Shared.Dto;
+using SharedLibrary.Dto;
 
 namespace BlazorServer.Controllers
 {
@@ -27,7 +27,6 @@ namespace BlazorServer.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/IntegratorsRegistration
         [HttpPost]
         public async Task<ActionResult> GetIntegrators([FromBody] DataManagerRequest dm)
         {
@@ -57,10 +56,8 @@ namespace BlazorServer.Controllers
             return integrator;
         }
 
-        // PUT: api/IntegratorsRegistration/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIntegrator(string hash, IntegratorsRegistrationCreateCommand command)
+        public async Task<IActionResult> EditIntegrator(string hash, IntegratorsRegistrationCreateCommand command)
         {
             //if (hash != command.Id)
             //{
@@ -88,8 +85,6 @@ namespace BlazorServer.Controllers
             return NoContent();
         }
 
-        // POST: api/IntegratorsRegistration
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<int>> PostIntegrator(IntegratorsRegistrationCreateCommand command)
         {
@@ -114,11 +109,10 @@ namespace BlazorServer.Controllers
             return Ok(1);
         }
 
-        // DELETE: api/IntegratorsRegistration/5
-        [HttpDelete("{hash}")]
-        public async Task<IActionResult> DeleteIntegrator(string hash)
+        [HttpPost]
+        public async Task<IActionResult> DeleteIntegrator([FromBody]  string id)
         {
-            var integrator = await _context.Integrators.FindAsync(hash);
+            var integrator = await _context.Integrators.FindAsync(Guid.Parse(id));
             if (integrator == null)
             {
                 return NotFound();
@@ -127,12 +121,12 @@ namespace BlazorServer.Controllers
             _context.Integrators.Remove(integrator);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(true);
         }
 
-        private bool IntegratorExists(string hash)
+        private bool IntegratorExists(string id)
         {
-            return _context.Integrators.Any(e => e.Hash == hash);
+            return _context.Integrators.Any(e => e.Hash == id);
         }
     }
 }

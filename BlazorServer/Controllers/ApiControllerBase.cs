@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using Shared.Commands;
+using SharedLibrary.Commands;
 
 namespace BlazorServer.Controllers;
 
