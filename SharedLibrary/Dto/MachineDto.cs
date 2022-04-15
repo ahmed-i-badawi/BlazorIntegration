@@ -9,6 +9,6 @@ namespace SharedLibrary.Dto;
 public class MachineDto
 {
     public int BrandId { get; set; }
-    public int BranshId { get; set; }
+    public string BranshId { get; set; }
     public string Token { get; set; }
 }

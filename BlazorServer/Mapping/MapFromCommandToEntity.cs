@@ -13,5 +13,7 @@ public class MapFromCommandToEntity : Profile
     public MapFromCommandToEntity()
     {
         CreateMap<IntegratorsRegistrationCreateCommand, Integrator>();
+        CreateMap<BrandCreateCommand, Brand>();
+        CreateMap<BranchCreateCommand, Branch>();
     }
 }

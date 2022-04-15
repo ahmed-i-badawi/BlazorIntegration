@@ -53,8 +53,10 @@ namespace BlazorServer.Migrations
                 name: "Brands",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,7 +68,7 @@ namespace BlazorServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -181,20 +183,20 @@ namespace BlazorServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Branchs",
+                name: "Branches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Branchs", x => x.Id);
+                    table.PrimaryKey("PK_Branches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Branchs_Brands_BrandId",
+                        name: "FK_Branches_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
@@ -207,18 +209,19 @@ namespace BlazorServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FingerPrint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FingerPrint = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
-                    BranchId = table.Column<int>(type: "int", nullable: false)
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Machines", x => x.Id);
+                    table.UniqueConstraint("AK_Machines_FingerPrint", x => x.FingerPrint);
                     table.ForeignKey(
-                        name: "FK_Machines_Branchs_BranchId",
+                        name: "FK_Machines_Branches_BranchId",
                         column: x => x.BranchId,
-                        principalTable: "Branchs",
+                        principalTable: "Branches",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -285,8 +288,8 @@ namespace BlazorServer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Branchs_BrandId",
-                table: "Branchs",
+                name: "IX_Branches_BrandId",
+                table: "Branches",
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
@@ -334,7 +337,7 @@ namespace BlazorServer.Migrations
                 name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "Branchs");
+                name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Brands");

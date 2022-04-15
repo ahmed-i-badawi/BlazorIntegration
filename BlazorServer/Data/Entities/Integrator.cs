@@ -16,6 +16,6 @@ public class Integrator
     [NotMapped]
     public string Hash { get { return Id.ToString(); } }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
     public string? Notes { get; set; }
 }

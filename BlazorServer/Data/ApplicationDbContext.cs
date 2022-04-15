@@ -1,4 +1,5 @@
 ﻿using BlazorServer.Data.Entities;
+using BlazorServer.Extensions;
 using BlazorServer.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +14,18 @@ namespace BlazorServer.Data
         {
         }
         public DbSet<Brand> Brands => Set<Brand>();
-        public DbSet<Branch> Branchs => Set<Branch>();
+        public DbSet<Branch> Branches => Set<Branch>();
         public DbSet<Machine> Machines => Set<Machine>();
         public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
         public DbSet<Integrator> Integrators => Set<Integrator>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Integrator>().Property(p=>p.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Brand>().Property(p => p.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Integrator>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Branch>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            //modelBuilder.Entity<Machine>(entity => { entity.HasIndex(e => e.FingerPrint.TrimAll()).IsUnique(); });
+            modelBuilder.Entity<Machine>().HasAlternateKey(u => u.FingerPrint);
 
             base.OnModelCreating(modelBuilder);
         }

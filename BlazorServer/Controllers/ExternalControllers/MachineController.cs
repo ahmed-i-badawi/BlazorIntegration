@@ -42,119 +42,42 @@ public class MachineController : ApiControllerBase
     {
         if (!_context.Brands?.Any() ?? false)
         {
-            List<Brand> brands = new List<Brand>()
-        {
-            new Brand()
+            var brands = Enumerable.Range(1, 100).Select(x => new Brand()
             {
-                Id = 1,
-                Name = "Brand1"
-            },new Brand()
-            {
-                Id = 2,
-                Name = "Brand2"
-            },new Brand()
-            {
-                Id = 3,
-                Name = "Brand3"
-            },new Brand()
-            {
-                Id = 4,
-                Name = "Brand4"
-            },new Brand()
-            {
-                Id = 5,
-                Name = "Brand5"
-            },new Brand()
-            {
-                Id = 6,
-                Name = "Brand6"
-            },new Brand()
-            {
-                Id = 7,
-                Name = "Brand7"
-            },
-        };
+                Name = $"Brand{x}",
+                Notes = $"this is brand{x} Notes"
+            });
 
             _context.Brands.AddRange(brands);
             _context.SaveChanges();
         }
 
-        if (!_context.Branchs?.Any() ?? false)
+        if (!_context.Branches?.Any() ?? false)
         {
-            List<Branch> branches = new List<Branch>()
+            var branches = Enumerable.Range(1, 2500).Select(x => new Branch()
             {
-                new Branch()
-                {
-                    Id = 1,
-                    Name = "Branch01",
-                    Hash = "uyhdjnfuirdfjkruhjdn",
-                    Address = "AddressBranch01",
-                    BrandId = 1,
-                },new Branch()
-                {
-                    Id = 2,
-                    Name = "Branch02",
-                    Hash = "4rfteddsf",
-                    Address = "AddressBranch02",
-                    BrandId = 1,
-                },new Branch()
-                {
-                    Id = 3,
-                    Name = "Branch03",
-                Hash = "sdfgerfgregrg",
-                    Address = "AddressBranch0222",
-                    BrandId = 1,
-                },new Branch()
-                {
-                    Id = 4,
-                    Name = "Branch01",
-                Hash = "dfgergdrfghsdfa2334",
-                    Address = "AddressBranch0333",
-                    BrandId = 2,
-                },new Branch()
-                {
-                    Id = 5,
-                    Name = "Branch02",
-                Hash = "32rewsdc3evdxv",
-                    Address = "AddressBranch01",
-                    BrandId = 1,
-                },new Branch()
-                {
-                    Id = 6,
-                    Name = "Branch01",
-                Hash = "467yrtgdtrefdfsdf",
-                    Address = "AddressBranch01",
-                    BrandId = 3,
-                },new Branch()
-                {
-                    Id = 7,
-                    Name = "Branch01",
-                Hash = "uyhdjnfuirdfjkruhjdn",
-                    Address = "AddressBranch01",
-                    BrandId = 4,
-                },new Branch()
-                {
-                    Id = 8,
-                    Name = "Branch02",
-                    Address = "AddressBranch01",
-                    BrandId = 4,
-                },new Branch()
-                {
-                    Id = 9,
-                    Name = "Branch01",
-                    Address = "AddressBranch01",
-                    BrandId = 5,
-                },new Branch()
-                {
-                    Id = 10,
-                    Name = "Branch02",
-                    Address = "AddressBranch01",
-                    BrandId = 5,
-                },
-            };
-            _context.Branchs.AddRange(branches);
+                Name = $"Branch{x}",
+                Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
+                Notes = $"this is branch{x} Notes",
+                BrandId = new Random().Next(1,100),
+            });
+
+            _context.Branches.AddRange(branches);
             _context.SaveChanges();
         }
+
+        if (!_context.Integrators?.Any() ?? false)
+        {
+            var integrators = Enumerable.Range(1, 500).Select(x => new Integrator()
+            {
+                Name = $"integrator{x}",
+                Notes = $"this is integrator{x} Notes"
+            });
+
+            _context.Integrators.AddRange(integrators);
+            _context.SaveChanges();
+        }
+
 
         return Ok(true);
     }
@@ -164,7 +87,7 @@ public class MachineController : ApiControllerBase
     {
         HashCheckerDto res = new HashCheckerDto();
 
-        var brandObj = _context.Branchs.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == hash);
+        var brandObj = _context.Branches.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == hash);
 
         if (brandObj != null)
         {
@@ -210,7 +133,7 @@ public class MachineController : ApiControllerBase
         if (machineobj != null)
         {
             var token = await MachineLogin(machineobj, machineModel.ConnectionId);
-            result.BranshId = machineobj.BranchId;
+            result.BranshId = machineobj.BranchId.ToString();
             result.BrandId = machineobj.Branch.BrandId;
             result.Token = token;
 
@@ -221,7 +144,7 @@ public class MachineController : ApiControllerBase
         {
             try
             {
-                var branch = _context.Branchs.FirstOrDefault(e => e.Hash == machineModel.Hash);
+                var branch = _context.Branches.FirstOrDefault(e => e.Hash == machineModel.Hash);
 
                 Machine machine = new Machine()
                 {
@@ -245,7 +168,7 @@ public class MachineController : ApiControllerBase
 
                 var token = machineFingerPrint;
 
-                result.BranshId = branch.Id;
+                result.BranshId = branch.Id.ToString();
                 result.BrandId = branch.BrandId;
                 result.Token = token;
 

@@ -93,8 +93,10 @@ namespace BlazorServer.Migrations
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Branch", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -103,27 +105,33 @@ namespace BlazorServer.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Hash")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Branchs");
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -139,6 +147,7 @@ namespace BlazorServer.Migrations
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
@@ -157,19 +166,22 @@ namespace BlazorServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CurrentStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("FingerPrint")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("FingerPrint");
 
                     b.HasIndex("BranchId")
                         .IsUnique();

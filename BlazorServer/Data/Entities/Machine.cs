@@ -22,7 +22,7 @@ public class Machine
     //}
     //public string? ConnectionId { get; set; }
 
-    public int BranchId { get; set; }
+    public Guid BranchId { get; set; }
     public Branch Branch { get; set; }
 
     public List<MachineLog>? MachineLogs { get; set; }

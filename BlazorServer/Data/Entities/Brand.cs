@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities;
 
 public class Brand
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [Key]
     public int Id { get; set; }
     public string Name { get; set; }
+    public string? Notes { get; set; }
 
     public List<Branch>? Branches { get; set; }
 }

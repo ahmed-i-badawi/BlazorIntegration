@@ -6,7 +6,7 @@ namespace BlazorServer.Services;
 public interface IApplicationDbContext
 {
     DbSet<Brand> Brands { get; }
-    DbSet<Branch> Branchs { get; }
+    DbSet<Branch> Branches { get; }
     DbSet<Machine> Machines { get; }
     DbSet<MachineLog> MachineLogs { get; }
     DbSet<Integrator> Integrators { get; }
