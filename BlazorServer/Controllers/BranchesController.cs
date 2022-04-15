@@ -30,7 +30,7 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult> GetBranches([FromBody] DataManagerRequest dm)
         {
-            var query = _context.Branches.AsQueryable();
+            var query = _context.Branches.Include(e=>e.Brand).AsQueryable();
 
             query = await query.FilterBy(dm);
             int count = await query.CountAsync();
@@ -130,7 +130,7 @@ namespace BlazorServer.Controllers
 
         private bool BranchExists(string id)
         {
-            return _context.Branches.Any(e => e.Hash == id);
+            return _context.Branches.Any(e => e.Id == Guid.Parse(id));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SharedLibrary.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities;
@@ -12,6 +13,7 @@ public class Machine
 
     //[DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
+    [MaxLength(1000)]
     public string? FingerPrint { get; set; }
     public string? Name { get; set; }
     public MachineStatus CurrentStatus { get; set; }

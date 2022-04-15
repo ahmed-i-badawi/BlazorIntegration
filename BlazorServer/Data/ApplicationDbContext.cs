@@ -24,8 +24,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         modelBuilder.Entity<Brand>().Property(p => p.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Integrator>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
         modelBuilder.Entity<Branch>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-        //modelBuilder.Entity<Machine>(entity => { entity.HasIndex(e => e.FingerPrint.TrimAll()).IsUnique(); });
-        modelBuilder.Entity<Machine>().HasAlternateKey(u => u.FingerPrint);
+        modelBuilder.Entity<Machine>(entity => { entity.HasIndex(e => e.FingerPrint).IsUnique(); });
+        //modelBuilder.Entity<Machine>().HasAlternateKey(u => u.FingerPrint);
 
         base.OnModelCreating(modelBuilder);
     }

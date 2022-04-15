@@ -28,7 +28,6 @@ namespace BlazorServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -209,7 +208,7 @@ namespace BlazorServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FingerPrint = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FingerPrint = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
                     BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -217,7 +216,6 @@ namespace BlazorServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Machines", x => x.Id);
-                    table.UniqueConstraint("AK_Machines_FingerPrint", x => x.FingerPrint);
                     table.ForeignKey(
                         name: "FK_Machines_Branches_BranchId",
                         column: x => x.BranchId,
@@ -302,6 +300,13 @@ namespace BlazorServer.Migrations
                 table: "Machines",
                 column: "BranchId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Machines_FingerPrint",
+                table: "Machines",
+                column: "FingerPrint",
+                unique: true,
+                filter: "[FingerPrint] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

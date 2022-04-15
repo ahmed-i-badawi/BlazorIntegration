@@ -78,7 +78,7 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> CheckIntegratorAvaiability([FromBody] IntegratorModel model)
         {
-           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Hash == model.Hash);
+           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Id == Guid.Parse(model.Hash));
 
             if (integratorObj != null)
             {

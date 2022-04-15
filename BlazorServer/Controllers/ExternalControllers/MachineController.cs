@@ -85,7 +85,7 @@ public class MachineController : ApiControllerBase
     {
         HashCheckerDto res = new HashCheckerDto();
 
-        var brandObj = _context.Branches.Include(e=>e.Machine).FirstOrDefault(e => e.Hash == hash);
+        var brandObj = _context.Branches.Include(e=>e.Machine).FirstOrDefault(e => e.Id == Guid.Parse(hash));
 
         if (brandObj != null)
         {
@@ -142,7 +142,7 @@ public class MachineController : ApiControllerBase
         {
             try
             {
-                var branch = _context.Branches.FirstOrDefault(e => e.Hash == machineModel.Hash);
+                var branch = _context.Branches.FirstOrDefault(e => e.Id == Guid.Parse(machineModel.Hash));
 
                 Machine machine = new Machine()
                 {

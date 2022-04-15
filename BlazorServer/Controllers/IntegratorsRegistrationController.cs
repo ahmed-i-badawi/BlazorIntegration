@@ -129,7 +129,7 @@ namespace BlazorServer.Controllers
 
         private bool IntegratorExists(string id)
         {
-            return _context.Integrators.Any(e => e.Hash == id);
+            return _context.Integrators.Any(e => e.Id == Guid.Parse(id));
         }
     }
 }

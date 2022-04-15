@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220415042948_init")]
+    [Migration("20220415195443_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -48,10 +48,6 @@ namespace BlazorServer.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -175,7 +171,6 @@ namespace BlazorServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FingerPrint")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -183,10 +178,12 @@ namespace BlazorServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("FingerPrint");
-
                     b.HasIndex("BranchId")
                         .IsUnique();
+
+                    b.HasIndex("FingerPrint")
+                        .IsUnique()
+                        .HasFilter("[FingerPrint] IS NOT NULL");
 
                     b.ToTable("Machines");
                 });
