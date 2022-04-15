@@ -9,14 +9,13 @@ namespace SharedLibrary.Commands;
 
 public class IntegratorsRegistrationCreateCommand
 {
+    public string? Hash { get; set; }
     public string Name { get; set; }
     public string Notes { get; set; }
 }
 
 public class IntegratorsRegistrationCreateFM : IntegratorsRegistrationCreateCommand
 {
-    public int? Id { get; set; }
-    public string? Hash { get; set; }
 }
 
 public class IntegratorsRegistrationCreateFMValidator : AbstractValidator<IntegratorsRegistrationCreateFM>

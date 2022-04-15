@@ -56,15 +56,18 @@ namespace BlazorServer.Controllers
             return integrator;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditIntegrator(string hash, IntegratorsRegistrationCreateCommand command)
+        [HttpPost]
+        public async Task<ActionResult<bool>> EditIntegrator(IntegratorsRegistrationCreateCommand command)
         {
-            //if (hash != command.Id)
-            //{
-            //    return BadRequest();
-            //}
+            Integrator integratorCommnad = _mapper.Map<Integrator>(command);
+            Integrator integratorDb = _context.Integrators.FirstOrDefault(e => e.Id == Guid.Parse(command.Hash));
 
-            //_context.Entry(integrator).State = EntityState.Modified;
+            if (integratorDb != null)
+            {
+                integratorDb.Name = command.Name;
+                integratorDb.Notes = command.Notes;
+            }
+
 
             try
             {
@@ -72,7 +75,7 @@ namespace BlazorServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IntegratorExists(hash))
+                if (!IntegratorExists(command?.Hash))
                 {
                     return NotFound();
                 }
@@ -82,11 +85,11 @@ namespace BlazorServer.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> PostIntegrator(IntegratorsRegistrationCreateCommand command)
+        public async Task<ActionResult<bool>> PostIntegrator(IntegratorsRegistrationCreateCommand command)
         {
             Integrator integrator = _mapper.Map<Integrator>(command);
 
@@ -106,11 +109,11 @@ namespace BlazorServer.Controllers
                     throw;
                 }
             }
-            return Ok(1);
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteIntegrator([FromBody]  string id)
+        public async Task<IActionResult> DeleteIntegrator([FromBody] string id)
         {
             var integrator = await _context.Integrators.FindAsync(Guid.Parse(id));
             if (integrator == null)

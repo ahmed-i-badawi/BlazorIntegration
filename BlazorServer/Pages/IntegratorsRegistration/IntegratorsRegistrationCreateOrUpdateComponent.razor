@@ -4,17 +4,27 @@
 @inject IConfiguration configuration
 @using FluentValidation;
 @using FluentValidation.Validators;
+@using AutoMapper;
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
 
 <div class="container">
 
-    <h3>Integrators Registration</h3>
 
     @if (FModel != null)
     {
+        @if (EditModel == null)
+        {
+            <h3>Add New Integrator</h3>
+        }
+        else
+        {
+            <h3>Edit Integrator with hash @FModel.Hash</h3>
+        }
+
         <EditForm OnValidSubmit="Submit" Model="FModel">
             <FluentValidator />
             <ValidationSummary></ValidationSummary>
-
             <div class="row">
                 <div class="col-6">
                     <InputText id="Name" class="form-control" @bind-Value="@FModel.Name" placeholder="Name" /><br />
@@ -29,31 +39,32 @@
                     <ValidationMessage For="() => FModel.Notes"></ValidationMessage>
                 </div>
             </div>
-            <button id="Save" type="submit" class="btn btn-primary">Save</button>
+            <button id="Save" type="submit" class="btn btn-primary">Submit</button>
             <button id="Cancel" type="button" @onclick="CancelClick" class="btn btn-danger">Cancel</button>
         </EditForm>
-        <ul id="discussion">
-            @foreach (var message in _messages)
-            {
-                <li>@message</li>
-            }
-        </ul>
     }
 </div>
 
 @code {
-    public IntegratorsRegistrationCreateFM FModel { get; set; } = new IntegratorsRegistrationCreateFM();
-    private IList<string> _messages = new List<string>();
-    private string _username;
-    public string Status { get; set; }
+    public IntegratorsRegistrationCreateFM FModel { get; set; } = null;
+    [Parameter]
+    public IntegratorsRegistrationCreateFM EditModel { get; set; }
+    public SubmitClickedArg SubmitClickedArguments { get; set; }
     [Parameter]
     public EventCallback OnCancelClicked { get; set; }
     [Parameter]
-    public EventCallback<bool> OnSubmitClicked { get; set; }
+    public EventCallback<SubmitClickedArg> OnSubmitClicked { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        FModel = new IntegratorsRegistrationCreateFM();
+        if (EditModel == null)
+        {
+            FModel = new IntegratorsRegistrationCreateFM();
+        }
+        else
+        {
+            FModel = _mapper.Map<IntegratorsRegistrationCreateFM>(EditModel);
+        }
         //_http.BaseAddress = new Uri(configuration["API"]);
     }
     public async Task CancelClick()
@@ -63,18 +74,38 @@
 
     protected async Task Submit()
     {
-        var response = _apiService.HttpClient.PostAsJsonAsync<IntegratorsRegistrationCreateFM>($"api/IntegratorsRegistration/PostIntegrator", FModel);
-        int result = await response.Result.Content.ReadFromJsonAsync<int>();
-        if (result > 0)
+        if (EditModel == null)
         {
-            _messages.Add("saved");
-            OnSubmitClicked.InvokeAsync(true);
+            var response = _apiService.HttpClient.PostAsJsonAsync<IntegratorsRegistrationCreateFM>($"api/IntegratorsRegistration/PostIntegrator", FModel);
+            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+            if (result)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, true);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            else
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, false);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            StateHasChanged();
         }
         else
         {
-            _messages.Add("not saved");
-            OnSubmitClicked.InvokeAsync(false);
+            var response = _apiService.HttpClient.PostAsJsonAsync<IntegratorsRegistrationCreateFM>($"api/IntegratorsRegistration/EditIntegrator", FModel);
+            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+            if (result)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, true);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            else
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, false);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            StateHasChanged();
         }
-        StateHasChanged();
+
     }
 }
