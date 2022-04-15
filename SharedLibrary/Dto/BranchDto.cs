@@ -14,6 +14,7 @@ public class BranchDto
     public string Address { get; set; }
     public string Notes { get; set; }
 
+    public int BrandId { get; set; }
     public BrandDto Brand { get; set; }
     public MachineDto Machine { get; set; }
 }

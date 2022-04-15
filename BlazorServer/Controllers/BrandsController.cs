@@ -1,18 +1,13 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using BlazorServer.Data;
 using BlazorServer.Data.Entities;
-using SharedLibrary.Commands;
-using AutoMapper;
-using Syncfusion.Blazor;
 using BlazorServer.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Commands;
 using SharedLibrary.Dto;
+using Syncfusion.Blazor;
 
 namespace BlazorServer.Controllers
 {
@@ -25,6 +20,62 @@ namespace BlazorServer.Controllers
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public object GetBrandsDropDownList([FromQuery] string Name)
+        {
+            var query = _context.Brands.AsQueryable().AsNoTracking();
+            var queryString = Request.Query;
+
+            int.TryParse(queryString["take"], out int take);
+            int.TryParse(queryString["selectedId"], out int selectedId);
+            string filter = queryString["$filter"];
+
+            if (filter != null) // to handle filter opertaion 
+            {
+                var newfiltersplits = filter;
+                var filtersplits = newfiltersplits.Split('(', ')', ' ', '\'');
+                var filterfield = filtersplits[2];
+                var filtervalue = filtersplits[4];
+
+                if (filtersplits.Length == 7)
+                {
+                    if (filtersplits[2] == "tolower")
+                    {
+                        filterfield = filter.Split('(', ')', '\'')[3];
+                        filtervalue = filter.Split('(', ')', '\'')[5];
+                    }
+                }
+                switch (filterfield)
+                {
+                    case "Name":
+                        query = query.Where(x => x.Name.ToLower().Contains(filtervalue.ToString()));
+                        break;
+                }
+            }
+
+            List<BrandDto> data = new List<BrandDto>();
+
+            if (selectedId > 0)
+            {
+                var selectedObj = query.FirstOrDefault(x => x.Id == selectedId);
+
+                query = query.Take(take - 1);
+
+                var dbData = query.ToList();
+                dbData.Insert(0, selectedObj);
+                data = _mapper.Map<List<BrandDto>>(dbData);
+            }
+            else
+            {
+                query = query.Take(take);
+                data = _mapper.Map<List<BrandDto>>(query.ToList());
+            }
+
+
+
+            return data;
         }
 
         [HttpPost]
@@ -42,29 +93,17 @@ namespace BlazorServer.Controllers
             return Ok(res);
         }
 
-        // GET: api/Brands/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Brand>> GetBrand(int id)
+        [HttpPost]
+        public async Task<ActionResult<bool>> EditBrand(BrandCreateCommand command)
         {
-            var brand = await _context.Brands.FindAsync(id);
+            Brand integratorCommnad = _mapper.Map<Brand>(command);
+            Brand integratorDb = _context.Brands.FirstOrDefault(e => e.Id == command.Id);
 
-            if (brand == null)
+            if (integratorDb != null)
             {
-                return NotFound();
+                integratorDb.Name = command.Name;
+                integratorDb.Notes = command.Notes;
             }
-
-            return brand;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditBrand(int id, BrandCreateCommand command)
-        {
-            //if (id != command.Id)
-            //{
-            //    return BadRequest();
-            //}
-
-            //_context.Entry(brand).State = EntityState.Modified;
 
             try
             {
@@ -72,7 +111,7 @@ namespace BlazorServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BrandExists(id))
+                if (!BrandExists(command.Id.Value))
                 {
                     return NotFound();
                 }
@@ -82,11 +121,11 @@ namespace BlazorServer.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> PostBrand(BrandCreateCommand command)
+        public async Task<ActionResult<bool>> PostBrand(BrandCreateCommand command)
         {
             Brand brand = _mapper.Map<Brand>(command);
 
@@ -106,13 +145,13 @@ namespace BlazorServer.Controllers
                     throw;
                 }
             }
-            return Ok(1);
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteBrand([FromBody]  string id)
+        public async Task<IActionResult> DeleteBrand([FromBody] int id)
         {
-            var brand = await _context.Brands.FindAsync(Guid.Parse(id));
+            var brand = await _context.Brands.FindAsync(id);
             if (brand == null)
             {
                 return NotFound();

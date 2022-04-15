@@ -9,6 +9,7 @@ namespace SharedLibrary.Commands;
 
 public class BranchCreateCommand
 {
+    public string? Hash { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
     public string Notes { get; set; }
@@ -17,7 +18,6 @@ public class BranchCreateCommand
 
 public class BranchCreateFM : BranchCreateCommand
 {
-    public string? Hash { get; set; }
     public string BrandName { get; set; }
 }
 

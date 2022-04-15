@@ -1,7 +1,6 @@
 ﻿using BlazorServer.Data;
 using BlazorServer.Data.Entities;
 using BlazorServer.Extensions;
-using BlazorServer.Models;
 using BlazorServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +18,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BlazorServer.Extensions;
 using SharedLibrary.Dto;
 
 namespace BlazorServer.Controllers;

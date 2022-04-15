@@ -1,4 +1,4 @@
-﻿@page "/IntegratorsRegistration"
+﻿@page "/Branches"
 @using BlazorServer.Resources
 @using BlazorServer.Services
 @inject ApiService _apiService
@@ -12,23 +12,26 @@
     @if (IsProcessingItem)
     {
         <div>
-            <IntegratorsRegistrationCreateOrUpdateComponent EditModel="FModel"
-                                                        OnCancelClicked="CancelClicked"
-                                                        OnSubmitClicked="SubmitClicked" />
+            <BranchCreateOrUpdateComponent EditModel="FModel"
+                                      OnCancelClicked="CancelClicked"
+                                      OnSubmitClicked="SubmitClicked" />
         </div>
     }
     else
     {
         <div>
-            <CustomFullGridComponent DTO="IntegratorsDto"
-                                               SfDataManagerUrl="api/IntegratorsRegistration/GetIntegrators"
-                                               Edit="Edit"
-                                               Delete="Delete"
-                                               Add="Add">
+            <CustomFullGridComponent DTO="BranchDto"
+                                 SfDataManagerUrl="api/Branches/GetBranches"
+                                 Edit="Edit"
+                                 Delete="Delete"
+                                 Add="Add">
                 <GridColumnsTemplate>
-                    <GridColumn Field=@nameof(IntegratorsDto.Hash) HeaderText="Hash"></GridColumn>
-                    <GridColumn Field=@nameof(IntegratorsDto.Name) HeaderText="Name"></GridColumn>
-                    <GridColumn Field=@nameof(IntegratorsDto.Notes) HeaderText="Notes"></GridColumn>
+                    <GridColumn Field=@nameof(BranchDto.Hash) HeaderText="Hash"></GridColumn>
+                    <GridColumn Field=@nameof(BranchDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(BranchDto.Address) HeaderText="Address"></GridColumn>
+                    <GridColumn Field="Brand.Name" HeaderText="Brand Name"></GridColumn>
+                    <GridColumn Field="Machine.Name" HeaderText="Machine Name"></GridColumn>
+                    <GridColumn Field=@nameof(BranchDto.Notes) HeaderText="Notes"></GridColumn>
                 </GridColumnsTemplate>
             </CustomFullGridComponent>
         </div>
@@ -37,7 +40,7 @@
 </div>
 @code {
     private bool IsProcessingItem { get; set; } = false;
-    public IntegratorsRegistrationCreateFM FModel { get; set; } = null;
+    public BranchCreateFM FModel { get; set; } = null;
 
     public async Task<bool> Add(bool added)
     {
@@ -84,20 +87,20 @@
         FModel = null;
     }
 
-    public async Task Edit(IntegratorsDto dto)
+    public async Task Edit(BranchDto dto)
     {
         IsProcessingItem = true;
 
-        FModel = _mapper.Map<IntegratorsRegistrationCreateFM>(dto);
+        FModel = _mapper.Map<BranchCreateFM>(dto);
 
         StateHasChanged();
     }
 
-    public async Task<bool> Delete(IntegratorsDto dto)
+    public async Task<bool> Delete(BranchDto dto)
     {
         //ActionsDisabled = true;
 
-        var response = _apiService.HttpClient.PostAsJsonAsync("api/IntegratorsRegistration/DeleteIntegrator", dto.Hash);
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/Branches/DeleteBranch", dto.Hash);
         bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
         if (!result)
         {

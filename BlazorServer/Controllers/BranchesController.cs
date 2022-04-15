@@ -56,15 +56,19 @@ namespace BlazorServer.Controllers
             return branch;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditBranch(string id, BranchCreateCommand command)
+        [HttpPost]
+        public async Task<ActionResult<bool>> EditBranch(BranchCreateCommand command)
         {
-            //if (id != command.Id)
-            //{
-            //    return BadRequest();
-            //}
+            Branch commnad = _mapper.Map<Branch>(command);
+            Branch db = _context.Branches.FirstOrDefault(e => e.Id == Guid.Parse(command.Hash));
 
-            //_context.Entry(branch).State = EntityState.Modified;
+            if (db != null)
+            {
+                db.Name = command.Name;
+                db.Notes = command.Notes;
+                db.Address = command.Address;
+                db.BrandId = command.BrandId;
+            }
 
             try
             {
@@ -72,7 +76,7 @@ namespace BlazorServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BranchExists(id))
+                if (!BranchExists(command.Hash))
                 {
                     return NotFound();
                 }
@@ -82,11 +86,11 @@ namespace BlazorServer.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(true);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> PostBranch(BranchCreateCommand command)
+        public async Task<ActionResult<bool>> PostBranch(BranchCreateCommand command)
         {
             Branch branch = _mapper.Map<Branch>(command);
 
@@ -106,7 +110,7 @@ namespace BlazorServer.Controllers
                     throw;
                 }
             }
-            return Ok(1);
+            return Ok(true);
         }
 
         [HttpPost]
