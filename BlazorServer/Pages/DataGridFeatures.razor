@@ -5,8 +5,8 @@
 <div id = "ControlRegion">
 <SfGrid  ID="Grid" DataSource="@Orders"  @ref="Grid" AllowPaging="true" AllowFiltering="true" AllowReordering="true" AllowResizing="true" AllowGrouping="true" AllowExcelExport="true" AllowSelection="true"
               AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})" Height="315" Width="900">        
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog"></GridEditSettings>
-        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
     <GridPageSettings PageSizes="true"></GridPageSettings>
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
         <GridEvents OnToolbarClick="ToolbarClick" TValue="Order"></GridEvents>
@@ -27,14 +27,14 @@
       <li class="list"> Exporting - Excel Export</li>
       <li class="list"> Grouping</li>
       <li class="list"> Sorting</li>
-      <li class="list"> Filtering - Menu</li>
+      <li class="list"> Filtering - Filter Bar</li>
       <li class="list"> Selection</li>
       <li class="list"> Reordering</li>
       <li class="list"> Paging</li>
       <li class="list"> Resizing</li>
       <li class="list"> Searching</li>
       <li class="list"> Checkbox Selection</li>
-      <li class="list"> Editing - Dialog</li>
+      <li class="list"> Editing - Normal</li>
       <li class="list"> Theme - Bootstrap v5</li>
     </ul>
 </div>

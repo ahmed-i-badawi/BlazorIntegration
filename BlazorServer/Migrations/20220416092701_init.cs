@@ -208,7 +208,7 @@ namespace BlazorServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FingerPrint = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FingerPrint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
                     BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

@@ -1,11 +1,8 @@
 ﻿@page "/toast-features"
 @using Syncfusion.Blazor.Notifications
-@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Inputs
-@inject IClientOperations _clientOperations
-@using BlazorServer.Services
-
+@using Syncfusion.Blazor.DropDowns
 <h2>Toast</h2>
 <br/>
 <div id = "Control-Region">
@@ -59,12 +56,7 @@
     private string ToastContent = "Conference Room 01 / Building 135 10:00 AM-10:30 AM";
     private void ShowOnClick()
     {
-        Console.WriteLine("start");
-        _clientOperations.ShowToast("lol", "lol content", "success");
-        Console.WriteLine("end");
-
-
-        //this.ToastObj.Show();
+        this.ToastObj.Show();
     }
     private void HideOnClick()
     {

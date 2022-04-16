@@ -6,7 +6,7 @@
 @inject IClientOperations _clientOperations
 
 <AuthorizeView>
-    <NotAuthorized>
+    <Authorized>
         <PageTitle>BlazorServer</PageTitle>
         <SfSidebar ID="Sidebar" Type="SidebarType.Push" Width="300px" DockSize="65px" EnableDock="true" @ref="Sidebar" @bind-IsOpen="SidebarToggle">
             <div class="sidebar" style="position:fixed;z-index:1200">
@@ -25,14 +25,16 @@
                         <ToastPosition X="Right"></ToastPosition>
                     </SfToast>
                 </div>
+
             </div>
         </SfSidebar>
 
         <div class="main">
             <div class="top-row px-4" style="z-index:1111;padding-top:0px">
                 <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
-                <LoginDisplay />        <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
-                <CultureSwitcher/>
+                <LoginDisplay />
+                <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
+                <CultureSwitcher />
             </div>
 
             <div class="content px-4" id="Control-Region">
@@ -40,6 +42,22 @@
             </div>
         </div>
 
+
+    </Authorized>
+    <NotAuthorized>
+
+        <div class="main">
+            <div class="top-row px-4" style="z-index:1111;padding-top:0px">
+                <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
+                <LoginDisplay />
+                <div style="padding-left:10px;width:1px;height:25px;color:#E4E4E4">|</div>
+                <CultureSwitcher />
+            </div>
+
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 <style>
@@ -71,9 +89,11 @@
     .e-sidebar .e-icons::before {
         font-size: 25px;
     }
-    .e-sidebar:hover .e-open{
-        display:inline-block;
+
+    .e-sidebar:hover .e-open {
+        display: inline-block;
     }
+
     .e-sidebar:hover .e-close {
         display: none;
     }
@@ -85,6 +105,7 @@
     .e-sidebar .profile::before {
         content: '\e10c';
     }
+
     .e-sidebar .info::before {
         content: '\e11b';
     }
@@ -214,12 +235,13 @@
             SidebarToggle = true;
         }
     }
+
     public async Task MouseOut(MouseEventArgs args)
     {
         var isSidebar = await JS.InvokeAsync<bool>("isSidebar", args.ClientX, args.ClientY);
         if (SidebarToggle && !isSidebar)
         {
-            if(!SidebarToggleFixed)
+            if (!SidebarToggleFixed)
             {
                 SidebarToggle = false;
             }
