@@ -27,10 +27,10 @@ public class SeedingController : ApiControllerBase
 {
     private readonly ApplicationDbContext _context;
     public IConfiguration _config { get; }
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public SeedingController(ApplicationDbContext context, IConfiguration config, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public SeedingController(ApplicationDbContext context, IConfiguration config, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _config = config;

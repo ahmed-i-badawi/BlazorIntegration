@@ -22,7 +22,7 @@ using SharedLibrary.Dto;
 
 namespace BlazorServer.Controllers;
 
-[Authorize(Policy = "MachineToMachine")]
+[Authorize]
 public class MachineController : ApiControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -57,7 +57,7 @@ public class MachineController : ApiControllerBase
                 Name = $"Branch{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
                 Notes = $"this is branch{x} Notes",
-                BrandId = new Random().Next(1,100),
+                BrandId = new Random().Next(1, 100),
             });
 
             _context.Branches.AddRange(branches);
@@ -85,35 +85,37 @@ public class MachineController : ApiControllerBase
     {
         HashCheckerDto res = new HashCheckerDto();
 
-        var brandObj = _context.Branches.Include(e=>e.Machine).FirstOrDefault(e => e.Id == Guid.Parse(hash));
+        bool isGuid = Guid.TryParse(hash, out Guid id);
 
-        if (brandObj != null)
+        if (isGuid)
         {
-            if (brandObj.Machine != null)
+            var brandObj = _context.Branches.Include(e => e.Machine).FirstOrDefault(e => e.Id == id);
+
+            if (brandObj != null)
             {
-                res.SystemInfo = string.Empty;
-                res.Message = "this branch has a machine";
+                if (brandObj.Machine != null)
+                {
+                    res.SystemInfo = string.Empty;
+                    res.Message = "this branch has a machine";
 
-                return Ok(res);
-            }
-            else
-            {
-                SystemGuid systemGuid = new SystemGuid();
-                var systemInfo = systemGuid.SystemInfoAsync();
+                    return Ok(res);
+                }
+                else
+                {
+                    SystemGuid systemGuid = new SystemGuid();
+                    var systemInfo = systemGuid.SystemInfoAsync();
 
-                res.SystemInfo = systemInfo;
-                res.Message = string.Empty;
+                    res.SystemInfo = systemInfo;
+                    res.Message = string.Empty;
 
-                return Ok(res);
+                    return Ok(res);
+                }
             }
         }
-        else
-        {
-            res.SystemInfo = string.Empty;
-            res.Message = "No hash available";
+        res.SystemInfo = string.Empty;
+        res.Message = "No hash available";
 
-            return Ok(res);
-        }
+        return Ok(res);
     }
 
     [HttpPost]
@@ -125,7 +127,7 @@ public class MachineController : ApiControllerBase
         SystemInfo systemGuid = new SystemInfo();
 
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
-        var machineobj = _context.Machines.Include(e=>e.Branch).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+        var machineobj = _context.Machines.Include(e => e.Branch).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
         // if machine exist
         if (machineobj != null)
@@ -213,27 +215,27 @@ public class MachineController : ApiControllerBase
         // if registered
         //if (machineobj.CurrentStatus == MachineStatus.Closed)
         //{
-            // token is valid
-            if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
+        // token is valid
+        if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
+        {
+            MachineLog log = new MachineLog()
             {
-                MachineLog log = new MachineLog()
-                {
-                    MachineId = machineobj.Id,
-                    OccurredAt = DateTime.Now,
-                    Status = MachineStatus.Alive,
-                    ConnectionId=newConnectionId
-                };
-                _context.MachineLogs.Add(log);
-                //machineobj.ConnectionId = newConnectionId;
-                machineobj.CurrentStatus = MachineStatus.Alive;
-                _context.SaveChanges();
-                return machineobj.FingerPrint;
-            }
-            // if token not valid
-            else
-            {
-                return String.Empty;
-            }
+                MachineId = machineobj.Id,
+                OccurredAt = DateTime.Now,
+                Status = MachineStatus.Alive,
+                ConnectionId = newConnectionId
+            };
+            _context.MachineLogs.Add(log);
+            //machineobj.ConnectionId = newConnectionId;
+            machineobj.CurrentStatus = MachineStatus.Alive;
+            _context.SaveChanges();
+            return machineobj.FingerPrint;
+        }
+        // if token not valid
+        else
+        {
+            return String.Empty;
+        }
         //}
 
         //return "";

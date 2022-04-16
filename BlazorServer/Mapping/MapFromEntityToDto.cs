@@ -15,5 +15,6 @@ public class MapFromEntityToDto : Profile
         CreateMap<Integrator, IntegratorsDto>();
         CreateMap<Brand, BrandDto>();
         CreateMap<Branch, BranchDto>();
+        CreateMap<Machine, MachineDto>();
     }
 }

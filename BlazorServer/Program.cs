@@ -17,6 +17,11 @@ using System.Reflection;
 using FluentValidation;
 using BlazorServer;
 using SharedLibrary;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
@@ -30,13 +35,11 @@ if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/SyncfusionLicense.
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddHttpClient("BlazorServer");
 builder.Services.AddTransient<ApiService>();
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -48,8 +51,8 @@ builder.Services.AddSyncfusionBlazor();
 builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-                // Define the list of cultures your app will support
-                var supportedCultures = new List<CultureInfo>()
+    // Define the list of cultures your app will support
+    var supportedCultures = new List<CultureInfo>()
     {
                     new CultureInfo("en-US"),
                     new CultureInfo("de"),
@@ -57,8 +60,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
                     new CultureInfo("ar"),
                     new CultureInfo("zh"),
     };
-                // Set the default culture
-                options.DefaultRequestCulture = new RequestCulture("en-US");
+    // Set the default culture
+    options.DefaultRequestCulture = new RequestCulture("en-US");
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });
@@ -71,12 +74,112 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
+
+// Supply HttpClient instances that include access tokens when making requests to the server project
+//builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
+builder.Services.AddResponseCompression(opt =>
+{
+    opt.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
+});
+builder.Services.AddControllers();
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("MachineToMachine", policy => policy.RequireClaim("MachineToMachine"));
+//});
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//              .AddJwtBearer(options =>
+//              {
+//                  options.TokenValidationParameters = new TokenValidationParameters
+//                  {
+//                      ValidateIssuer = true,
+//                      ValidateAudience = true,
+//                      ValidateLifetime = true,
+//                      ValidateIssuerSigningKey = true,
+//                      ValidIssuer = configuration["Jwt:Issuer"],
+//                      ValidAudience = configuration["Jwt:Audience"],
+//                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+//                  };
+//              });
+builder.Services
+    .AddAuthentication()
+        .AddJwtBearer("Bearer", options => { })
+.AddJwtBearer("MachineToMachine", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidIssuer = configuration["Jwt:Issuer"],
+        //ValidAudience = Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
+    };
+});
+builder.Services
+    .AddAuthorization(options =>
+    {
+        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .AddAuthenticationSchemes("Bearer", "MachineToMachine")
+            .Build();
+        // options.AddPolicy("MyCustomPolicy",
+        //policyBuilder => policyBuilder.RequireClaim("SomeClaim"));
+    });
+//builder.Services.AddAuthorization(auth =>
+//{
+//    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+//        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+//        .RequireAuthenticatedUser().Build());
+
+//    auth.AddPolicy("MachineToMachine", policy =>
+//        policy.req.Add(new ApiKeyRequirement()));
+
+//    auth.DefaultPolicy = auth.GetPolicy("Bearer");
+//});
+//builder.Services.AddAuthentication(x =>
+//{
+//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//             .AddJwtBearer(cfg =>
+//             {
+//                 cfg.RequireHttpsMetadata = false;
+//                 cfg.SaveToken = true;
+//                 cfg.TokenValidationParameters = new TokenValidationParameters()
+//                 {
+//                     //ValidateIssuerSigningKey = true,
+//                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
+//                     ValidateAudience = false,
+//                     ValidateLifetime = true,
+//                     ValidIssuer = configuration["Jwt:Issuer"],
+//                     //ValidAudience = Configuration["Jwt:Audience"],
+//                     //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
+//                 };
+//             });
+
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -90,6 +193,7 @@ else
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -101,8 +205,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
-app.MapControllers();
+app.MapDefaultControllerRoute();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

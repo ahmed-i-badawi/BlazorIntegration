@@ -7,7 +7,7 @@ namespace BlazorServer.Data;
 public static class ApplicationDbContextSeed
 {
   
-    public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public static async Task SeedDefaultUserAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         var administratorRole = new IdentityRole("Administrator");
 
@@ -16,12 +16,18 @@ public static class ApplicationDbContextSeed
             await roleManager.CreateAsync(administratorRole);
         }
 
-        var administrator = new ApplicationUser { UserName = "admin", Email = "admin@localhost" };
+        var administrator = new IdentityUser { UserName = "admin", Email = "admin@localhost" , EmailConfirmed = true };
+        var administrator2 = new IdentityUser { UserName = "ahmedbadawi127@gmail.com", Email = "ahmedbadawi127@gmail.com", EmailConfirmed = true };
 
         if (userManager.Users.All(u => u.UserName != administrator.UserName))
         {
             await userManager.CreateAsync(administrator, "Admin1!");
             await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+        }
+        if (userManager.Users.All(u => u.UserName != administrator2.UserName))
+        {
+            await userManager.CreateAsync(administrator2, "12!@qwQW");
+            await userManager.AddToRolesAsync(administrator2, new[] { administratorRole.Name });
         }
     }
 
