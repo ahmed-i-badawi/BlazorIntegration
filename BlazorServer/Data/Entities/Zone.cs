@@ -1,0 +1,14 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BlazorServer.Data.Entities
+{
+    public class Zone
+    {
+        public int Id { get; }
+        public string Name { get; set; }
+        public string? Notes { get; set; }
+
+        public List<SiteZone>? SiteZones { get; set; }
+    }
+}

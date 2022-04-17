@@ -15,6 +15,8 @@ public class MapFromEntityToDto : Profile
         CreateMap<Integrator, IntegratorsDto>();
         CreateMap<Brand, BrandDto>();
         CreateMap<Site, SiteDto>();
+        CreateMap<Zone, ZoneDto>();
+        CreateMap<Site, SiteDto>();
         CreateMap<Machine, MachineDto>();
     }
 }

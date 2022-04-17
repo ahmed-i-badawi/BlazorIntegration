@@ -5,7 +5,6 @@ namespace BlazorServer.Data.Entities
 {
     public class Site
     {
-        [Key]
         public int Id { get; }
         public Guid Hash { get; }
         [NotMapped]
@@ -17,6 +16,15 @@ namespace BlazorServer.Data.Entities
 
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
+
+        public List<SiteZone>? SiteZones { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public int NumberOfZones
+        {
+            get { return SiteZones?.Count ?? 0; }
+            private set { /* needed for EF */ }
+        }
 
         public Machine Machine { get; set; }
     }

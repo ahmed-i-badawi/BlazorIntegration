@@ -72,5 +72,17 @@ public static class ApplicationDbContextSeed
             context.SaveChanges();
         }
 
+        if (!context.Zones?.Any() ?? false)
+        {
+            var zones = Enumerable.Range(1, 100).Select(x => new Zone()
+            {
+                Name = $"Zone{x}",
+                Notes = $"this is Zone{x} Notes",
+            });
+
+            context.Zones.AddRange(zones);
+            context.SaveChanges();
+        }
+
     }
 }

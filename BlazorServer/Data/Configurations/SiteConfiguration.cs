@@ -8,8 +8,14 @@ public class SiteConfiguration : IEntityTypeConfiguration<Site>
 {
     public void Configure(EntityTypeBuilder<Site> builder)
     {
+        builder.HasKey(p => p.Id);
         builder.Property(p => p.Hash).HasDefaultValueSql("NEWID()");
-        //builder.HasAlternateKey(p => p.Hash);
-        builder.Property(p => p.Id).ValueGeneratedOnAdd();
+
+        //builder.Property(m => m.NumberOfZones)
+        //    .HasComputedColumnSql(
+        //    "(SELECT COUNT(*) FROM [SiteZone] " +
+        //    "WHERE [Site].[Id] = [SiteZone].[SiteId]) as PendingRequests"
+        //    );
+
     }
 }

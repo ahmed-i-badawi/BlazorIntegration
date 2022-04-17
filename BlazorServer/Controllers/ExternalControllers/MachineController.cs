@@ -34,52 +34,6 @@ public class MachineController : ApiControllerBase
         _config = config;
     }
 
-    [AllowAnonymous]
-    [HttpGet]
-    public ActionResult<bool> Seeding()
-    {
-        if (!_context.Brands?.Any() ?? false)
-        {
-            var brands = Enumerable.Range(1, 100).Select(x => new Brand()
-            {
-                Name = $"Brand{x}",
-                Notes = $"this is brand{x} Notes"
-            });
-
-            _context.Brands.AddRange(brands);
-            _context.SaveChanges();
-        }
-
-        if (!_context.Sites?.Any() ?? false)
-        {
-            var Sites = Enumerable.Range(1, 2500).Select(x => new Site()
-            {
-                Name = $"Site{x}",
-                Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
-                Notes = $"this is Site{x} Notes",
-                BrandId = new Random().Next(1, 100),
-            });
-
-            _context.Sites.AddRange(Sites);
-            _context.SaveChanges();
-        }
-
-        if (!_context.Integrators?.Any() ?? false)
-        {
-            var integrators = Enumerable.Range(1, 500).Select(x => new Integrator()
-            {
-                Name = $"integrator{x}",
-                Notes = $"this is integrator{x} Notes"
-            });
-
-            _context.Integrators.AddRange(integrators);
-            _context.SaveChanges();
-        }
-
-
-        return Ok(true);
-    }
-
     [HttpPost]
     public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] int id)
     {

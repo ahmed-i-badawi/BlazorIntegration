@@ -16,41 +16,53 @@
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
-            <SfGrid @ref="GridRef" TValue="DTO"
+            <SfGrid @ref="GridRef" TValue="DTO" DataSource="DataSourceList"
                     AllowPaging="true"
                     AllowFiltering="true"
                     AllowReordering="true"
                     AllowResizing="true"
                     AllowSorting="true"
-                    Height="500"
+                    Height="@Height"
                     Width="100%"
                     AllowTextWrap="true">
                 <GridFilterSettings Type="FilterType.Menu"></GridFilterSettings>
                 <Syncfusion.Blazor.Data.SfDataManager Adaptor="Syncfusion.Blazor.Adaptors.UrlAdaptor" Url="@SfDataManagerUrl"></Syncfusion.Blazor.Data.SfDataManager>
                 <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
                 <GridColumns>
-              
+
                     @GridColumnsTemplate
 
-
-                    <GridColumn HeaderText="Actions" TextAlign="TextAlign.Center" Width="250">
-                        <Template Context="cContext">
-                            <SfButtonGroup CssClass="e-round-corner" style="text-align:center">
-                                @{
-                                    var obj = ((DTO)cContext);
-                                    if (Edit != null)
-                                    {
-                                        <button style="width:80px;" type="button" disabled="@IsActionsDisabled" onclick="@(() => Edit(obj))" class="btn btn-warning">Edit</button>
+                    @if (Edit != null && Delete != null)
+                    {
+                        <GridColumn HeaderText="Actions" TextAlign="TextAlign.Center" Width="250">
+                            <Template Context="cContext">
+                                <SfButtonGroup CssClass="e-round-corner" style="text-align:center">
+                                    @{
+                                        var obj = ((DTO)cContext);
+                                        if (Edit != null)
+                                        {
+                                            <button style="width:80px;" type="button" disabled="@IsActionsDisabled" onclick="@(() => Edit(obj))" class="btn btn-warning">Edit</button>
+                                        }
+                                        if (Delete != null)
+                                        {
+                                            <button style="width:80px;" type="button" disabled="@IsActionsDisabled" onclick="@(() => {Deleted(Delete(obj).Result);})" class="btn btn-danger">Delete</button>
+                                        }
                                     }
-                                    if (Delete != null)
-                                    {
-                                        <button style="width:80px;" type="button" disabled="@IsActionsDisabled" onclick="@(() => {Deleted(Delete(obj).Result);})" class="btn btn-danger">Delete</button>
-                                    }
-                                }
-                            </SfButtonGroup>
-                        </Template>
-                    </GridColumn>
+                                </SfButtonGroup>
+                            </Template>
+                        </GridColumn>
+                    }
                 </GridColumns>
+                @if (GridDetailTemplate != null)
+                {
+                    <GridTemplates>
+                        <DetailTemplate Context="cContect">
+
+                            @GridDetailTemplate(cContect)
+
+                        </DetailTemplate>
+                    </GridTemplates>
+                }
             </SfGrid>
         </div>
     </div>
@@ -62,7 +74,15 @@
     public string SfDataManagerUrl { get; set; }
 
     [Parameter]
+    public List<DTO> DataSourceList { get; set; }
+    [Parameter]
     public RenderFragment GridColumnsTemplate { get; set; }
+
+    [Parameter]
+    public string Height { get; set; } = "500";
+
+    [Parameter]
+    public RenderFragment<object> GridDetailTemplate { get; set; }
 
     [Parameter]
     public Func<DTO, Task> Edit { get; set; }

@@ -8,7 +8,7 @@ public class IntegratorConfiguration : IEntityTypeConfiguration<Integrator>
 {
     public void Configure(EntityTypeBuilder<Integrator> builder)
     {
-        builder.Property(p => p.Id).HasDefaultValueSql("NEWID()");
-
+        builder.HasKey(p => p.Id);
+        //builder.Property(p => p.Id).HasDefaultValueSql("NEWID()");
     }
 }

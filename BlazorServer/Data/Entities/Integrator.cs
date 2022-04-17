@@ -11,7 +11,6 @@ public class Integrator
 
     }
 
-    [Key]
     public Guid Id { get; }
     [NotMapped]
     public string Hash { get { return Id.ToString(); } }

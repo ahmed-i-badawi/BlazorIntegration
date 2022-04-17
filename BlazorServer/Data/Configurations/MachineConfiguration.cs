@@ -8,8 +8,8 @@ public class MachineConfiguration : IEntityTypeConfiguration<Machine>
 {
     public void Configure(EntityTypeBuilder<Machine> builder)
     {
-        builder.HasAlternateKey(u => u.FingerPrint);
-        builder.HasIndex(e => e.FingerPrint);
+        builder.HasKey(p => p.Id);
+        builder.HasIndex(e => e.FingerPrint).IsUnique();
 
     }
 }

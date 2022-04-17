@@ -26,18 +26,34 @@ namespace BlazorServer.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        private async Task GetSiteZones(List<SiteDto> dto , List<Site> db)
+        {
+            foreach (var siteEntity in db)
+            {
+                dto.FirstOrDefault(e => e.Id == siteEntity.Id).Zones = siteEntity.SiteZones?.Select(e => e.Zone).Select(e => new ZoneDto()
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Notes = e.Notes,
+                }).ToList();
+            }
+        }
         [HttpPost]
         public async Task<ActionResult> GetSites([FromBody] DataManagerRequest dm)
         {
             var query = _context.Sites.AsQueryable();
 
             query = await query.FilterBy(dm);
-            query = query.Include(e => e.Brand).Include(e => e.Machine);
+            query = query.Include(e => e.Brand).Include(e => e.Machine)
+                .Include(e => e.SiteZones).ThenInclude(e => e.Zone);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
 
-            List<SiteDto> data = _mapper.Map<List<SiteDto>>(query.ToList());
+            List<Site> qList = query.ToList();
+            List<SiteDto> data = _mapper.Map<List<SiteDto>>(qList);
+
+            await GetSiteZones(data, qList);
+
             ResultDto<SiteDto> res = new ResultDto<SiteDto>(data, count);
 
             return Ok(res);
@@ -115,7 +131,7 @@ namespace BlazorServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSite([FromBody]  int id)
+        public async Task<IActionResult> DeleteSite([FromBody] int id)
         {
             var Site = await _context.Sites.FindAsync(id);
             if (Site == null)

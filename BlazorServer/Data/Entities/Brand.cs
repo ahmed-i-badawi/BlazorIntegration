@@ -5,7 +5,6 @@ namespace BlazorServer.Data.Entities;
 
 public class Brand
 {
-    [Key]
     public int Id { get; set; }
     public string Name { get; set; }
     public string? Notes { get; set; }

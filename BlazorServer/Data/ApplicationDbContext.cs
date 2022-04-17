@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Machine> Machines => Set<Machine>();
     public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
     public DbSet<Integrator> Integrators => Set<Integrator>();
+    public DbSet<Zone> Zones => Set<Zone>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

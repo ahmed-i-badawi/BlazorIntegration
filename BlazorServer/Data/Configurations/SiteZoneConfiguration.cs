@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class BrandConfiguration : IEntityTypeConfiguration<Brand>
+public class SiteZoneConfiguration : IEntityTypeConfiguration<SiteZone>
 {
-    public void Configure(EntityTypeBuilder<Brand> builder)
+    public void Configure(EntityTypeBuilder<SiteZone> builder)
     {
-        builder.HasKey(p => p.Id);
+        builder.HasKey(p => new { p.SiteId, p.ZoneId });
     }
 }

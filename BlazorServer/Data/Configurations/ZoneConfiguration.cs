@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class BrandConfiguration : IEntityTypeConfiguration<Brand>
+public class ZoneConfiguration : IEntityTypeConfiguration<Zone>
 {
-    public void Configure(EntityTypeBuilder<Brand> builder)
+    public void Configure(EntityTypeBuilder<Zone> builder)
     {
         builder.HasKey(p => p.Id);
     }

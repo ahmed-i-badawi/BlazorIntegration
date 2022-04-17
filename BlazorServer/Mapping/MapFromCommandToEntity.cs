@@ -15,5 +15,6 @@ public class MapFromCommandToEntity : Profile
         CreateMap<IntegratorsRegistrationCreateCommand, Integrator>();
         CreateMap<BrandCreateCommand, Brand>();
         CreateMap<SiteCreateCommand, Site>();
+        CreateMap<ZoneCreateCommand, Zone>();
     }
 }
