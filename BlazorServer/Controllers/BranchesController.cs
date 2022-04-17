@@ -30,9 +30,10 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult> GetBranches([FromBody] DataManagerRequest dm)
         {
-            var query = _context.Branches.Include(e=>e.Brand).Include(e=>e.Machine).AsQueryable();
+            var query = _context.Branches.AsQueryable();
 
             query = await query.FilterBy(dm);
+            query = query.Include(e => e.Brand).Include(e => e.Machine);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
 

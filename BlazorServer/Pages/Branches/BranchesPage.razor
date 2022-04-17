@@ -29,8 +29,8 @@
                     <GridColumn Field=@nameof(BranchDto.Hash) HeaderText="Hash"></GridColumn>
                     <GridColumn Field=@nameof(BranchDto.Name) HeaderText="Name"></GridColumn>
                     <GridColumn Field=@nameof(BranchDto.Address) HeaderText="Address"></GridColumn>
-                    <GridColumn Field="Brand.Name" HeaderText="Brand Name"></GridColumn>
-                    <GridColumn Field="Machine.Name" HeaderText="Machine Name"></GridColumn>
+                    <GridColumn Field="Brand.Name" AllowFiltering="false" HeaderText="Brand Name"></GridColumn>
+                    <GridColumn Field="Machine.Name" AllowFiltering="false" HeaderText="Machine Name"></GridColumn>
                     <GridColumn Field=@nameof(BranchDto.Notes) HeaderText="Notes"></GridColumn>
                 </GridColumnsTemplate>
             </CustomFullGridComponent>

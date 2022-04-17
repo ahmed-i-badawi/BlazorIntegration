@@ -14,7 +14,7 @@ using SharedLibrary.Commands;
 
 namespace BlazorServer.Controllers
 {
-    [Authorize(Policy = "MachineToMachine")]
+    [Authorize]
     public class IntegratorController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -49,17 +49,21 @@ namespace BlazorServer.Controllers
 
         private Integrator Authenticate(IntegratorModel branchLogin)
         {
-            var currentIntegrator = _context.Integrators.FirstOrDefault(b => b.Hash == branchLogin.Hash);
-
-            if (currentIntegrator != null)
+            var idGuid = Guid.TryParse(branchLogin.Hash, out Guid id);
+            if (idGuid)
             {
-                return currentIntegrator;
+                var currentIntegrator = _context.Integrators.FirstOrDefault(b => b.Id == id);
+
+                if (currentIntegrator != null)
+                {
+                    return currentIntegrator;
+                }
             }
+
 
             return null;
         }
 
-        [Authorize(Policy = "MachineToMachine")]
         [HttpPost]
         public IActionResult Login([FromBody] IntegratorModel integratorLogin)
         {
@@ -74,11 +78,10 @@ namespace BlazorServer.Controllers
             return NotFound("Integrator not found");
         }
 
-        [Authorize(Policy = "MachineToMachine")]
         [HttpPost]
         public async Task<ActionResult<bool>> CheckIntegratorAvaiability([FromBody] IntegratorModel model)
         {
-           var integratorObj = _context.Integrators.FirstOrDefault(e => e.Id == Guid.Parse(model.Hash));
+            var integratorObj = _context.Integrators.FirstOrDefault(e => e.Id == Guid.Parse(model.Hash));
 
             if (integratorObj != null)
             {

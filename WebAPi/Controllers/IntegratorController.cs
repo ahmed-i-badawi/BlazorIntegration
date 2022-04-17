@@ -79,7 +79,7 @@ public class IntegratorController : ApiControllerBase
     {
         // send order
         var hash = User.Claims.FirstOrDefault(e => e.Type == "Hash")?.Value;
-        var hasIntegratorClaim = int.TryParse(User.Claims.FirstOrDefault(e => e.Type == "INTEGRATOR")?.Value, out int integratorInt);
+        var hasIntegratorClaim = Guid.TryParse(User.Claims.FirstOrDefault(e => e.Type == "INTEGRATOR")?.Value, out Guid integratorId);
 
         if (hasIntegratorClaim)
         {
