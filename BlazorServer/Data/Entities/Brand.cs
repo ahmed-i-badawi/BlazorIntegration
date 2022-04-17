@@ -10,5 +10,5 @@ public class Brand
     public string Name { get; set; }
     public string? Notes { get; set; }
 
-    public List<Branch>? Branches { get; set; }
+    public List<Site>? Sites { get; set; }
 }

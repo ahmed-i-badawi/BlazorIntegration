@@ -47,9 +47,9 @@ namespace BlazorServer.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private Integrator Authenticate(IntegratorModel branchLogin)
+        private Integrator Authenticate(IntegratorModel SiteLogin)
         {
-            var idGuid = Guid.TryParse(branchLogin.Hash, out Guid id);
+            var idGuid = Guid.TryParse(SiteLogin.Hash, out Guid id);
             if (idGuid)
             {
                 var currentIntegrator = _context.Integrators.FirstOrDefault(b => b.Id == id);

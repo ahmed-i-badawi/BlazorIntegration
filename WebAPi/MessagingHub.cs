@@ -79,6 +79,7 @@ public class MessagingHub : Hub
         {
             SystemInfo = sysInfo,
             ConnectionId = connectionId,
+            SiteId = machine.SiteId,
             Hash = machine?.Hash,
             MachineName = machine?.MachineName,
             Notes = machine?.Notes,
@@ -113,7 +114,7 @@ public class MessagingHub : Hub
                     SystemInfo = myObj.SystemInfo,
                     ConnectionId = connectionId,
                     BrandId = machineObjRes.BrandId,
-                    BranchId = machineObjRes.BranshId,
+                    SiteId = machineObjRes.SiteId,
                 });
 
                 _cache.Remove("machinesLoggedIn");

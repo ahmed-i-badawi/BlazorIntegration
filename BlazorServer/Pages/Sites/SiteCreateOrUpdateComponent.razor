@@ -17,11 +17,11 @@
     {
         @if (EditModel == null)
         {
-            <h3>Add New Branch</h3>
+            <h3>Add New Site</h3>
         }
         else
         {
-            <h3>Edit Branch with Hash @FModel.Hash</h3>
+            <h3>Edit Site with Hash @FModel.HashString</h3>
         }
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
@@ -62,9 +62,9 @@
 </div>
 
 @code {
-    public BranchCreateFM FModel { get; set; } = null;
+    public SiteCreateFM FModel { get; set; } = null;
     [Parameter]
-    public BranchCreateFM EditModel { get; set; }
+    public SiteCreateFM EditModel { get; set; }
     public SubmitClickedArg SubmitClickedArguments { get; set; }
     [Parameter]
     public EventCallback OnCancelClicked { get; set; }
@@ -79,11 +79,11 @@
 
         if (EditModel == null)
         {
-            FModel = new BranchCreateFM();
+            FModel = new SiteCreateFM();
         }
         else
         {
-            FModel = _mapper.Map<BranchCreateFM>(EditModel);
+            FModel = _mapper.Map<SiteCreateFM>(EditModel);
             RemoteDataQuery.AddParams("selectedId", FModel.BrandId);
 
         }
@@ -98,7 +98,7 @@
     {
         if (EditModel == null)
         {
-            var response = _apiService.HttpClient.PostAsJsonAsync<BranchCreateFM>($"api/Branches/PostBranch", FModel);
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/PostSite", FModel);
             bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
             if (result)
             {
@@ -114,7 +114,7 @@
         }
         else
         {
-            var response = _apiService.HttpClient.PostAsJsonAsync<BranchCreateFM>($"api/Branches/EditBranch", FModel);
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/EditSite", FModel);
             bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
             if (result)
             {

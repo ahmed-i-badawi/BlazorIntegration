@@ -14,6 +14,6 @@ public class MapFromDtoToFM : Profile
     {
         CreateMap<IntegratorsDto , IntegratorsRegistrationCreateFM>();
         CreateMap<BrandDto , BrandCreateFM>();
-        CreateMap<BranchDto , BranchCreateFM>();
+        CreateMap<SiteDto , SiteCreateFM>();
     }
 }

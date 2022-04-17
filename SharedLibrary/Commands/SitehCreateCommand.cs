@@ -7,23 +7,24 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Commands;
 
-public class BranchCreateCommand
+public class SiteCreateCommand
 {
-    public string? Hash { get; set; }
+    public int Id { get; set; }
+    public string? HashString { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
     public string Notes { get; set; }
     public int BrandId { get; set; }
 }
 
-public class BranchCreateFM : BranchCreateCommand
+public class SiteCreateFM : SiteCreateCommand
 {
     public string BrandName { get; set; }
 }
 
-public class BranchCreateFMValidator : AbstractValidator<BranchCreateFM>
+public class SiteCreateFMValidator : AbstractValidator<SiteCreateFM>
 {
-    public BranchCreateFMValidator()
+    public SiteCreateFMValidator()
     {
         RuleFor(o => o.Name).NotEmpty();
         RuleFor(o => o.Address).NotEmpty();

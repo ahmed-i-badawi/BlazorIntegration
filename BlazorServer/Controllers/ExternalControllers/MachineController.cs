@@ -50,17 +50,17 @@ public class MachineController : ApiControllerBase
             _context.SaveChanges();
         }
 
-        if (!_context.Branches?.Any() ?? false)
+        if (!_context.Sites?.Any() ?? false)
         {
-            var branches = Enumerable.Range(1, 2500).Select(x => new Branch()
+            var Sites = Enumerable.Range(1, 2500).Select(x => new Site()
             {
-                Name = $"Branch{x}",
+                Name = $"Site{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
-                Notes = $"this is branch{x} Notes",
+                Notes = $"this is Site{x} Notes",
                 BrandId = new Random().Next(1, 100),
             });
 
-            _context.Branches.AddRange(branches);
+            _context.Sites.AddRange(Sites);
             _context.SaveChanges();
         }
 
@@ -81,22 +81,20 @@ public class MachineController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] string hash)
+    public async Task<ActionResult<HashCheckerDto>> HashChecker([FromBody] int id)
     {
         HashCheckerDto res = new HashCheckerDto();
 
-        bool isGuid = Guid.TryParse(hash, out Guid id);
-
-        if (isGuid)
+        if (id > 0)
         {
-            var brandObj = _context.Branches.Include(e => e.Machine).FirstOrDefault(e => e.Id == id);
+            var brandObj = _context.Sites.Include(e => e.Machine).FirstOrDefault(e => e.Id == id);
 
             if (brandObj != null)
             {
                 if (brandObj.Machine != null)
                 {
                     res.SystemInfo = string.Empty;
-                    res.Message = "this branch has a machine";
+                    res.Message = "this Site has a machine";
 
                     return Ok(res);
                 }
@@ -127,14 +125,14 @@ public class MachineController : ApiControllerBase
         SystemInfo systemGuid = new SystemInfo();
 
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
-        var machineobj = _context.Machines.Include(e => e.Branch).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+        var machineobj = _context.Machines.Include(e => e.Site).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
         // if machine exist
         if (machineobj != null)
         {
             var token = await MachineLogin(machineobj, machineModel.ConnectionId);
-            result.BranshId = machineobj.BranchId.ToString();
-            result.BrandId = machineobj.Branch.BrandId;
+            result.SiteId = machineobj.SiteId;
+            result.BrandId = machineobj.Site.BrandId;
             result.Token = token;
 
             return Ok(result);
@@ -144,11 +142,11 @@ public class MachineController : ApiControllerBase
         {
             try
             {
-                var branch = _context.Branches.FirstOrDefault(e => e.Id == Guid.Parse(machineModel.Hash));
+                var Site = _context.Sites.FirstOrDefault(e => e.Id == machineModel.SiteId);
 
                 Machine machine = new Machine()
                 {
-                    BranchId = branch.Id,
+                    SiteId = Site.Id,
                     FingerPrint = machineFingerPrint,
                     CurrentStatus = MachineStatus.Alive,
                     Name = machineModel.MachineName,
@@ -168,8 +166,8 @@ public class MachineController : ApiControllerBase
 
                 var token = machineFingerPrint;
 
-                result.BranshId = branch.Id.ToString();
-                result.BrandId = branch.BrandId;
+                result.SiteId = Site.Id;
+                result.BrandId = Site.BrandId;
                 result.Token = token;
 
                 return Ok(result);

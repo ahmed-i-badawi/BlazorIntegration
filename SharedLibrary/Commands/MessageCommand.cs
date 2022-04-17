@@ -8,7 +8,7 @@ namespace SharedLibrary.Commands;
 
 public class MessageCommand
 {
-    //public int BranchId { get; set; }
+    //public int SiteId { get; set; }
     //public int BrandId { get; set; }
     public string Notes { get; set; } = "";
     public int StatusId { get; set; } = 0;

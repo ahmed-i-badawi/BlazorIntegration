@@ -100,18 +100,18 @@ public class IntegratorController : ApiControllerBase
                     return listMachinesLoggedIn;
                 });
 
-                var machineLoggedInObj = machinesLoggedIn.FirstOrDefault(e => e.BrandId == command.BrandId && e.BranchId == command.BranchId);
+                var machineLoggedInObj = machinesLoggedIn.FirstOrDefault(e => e.BrandId == command.BrandId && e.SiteId == command.SiteId);
 
                 if (machineLoggedInObj != null)
                 {
                     string connectionId = machineLoggedInObj.ConnectionId;
 
                     await _hubContext.Clients.Client(connectionId).SendAsync("NewOrder", command.Notes);
-                    return Ok("Order has been sent to branch");
+                    return Ok("Order has been sent to Site");
                 }
                 else
                 {
-                    return Ok("branch is offline, try again later");
+                    return Ok("Site is offline, try again later");
                 }
             }
             else

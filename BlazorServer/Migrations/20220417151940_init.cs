@@ -182,10 +182,12 @@ namespace BlazorServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Branches",
+                name: "Sites",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Hash = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -193,9 +195,10 @@ namespace BlazorServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Branches", x => x.Id);
+                    table.PrimaryKey("PK_Sites", x => x.Id);
+                    table.UniqueConstraint("AK_Sites_Hash", x => x.Hash);
                     table.ForeignKey(
-                        name: "FK_Branches_Brands_BrandId",
+                        name: "FK_Sites_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
@@ -208,18 +211,19 @@ namespace BlazorServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FingerPrint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    FingerPrint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SiteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Machines", x => x.Id);
+                    table.UniqueConstraint("AK_Machines_FingerPrint", x => x.FingerPrint);
                     table.ForeignKey(
-                        name: "FK_Machines_Branches_BranchId",
-                        column: x => x.BranchId,
-                        principalTable: "Branches",
+                        name: "FK_Machines_Sites_SiteId",
+                        column: x => x.SiteId,
+                        principalTable: "Sites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -286,27 +290,25 @@ namespace BlazorServer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Branches_BrandId",
-                table: "Branches",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MachineLogs_MachineId",
                 table: "MachineLogs",
                 column: "MachineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Machines_BranchId",
+                name: "IX_Machines_FingerPrint",
                 table: "Machines",
-                column: "BranchId",
+                column: "FingerPrint");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Machines_SiteId",
+                table: "Machines",
+                column: "SiteId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Machines_FingerPrint",
-                table: "Machines",
-                column: "FingerPrint",
-                unique: true,
-                filter: "[FingerPrint] IS NOT NULL");
+                name: "IX_Sites_BrandId",
+                table: "Sites",
+                column: "BrandId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -342,7 +344,7 @@ namespace BlazorServer.Migrations
                 name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "Branches");
+                name: "Sites");
 
             migrationBuilder.DropTable(
                 name: "Brands");

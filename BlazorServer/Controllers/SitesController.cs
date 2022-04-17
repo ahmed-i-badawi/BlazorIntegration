@@ -16,52 +16,52 @@ using SharedLibrary.Dto;
 
 namespace BlazorServer.Controllers
 {
-    public class BranchesController : ApiControllerBase
+    public class SitesController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public BranchesController(ApplicationDbContext context, IMapper mapper)
+        public SitesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetBranches([FromBody] DataManagerRequest dm)
+        public async Task<ActionResult> GetSites([FromBody] DataManagerRequest dm)
         {
-            var query = _context.Branches.AsQueryable();
+            var query = _context.Sites.AsQueryable();
 
             query = await query.FilterBy(dm);
             query = query.Include(e => e.Brand).Include(e => e.Machine);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
 
-            List<BranchDto> data = _mapper.Map<List<BranchDto>>(query.ToList());
-            ResultDto<BranchDto> res = new ResultDto<BranchDto>(data, count);
+            List<SiteDto> data = _mapper.Map<List<SiteDto>>(query.ToList());
+            ResultDto<SiteDto> res = new ResultDto<SiteDto>(data, count);
 
             return Ok(res);
         }
 
-        // GET: api/Branches/5
+        // GET: api/Sites/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Branch>> GetBranch(string id)
+        public async Task<ActionResult<Site>> GetSite(int id)
         {
-            var branch = await _context.Branches.FindAsync(Guid.Parse(id));
+            var Site = await _context.Sites.FindAsync(id);
 
-            if (branch == null)
+            if (Site == null)
             {
                 return NotFound();
             }
 
-            return branch;
+            return Site;
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> EditBranch(BranchCreateCommand command)
+        public async Task<ActionResult<bool>> EditSite(SiteCreateCommand command)
         {
-            Branch commnad = _mapper.Map<Branch>(command);
-            Branch db = _context.Branches.FirstOrDefault(e => e.Id == Guid.Parse(command.Hash));
+            Site commnad = _mapper.Map<Site>(command);
+            Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);
 
             if (db != null)
             {
@@ -77,7 +77,7 @@ namespace BlazorServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BranchExists(command.Hash))
+                if (!SiteExists(command.Id))
                 {
                     return NotFound();
                 }
@@ -91,18 +91,18 @@ namespace BlazorServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> PostBranch(BranchCreateCommand command)
+        public async Task<ActionResult<bool>> PostSite(SiteCreateCommand command)
         {
-            Branch branch = _mapper.Map<Branch>(command);
+            Site Site = _mapper.Map<Site>(command);
 
-            _context.Branches.Add(branch);
+            _context.Sites.Add(Site);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (BranchExists(branch.Hash))
+                if (SiteExists(Site.Id))
                 {
                     return Conflict();
                 }
@@ -115,23 +115,23 @@ namespace BlazorServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteBranch([FromBody]  string id)
+        public async Task<IActionResult> DeleteSite([FromBody]  int id)
         {
-            var branch = await _context.Branches.FindAsync(Guid.Parse(id));
-            if (branch == null)
+            var Site = await _context.Sites.FindAsync(id);
+            if (Site == null)
             {
                 return NotFound();
             }
 
-            _context.Branches.Remove(branch);
+            _context.Sites.Remove(Site);
             await _context.SaveChangesAsync();
 
             return Ok(true);
         }
 
-        private bool BranchExists(string id)
+        private bool SiteExists(int id)
         {
-            return _context.Branches.Any(e => e.Id == Guid.Parse(id));
+            return _context.Sites.Any(e => e.Id == id);
         }
     }
 }

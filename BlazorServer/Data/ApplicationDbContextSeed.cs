@@ -16,8 +16,8 @@ public static class ApplicationDbContextSeed
             await roleManager.CreateAsync(administratorRole);
         }
 
-        var administrator = new IdentityUser { UserName = "admin", Email = "admin@localhost" , EmailConfirmed = true };
-        var administrator2 = new IdentityUser { UserName = "ahmedbadawi127@gmail.com", Email = "ahmedbadawi127@gmail.com", EmailConfirmed = true };
+        var administrator = new IdentityUser { UserName = "admin", Email = "admin@localhost.com" , EmailConfirmed = true };
+        var administrator2 = new IdentityUser { UserName = "ahmed", Email = "ahmedbadawi127@gmail.com", EmailConfirmed = true };
 
         if (userManager.Users.All(u => u.UserName != administrator.UserName))
         {
@@ -46,17 +46,17 @@ public static class ApplicationDbContextSeed
             context.SaveChanges();
         }
 
-        if (!context.Branches?.Any() ?? false)
+        if (!context.Sites?.Any() ?? false)
         {
-            var branches = Enumerable.Range(1, 2500).Select(x => new Branch()
+            var Sites = Enumerable.Range(1, 2500).Select(x => new Site()
             {
-                Name = $"Branch{x}",
+                Name = $"Site{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
-                Notes = $"this is branch{x} Notes",
+                Notes = $"this is Site{x} Notes",
                 BrandId = new Random().Next(1, 100),
             });
 
-            context.Branches.AddRange(branches);
+            context.Sites.AddRange(Sites);
             context.SaveChanges();
         }
 

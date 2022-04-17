@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220416092701_init")]
-    partial class init
+    [Migration("20220417152411_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,34 +23,6 @@ namespace BlazorServer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("BlazorServer.Data.Entities.Branch", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.ToTable("Branches");
-                });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Brand", b =>
                 {
@@ -99,27 +71,28 @@ namespace BlazorServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("CurrentStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("FingerPrint")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId")
-                        .IsUnique();
+                    b.HasAlternateKey("FingerPrint");
 
-                    b.HasIndex("FingerPrint")
-                        .IsUnique()
-                        .HasFilter("[FingerPrint] IS NOT NULL");
+                    b.HasIndex("FingerPrint");
+
+                    b.HasIndex("SiteId")
+                        .IsUnique();
 
                     b.ToTable("Machines");
                 });
@@ -149,6 +122,40 @@ namespace BlazorServer.Migrations
                     b.HasIndex("MachineId");
 
                     b.ToTable("MachineLogs");
+                });
+
+            modelBuilder.Entity("BlazorServer.Data.Entities.Site", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Hash")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Sites");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -353,26 +360,15 @@ namespace BlazorServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BlazorServer.Data.Entities.Branch", b =>
-                {
-                    b.HasOne("BlazorServer.Data.Entities.Brand", "Brand")
-                        .WithMany("Branches")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-                });
-
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>
                 {
-                    b.HasOne("BlazorServer.Data.Entities.Branch", "Branch")
+                    b.HasOne("BlazorServer.Data.Entities.Site", "Site")
                         .WithOne("Machine")
-                        .HasForeignKey("BlazorServer.Data.Entities.Machine", "BranchId")
+                        .HasForeignKey("BlazorServer.Data.Entities.Machine", "SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Branch");
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.MachineLog", b =>
@@ -384,6 +380,17 @@ namespace BlazorServer.Migrations
                         .IsRequired();
 
                     b.Navigation("Machine");
+                });
+
+            modelBuilder.Entity("BlazorServer.Data.Entities.Site", b =>
+                {
+                    b.HasOne("BlazorServer.Data.Entities.Brand", "Brand")
+                        .WithMany("Sites")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -437,20 +444,20 @@ namespace BlazorServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorServer.Data.Entities.Branch", b =>
-                {
-                    b.Navigation("Machine")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BlazorServer.Data.Entities.Brand", b =>
                 {
-                    b.Navigation("Branches");
+                    b.Navigation("Sites");
                 });
 
             modelBuilder.Entity("BlazorServer.Data.Entities.Machine", b =>
                 {
                     b.Navigation("MachineLogs");
+                });
+
+            modelBuilder.Entity("BlazorServer.Data.Entities.Site", b =>
+                {
+                    b.Navigation("Machine")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

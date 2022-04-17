@@ -24,8 +24,8 @@ public class Machine
     //}
     //public string? ConnectionId { get; set; }
 
-    public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public int SiteId { get; set; }
+    public Site Site { get; set; }
 
     public List<MachineLog>? MachineLogs { get; set; }
 }

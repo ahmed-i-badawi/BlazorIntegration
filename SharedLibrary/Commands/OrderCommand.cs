@@ -9,6 +9,6 @@ namespace SharedLibrary.Commands;
 public class OrderCommand
 {
     public int BrandId { get; set; }
-    public string BranchId { get; set; }
+    public int SiteId { get; set; }
     public string? Notes { get; set; }
 }

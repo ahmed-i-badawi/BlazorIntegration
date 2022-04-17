@@ -1,4 +1,4 @@
-﻿@page "/Branches"
+﻿@page "/Sites"
 @using BlazorServer.Resources
 @using BlazorServer.Services
 @inject ApiService _apiService
@@ -12,7 +12,7 @@
     @if (IsProcessingItem)
     {
         <div>
-            <BranchCreateOrUpdateComponent EditModel="FModel"
+            <SiteCreateOrUpdateComponent EditModel="FModel"
                                       OnCancelClicked="CancelClicked"
                                       OnSubmitClicked="SubmitClicked" />
         </div>
@@ -20,18 +20,19 @@
     else
     {
         <div>
-            <CustomFullGridComponent DTO="BranchDto"
-                                 SfDataManagerUrl="api/Branches/GetBranches"
+            <CustomFullGridComponent DTO="SiteDto"
+                                 SfDataManagerUrl="api/Sites/GetSites"
                                  Edit="Edit"
                                  Delete="Delete"
                                  Add="Add">
                 <GridColumnsTemplate>
-                    <GridColumn Field=@nameof(BranchDto.Hash) HeaderText="Hash"></GridColumn>
-                    <GridColumn Field=@nameof(BranchDto.Name) HeaderText="Name"></GridColumn>
-                    <GridColumn Field=@nameof(BranchDto.Address) HeaderText="Address"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.HashString) HeaderText="Hash"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Address) HeaderText="Address"></GridColumn>
                     <GridColumn Field="Brand.Name" AllowFiltering="false" HeaderText="Brand Name"></GridColumn>
                     <GridColumn Field="Machine.Name" AllowFiltering="false" HeaderText="Machine Name"></GridColumn>
-                    <GridColumn Field=@nameof(BranchDto.Notes) HeaderText="Notes"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Notes) HeaderText="Notes"></GridColumn>
                 </GridColumnsTemplate>
             </CustomFullGridComponent>
         </div>
@@ -40,7 +41,7 @@
 </div>
 @code {
     private bool IsProcessingItem { get; set; } = false;
-    public BranchCreateFM FModel { get; set; } = null;
+    public SiteCreateFM FModel { get; set; } = null;
 
     public async Task<bool> Add(bool added)
     {
@@ -87,20 +88,20 @@
         FModel = null;
     }
 
-    public async Task Edit(BranchDto dto)
+    public async Task Edit(SiteDto dto)
     {
         IsProcessingItem = true;
 
-        FModel = _mapper.Map<BranchCreateFM>(dto);
+        FModel = _mapper.Map<SiteCreateFM>(dto);
 
         StateHasChanged();
     }
 
-    public async Task<bool> Delete(BranchDto dto)
+    public async Task<bool> Delete(SiteDto dto)
     {
         //ActionsDisabled = true;
 
-        var response = _apiService.HttpClient.PostAsJsonAsync("api/Branches/DeleteBranch", dto.Hash);
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/Sites/DeleteSite", dto.Id);
         bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
         if (!result)
         {

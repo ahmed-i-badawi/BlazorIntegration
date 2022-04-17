@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorServer.Data.Entities
 {
-    public class Branch
+    public class Site
     {
         [Key]
-        public Guid Id { get; }
+        public int Id { get; }
+        public Guid Hash { get; }
         [NotMapped]
-        public string Hash { get { return Id.ToString(); } }
-
+        public string HashString { get { return Hash.ToString(); } }
 
         public string Name { get; set; }
         public string Address { get; set; }

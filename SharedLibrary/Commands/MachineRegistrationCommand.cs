@@ -9,7 +9,7 @@ namespace SharedLibrary.Commands
     public class MachineRegistrationCommand
     {
         public int? BrandId { get; set; }
-        public string? BranchId { get; set; }
+        public int? SiteId { get; set; }
         public string Hash { get; set; }
         public string MachineName { get; set; }
         public string Notes { get; set; }
