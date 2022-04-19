@@ -26,7 +26,6 @@
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
             <FluentValidator />
-            <ValidationSummary></ValidationSummary>
             <div class="row">
                 <div class="col-6">
                     <SfDropDownList Readonly="@(EditModel != null)" TValue="int" TItem="ZoneDto" @bind-Value="@FModel.ZoneId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Zone">

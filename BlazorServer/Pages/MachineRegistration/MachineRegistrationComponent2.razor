@@ -2,28 +2,26 @@
 @using System.Net.Http.Headers
 @inject ApiService _apiService
 @inject IConfiguration configuration
+@inject IClientOperations _clientOperations
 @using FluentValidation;
 @using FluentValidation.Validators;
-@inject IClientOperations _clientOperations
 
 <div class="container">
 
+    <h3>Machine Registration</h3>
+
     @if (FModel != null)
     {
-        <h3>Machine Registration</h3>
-
         <EditForm OnValidSubmit="Submit" Model="FModel">
             <FluentValidator />
             <div class="row">
                 <div class="col-6">
-                    <InputText id="Hash" class="form-control" @bind-Value="@FModel.Hash" placeholder="Hash" /><br />
+                    <InputText id="Hash" class="form-control" @bind="@FModel.Hash" placeholder="Hash" /><br />
                     <ValidationMessage For="() => FModel.Hash"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <div class="col-6">
-                    <InputText id="MachineName" class="form-control" @bind-Value="@FModel.MachineName" placeholder="Machine Name" /><br />
+                    <InputText id="MachineName" class="form-control" @bind="@FModel.MachineName" placeholder="MachineName" /><br />
                     <ValidationMessage For="() => FModel.MachineName"></ValidationMessage>
-                </div
                 </div>
             </div>
             <div class="row">
@@ -38,29 +36,16 @@
 </div>
 
 @code {
-    public MachineRegistrationFM FModel { get; set; } = null;
+    public MachineRegistrationCommand FModel { get; set; } = new MachineRegistrationCommand();
 
     protected override async Task OnInitializedAsync()
     {
-        FModel = new MachineRegistrationFM();
+        FModel = new MachineRegistrationCommand();
         _apiService.HttpClient.BaseAddress = new Uri(configuration["API"]);
     }
 
     protected async Task Submit()
     {
-        var response = await _apiService.HttpClient.PostAsJsonAsync<MachineRegistrationFM>("api/Machine/RegisterMachine", FModel);
-        string registerRes = await response.Content.ReadAsStringAsync();
-
-        
-        if (!response.IsSuccessStatusCode)
-        {
-        await _clientOperations.ShowToast("Error", $"{registerRes}", "error");
-            }
-            else
-            {
-            await _clientOperations.ShowToast($"{FModel.MachineName}", $"{registerRes}", "success");
-            }
-
-        StateHasChanged();
+       
     }
 }
