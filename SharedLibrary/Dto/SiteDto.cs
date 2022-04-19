@@ -18,6 +18,7 @@ public class SiteDto
     public string Name { get; set; }
     public string Address { get; set; }
     public string Notes { get; set; }
+    public int NumberOfZones { get; set; }
 
     public List<ZoneDto>? Zones { get; set; }
     public int BrandId { get; set; }

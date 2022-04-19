@@ -27,6 +27,62 @@ namespace BlazorServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public object GetZonesDropDownList([FromQuery] string Name)
+        {
+            var query = _context.Zones.AsQueryable().AsNoTracking();
+            var queryString = Request.Query;
+
+            int.TryParse(queryString["take"], out int take);
+            int.TryParse(queryString["selectedId"], out int selectedId);
+            string filter = queryString["$filter"];
+
+            if (filter != null) // to handle filter opertaion 
+            {
+                var newfiltersplits = filter;
+                var filtersplits = newfiltersplits.Split('(', ')', ' ', '\'');
+                var filterfield = filtersplits[2];
+                var filtervalue = filtersplits[4];
+
+                if (filtersplits.Length == 7)
+                {
+                    if (filtersplits[2] == "tolower")
+                    {
+                        filterfield = filter.Split('(', ')', '\'')[3];
+                        filtervalue = filter.Split('(', ')', '\'')[5];
+                    }
+                }
+                switch (filterfield)
+                {
+                    case "Name":
+                        query = query.Where(x => x.Name.ToLower().Contains(filtervalue.ToString()));
+                        break;
+                }
+            }
+
+            List<ZoneDto> data = new List<ZoneDto>();
+
+            if (selectedId > 0)
+            {
+                var selectedObj = query.FirstOrDefault(x => x.Id == selectedId);
+
+                query = query.Take(take - 1);
+
+                var dbData = query.ToList();
+                dbData.Insert(0, selectedObj);
+                data = _mapper.Map<List<ZoneDto>>(dbData);
+            }
+            else
+            {
+                query = query.Take(take);
+                data = _mapper.Map<List<ZoneDto>>(query.ToList());
+            }
+
+
+
+            return data;
+        }
+
         [HttpPost]
         public async Task<ActionResult> GetZones([FromBody] DataManagerRequest dm)
         {

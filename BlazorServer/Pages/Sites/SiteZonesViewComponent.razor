@@ -1,0 +1,144 @@
+﻿@using BlazorServer.Services
+@inject ApiService _apiService
+@using AutoMapper
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@inject IClientOperations _clientOperations
+@using SharedLibrary.Enums
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.SplitButtons;
+
+<div>
+    @if (ProcessingItem == ProcessingItem.Grid)
+    {
+        <div>
+            <h3>@($"Zones for Site Id: {SiteId}")</h3>
+            <hr />
+            <CustomFullGridComponent DTO="SiteZoneDto" Query="RemoteDataQuery"
+                                 SfDataManagerUrl="api/Sites/GetSiteZones"
+                                 Edit="Edit"
+                                 Delete="Delete"
+                                 Add="Add"
+                                 Back="BackClicked">
+                <GridColumnsTemplate>
+                    <GridColumn Field=@nameof(SiteZoneDto.ZoneId) HeaderText="ZoneId" TextAlign="TextAlign.Center" AllowFiltering="false"></GridColumn>
+                    <GridColumn Field="Zone.Name" HeaderText="Name" TextAlign="TextAlign.Center" AllowFiltering="false"></GridColumn>
+                    <GridColumn Field=@nameof(SiteZoneDto.Notes) HeaderText="Notes" TextAlign="TextAlign.Center"></GridColumn>
+                </GridColumnsTemplate>
+            </CustomFullGridComponent>
+        </div>
+    }
+    else if (ProcessingItem == ProcessingItem.FirstCreateOrUpdate)
+    {
+        <div>
+            <SiteZoneCreateOrUpdateComponent EditModel="FModel" SiteId="SiteId"
+                                         OnCancelClicked="CancelClicked"
+                                         OnSubmitClicked="SubmitClicked" />
+        </div>
+    }
+</div>
+
+@code
+{
+    private ProcessingItem ProcessingItem { get; set; }
+    public SiteZoneCreateFM FModel { get; set; } = null;
+
+    [Parameter]
+    public int SiteId { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancelClicked { get; set; }
+
+    public Query RemoteDataQuery { get; set; } = new Query();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RemoteDataQuery.AddParams("siteId", SiteId);
+    }
+
+    public async Task CancelClicked()
+    {
+        ProcessingItem = ProcessingItem.Grid;
+        FModel = null;
+    }
+
+    public async Task BackClicked()
+    {
+        await OnCancelClicked.InvokeAsync();
+    }
+
+
+    public async Task<bool> Add(bool added)
+    {
+        ProcessingItem = ProcessingItem.FirstCreateOrUpdate;
+
+        StateHasChanged();
+
+        return false;
+    }
+    public async Task SubmitClicked(SubmitClickedArg submitClickedArg)
+    {
+        ProcessingItem = ProcessingItem.Grid;
+
+        if (submitClickedArg.IsNewRecord)
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Create", "Created Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", $"Mission Incompleted: {submitClickedArg.ErrorMessage}", "error");
+            }
+        }
+        else
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Edit", "Updated Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", $"Mission Incompleted: {submitClickedArg.ErrorMessage}", "error");
+            }
+            FModel = null;
+        }
+    }
+    public async Task Edit(SiteZoneDto dto)
+    {
+        ProcessingItem = ProcessingItem.FirstCreateOrUpdate;
+
+        FModel = _mapper.Map<SiteZoneCreateFM>(dto);
+
+        StateHasChanged();
+    }
+
+    public async Task<bool> Delete(SiteZoneDto dto)
+    {
+        //ActionsDisabled = true;
+        DeleteSiteZoneCommand command = new DeleteSiteZoneCommand()
+            {
+                ZoneId = dto.ZoneId,
+                SiteId = dto.SiteId,
+            };
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/Sites/DeleteSiteZone", command);
+        bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+        if (!result)
+        {
+            await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            return result;
+        }
+        else
+        {
+            await _clientOperations.ShowToast("Delete", "Deleted Successfully", "success");
+            //var sitezone = SiteZones.FirstOrDefault(e => e.Id == zoneId);
+            //SiteZones.Remove(sitezone);
+            StateHasChanged();
+            return result;
+
+            //ActionsDisabled = false;
+        }
+    }
+
+}

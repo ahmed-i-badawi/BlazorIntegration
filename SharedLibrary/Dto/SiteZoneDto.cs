@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Dto;
 
-public class ZoneDto
+public class SiteZoneDto
 {
-    public int Id { get; set; }
-
     public int SiteId { get; set; }
-    public string Name { get; set; }
+    public SiteDto Site { get; set; }
+
+    public int ZoneId { get; set; }
+    public ZoneDto Zone { get; set; }
+
     public string? Notes { get; set; }
 }

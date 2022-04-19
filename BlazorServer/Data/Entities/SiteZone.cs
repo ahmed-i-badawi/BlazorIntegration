@@ -10,5 +10,8 @@ namespace BlazorServer.Data.Entities
 
         public int ZoneId { get; set; }
         public Zone Zone { get; set; }
+
+        public string? Notes { get; set; }
+
     }
 }

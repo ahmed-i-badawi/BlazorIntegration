@@ -10,6 +10,7 @@ namespace SharedLibrary.Commands
     {
         public int? BrandId { get; set; }
         public int? SiteId { get; set; }
+        public List<int>? ZoneIds { get; set; }
         public string Hash { get; set; }
         public string MachineName { get; set; }
         public string Notes { get; set; }

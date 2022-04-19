@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Commands;
 
-public class OrderCommand
+public class DeleteSiteZoneCommand
 {
-    public int BrandId { get; set; }
     public int ZoneId { get; set; }
-    public string? Notes { get; set; }
+    public int SiteId { get; set; }
 }

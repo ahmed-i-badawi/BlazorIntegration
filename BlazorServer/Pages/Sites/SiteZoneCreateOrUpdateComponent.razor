@@ -9,6 +9,7 @@
 @inject IMapper _mapper
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
+@using BlazorServer.Exceptions;
 
 <div class="container">
 
@@ -16,11 +17,11 @@
     {
         @if (EditModel == null)
         {
-            <h3>Add New Site</h3>
+            <h3>Add New Zone to Site</h3>
         }
         else
         {
-            <h3>Edit Site with Hash @FModel.HashString</h3>
+            <h3>Edit zone @FModel.ZoneId for site @FModel.SiteId</h3>
         }
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
@@ -28,22 +29,10 @@
             <ValidationSummary></ValidationSummary>
             <div class="row">
                 <div class="col-6">
-                    <InputText id="Name" class="form-control" @bind-Value="@FModel.Name" placeholder="Name" /><br />
-                    <ValidationMessage For="() => FModel.Name"></ValidationMessage>
-                </div>
-                <div class="col-6">
-                    <InputText id="Address" class="form-control" @bind-Value="@FModel.Address" placeholder="Address" /><br />
-                    <ValidationMessage For="() => FModel.Address"></ValidationMessage>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-
-                    <SfDropDownList TValue="int" TItem="BrandDto" @bind-Value="@FModel.BrandId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Brand">
-                        <SfDataManager Url="api/Brands/GetBrandsDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                    <SfDropDownList Readonly="@(EditModel != null)" TValue="int" TItem="ZoneDto" @bind-Value="@FModel.ZoneId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Zone">
+                        <SfDataManager Url="api/Zones/GetZonesDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                         <DropDownListFieldSettings Text="Name" Value="Id" />
                     </SfDropDownList>
-                    <ValidationMessage For="() => FModel.BrandId"></ValidationMessage>
                 </div>
                 <div class="col-6">
                 </div>
@@ -61,15 +50,16 @@
 </div>
 
 @code {
-    public SiteCreateFM FModel { get; set; } = null;
+    public SiteZoneCreateFM FModel { get; set; } = null;
     [Parameter]
-    public SiteCreateFM EditModel { get; set; }
+    public SiteZoneCreateFM EditModel { get; set; }
     public SubmitClickedArg SubmitClickedArguments { get; set; }
     [Parameter]
     public EventCallback OnCancelClicked { get; set; }
     [Parameter]
     public EventCallback<SubmitClickedArg> OnSubmitClicked { get; set; }
-
+    [Parameter]
+    public int SiteId { get; set; }
     public Query RemoteDataQuery = new Query();
 
     protected override async Task OnInitializedAsync()
@@ -78,15 +68,16 @@
 
         if (EditModel == null)
         {
-            FModel = new SiteCreateFM();
+            FModel = new SiteZoneCreateFM()
+                {
+                    SiteId = SiteId
+                };
         }
         else
         {
-            FModel = _mapper.Map<SiteCreateFM>(EditModel);
-            RemoteDataQuery.AddParams("selectedId", FModel.BrandId);
-
+            FModel = _mapper.Map<SiteZoneCreateFM>(EditModel);
+            RemoteDataQuery.AddParams("selectedId", FModel.ZoneId);
         }
-        //_http.BaseAddress = new Uri(configuration["API"]);
     }
     public async Task CancelClick()
     {
@@ -97,23 +88,25 @@
     {
         if (EditModel == null)
         {
-            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/PostSite", FModel);
-            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
-            if (result)
+            var response = await _apiService.HttpClient.PostAsJsonAsync<SiteZoneCreateFM>("api/Sites/PostSiteZone", FModel);
+            string returnMessage = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, false, returnMessage);
+                await OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+                return;
+            }
+            if (OnSubmitClicked.HasDelegate)
             {
                 SubmitClickedArguments = new SubmitClickedArg(true, true);
-                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+                await OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
             }
-            else
-            {
-                SubmitClickedArguments = new SubmitClickedArg(true, false);
-                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
-            }
+
             StateHasChanged();
         }
         else
         {
-            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/EditSite", FModel);
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteZoneCreateFM>($"api/Sites/EditSiteZone", FModel);
             bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
             if (result)
             {

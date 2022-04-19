@@ -100,7 +100,7 @@ public class IntegratorController : ApiControllerBase
                     return listMachinesLoggedIn;
                 });
 
-                var machineLoggedInObj = machinesLoggedIn.FirstOrDefault(e => e.BrandId == command.BrandId && e.SiteId == command.SiteId);
+                var machineLoggedInObj = machinesLoggedIn.FirstOrDefault(e => e.BrandId == command.BrandId && e.ZoneIds.Contains(command.ZoneId));
 
                 if (machineLoggedInObj != null)
                 {

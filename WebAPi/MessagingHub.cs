@@ -79,7 +79,7 @@ public class MessagingHub : Hub
         {
             SystemInfo = sysInfo,
             ConnectionId = connectionId,
-            SiteId = machine.SiteId,
+            SiteId = machine?.SiteId,
             Hash = machine?.Hash,
             MachineName = machine?.MachineName,
             Notes = machine?.Notes,
@@ -94,10 +94,9 @@ public class MessagingHub : Hub
             pendingMachinesRegistration.Remove(machine);
             _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
 
-            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully");
-            await this.Clients.Client(connectionId).SendAsync("MachineIsLoggedIn", true);
+            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully and logged in");
         }
-        else if (machineObjRes != null)
+        if (machineObjRes != null)
         {
             var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
             {
@@ -115,6 +114,7 @@ public class MessagingHub : Hub
                     ConnectionId = connectionId,
                     BrandId = machineObjRes.BrandId,
                     SiteId = machineObjRes.SiteId,
+                    ZoneIds = machineObjRes.ZoneIds,
                 });
 
                 _cache.Remove("machinesLoggedIn");

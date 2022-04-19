@@ -13,6 +13,7 @@ using AutoMapper;
 using Syncfusion.Blazor;
 using BlazorServer.Extensions;
 using SharedLibrary.Dto;
+using BlazorServer.Exceptions;
 
 namespace BlazorServer.Controllers
 {
@@ -26,7 +27,7 @@ namespace BlazorServer.Controllers
             _context = context;
             _mapper = mapper;
         }
-        private async Task GetSiteZones(List<SiteDto> dto , List<Site> db)
+        private async Task GetSiteZones(List<SiteDto> dto, List<Site> db)
         {
             foreach (var siteEntity in db)
             {
@@ -38,6 +39,39 @@ namespace BlazorServer.Controllers
                 }).ToList();
             }
         }
+        [HttpPost]
+        public async Task<ActionResult> GetSiteZones([FromBody] DataManagerRequest dm)
+        {
+            int.TryParse(dm.Params.FirstOrDefault(e => e.Key == "siteId").Value.ToString(), out int siteId);
+
+            var query2 = _context.Sites.Include(e => e.SiteZones).ThenInclude(e => e.Zone).AsQueryable();
+
+
+            var query = query2.FirstOrDefault(e => e.Id == siteId).SiteZones.AsQueryable();
+
+            //var query = _context.Zones.Include(e => e.SiteZones).ThenInclude(e => e.Site).AsQueryable();
+
+            //if (siteId > 0)
+            //{
+            //    query = query.Where(e => e.Id == siteId).AsQueryable();
+            //}
+
+            query = await query.FilterBy(dm);
+            //query = query.Include(e => e.SiteZones).ThenInclude(e => e.Zone);
+            int count = query.Count();
+            query = await query.PageBy(dm);
+
+            List<SiteZone> qList = query.ToList();
+            List<SiteZoneDto> data = _mapper.Map<List<SiteZoneDto>>(qList);
+
+            //await GetSiteZones(data, qList);
+
+            ResultDto<SiteZoneDto> res = new ResultDto<SiteZoneDto>(data, count);
+
+            return Ok(res);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> GetSites([FromBody] DataManagerRequest dm)
         {
@@ -130,6 +164,8 @@ namespace BlazorServer.Controllers
             return Ok(true);
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> DeleteSite([FromBody] int id)
         {
@@ -143,6 +179,86 @@ namespace BlazorServer.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(true);
+        }
+
+        // SiteZones handler
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSiteZone(DeleteSiteZoneCommand command)
+        {
+            var Site = _context.Sites.Include(e => e.SiteZones).FirstOrDefault(e => e.Id == command.SiteId);
+            if (Site == null)
+            {
+                return NotFound();
+            }
+
+            var SiteZone = Site.SiteZones.FirstOrDefault(e => e.ZoneId == command.ZoneId);
+            Site.SiteZones.Remove(SiteZone);
+            await _context.SaveChangesAsync();
+
+            return Ok(true);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostSiteZone(SiteZoneCreateCommand command)
+        {
+            var site = _context.Sites.Include(e => e.SiteZones).FirstOrDefault(e => e.Id == command.SiteId);
+            if (site == null)
+            {
+                return NotFound();
+            }
+            if (site.SiteZones.Any(e => e.ZoneId == command.ZoneId))
+            {
+                return NotFound($"Zone {command.ZoneId} is exist on {site.Name}");
+            }
+            var siteZone = new SiteZone()
+            {
+                SiteId = command.SiteId,
+                ZoneId = command.ZoneId,
+                Notes = command.Notes,
+            };
+
+            site.SiteZones?.Add(siteZone);
+
+            int res = await _context.SaveChangesAsync();
+
+            return Ok(res.ToString());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditSiteZone(SiteZoneCreateCommand command)
+        {
+            var site = _context.Sites.Include(e => e.SiteZones).FirstOrDefault(e => e.Id == command.SiteId);
+            if (site == null)
+            {
+                return NotFound();
+            }
+
+            var siteZone = site.SiteZones.FirstOrDefault(e => e.ZoneId == command.ZoneId);
+            siteZone.Notes = command.Notes;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SiteZoneExists(command.ZoneId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(true);
+        }
+
+        private bool SiteZoneExists(int id)
+        {
+            return _context.Sites.Include(e => e.SiteZones).FirstOrDefault(e => e.Id == id).SiteZones.Any(e => e.ZoneId == id);
         }
 
         private bool SiteExists(int id)
