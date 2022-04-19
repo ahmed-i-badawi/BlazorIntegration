@@ -25,7 +25,7 @@ namespace BlazorServer.Data.Entities
             get { return SiteZones?.Count ?? 0; }
             private set { /* needed for EF */ }
         }
-
+        public bool IsCallCenter { get; set; }
         public Machine Machine { get; set; }
     }
 }
