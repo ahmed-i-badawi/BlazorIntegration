@@ -1,5 +1,4 @@
 ﻿using BlazorServer.Data;
-using BlazorServer.Data.Entities;
 using BlazorServer.Extensions;
 using BlazorServer.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,30 +19,39 @@ using System.Text;
 using System.Threading.Tasks;
 using SharedLibrary.Dto;
 using Microsoft.AspNetCore.Identity;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using global::BlazorServer.Controllers;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers;
 
 public class SeedingController : ApiControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IApplicationDbContext _context;
     public IConfiguration _config { get; }
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IIdentityService _identityService;
 
-    public SeedingController(ApplicationDbContext context, IConfiguration config, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    public SeedingController(IApplicationDbContext context,
+        IConfiguration config,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager,
+        IIdentityService identityService)
     {
         _context = context;
         _config = config;
         _userManager = userManager;
         _roleManager = roleManager;
+        _identityService = identityService;
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<bool>> Init()
     {
-        await ApplicationDbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager);
-        await ApplicationDbContextSeed.SeedSampleDataAsync(_context);
+        await DbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager, _identityService);
+        await DbContextSeed.SeedSampleDataAsync(_context);
 
         return Ok(true);
     }

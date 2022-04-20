@@ -1,22 +1,24 @@
 ﻿#nullable disable
 using AutoMapper;
-using BlazorServer.Data;
-using BlazorServer.Data.Entities;
 using BlazorServer.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Commands;
 using SharedLibrary.Dto;
 using Syncfusion.Blazor;
+using Infrastructure.ApplicationDatabase.Services;
+using BlazorServer.Services;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers
 {
     public class BrandsController : ApiControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public BrandsController(ApplicationDbContext context, IMapper mapper)
+        public BrandsController(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

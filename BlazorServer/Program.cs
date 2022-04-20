@@ -22,6 +22,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using LogDatabase;
+using Infrastructure.ApplicationDatabase;
+using SharedLibrary.Entities;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using Infrastructure.LogDatabase.Common.Interfaces;
+using Infrastructure.LogDatabase;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
@@ -35,18 +41,24 @@ if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/SyncfusionLicense.
 
 var builder = WebApplication.CreateBuilder(args);
 
+var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var logConnectionString = builder.Configuration.GetConnectionString("LogConnection");
+
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 builder.Services.AddHttpClient("BlazorServer");
 builder.Services.AddTransient<ApiService>();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddApplicationDatabase(defaultConnectionString);
+builder.Services.AddLogDatabase(logConnectionString);
+
+builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+builder.Services.AddScoped<ILogDbContext>(provider => provider.GetRequiredService<LogDbContext>());
+
+
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -69,16 +81,13 @@ builder.Services.AddSingleton<IClientOperations, ClientOperations>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
 //builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
-
-builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {

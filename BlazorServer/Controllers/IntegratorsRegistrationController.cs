@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BlazorServer.Data;
-using BlazorServer.Data.Entities;
 using SharedLibrary.Commands;
 using AutoMapper;
 using Syncfusion.Blazor;
 using BlazorServer.Extensions;
 using SharedLibrary.Dto;
+using Infrastructure.ApplicationDatabase.Services;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers
 {
     public class IntegratorsRegistrationController : ApiControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public IntegratorsRegistrationController(ApplicationDbContext context, IMapper mapper)
+        public IntegratorsRegistrationController(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

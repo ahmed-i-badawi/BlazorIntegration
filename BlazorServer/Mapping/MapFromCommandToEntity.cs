@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharedLibrary.Commands;
-using BlazorServer.Data.Entities;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Mapping;
 public class MapFromCommandToEntity : Profile

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using BlazorServer.Data.Entities;
 using SharedLibrary.Dto;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Mapping;
 public class MapFromEntityToDto : Profile

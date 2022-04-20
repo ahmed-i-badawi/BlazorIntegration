@@ -1,8 +1,4 @@
-﻿using BlazorServer.Data;
-using BlazorServer.Data.Entities;
-using BlazorServer.Extensions;
-using BlazorServer.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -19,16 +15,19 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using SharedLibrary.Dto;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using BlazorServer.Extensions;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers;
 
 [Authorize]
 public class MachineController : ApiControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IApplicationDbContext _context;
     public IConfiguration _config { get; }
 
-    public MachineController(ApplicationDbContext context, IConfiguration config)
+    public MachineController(IApplicationDbContext context, IConfiguration config)
     {
         _context = context;
         _config = config;
@@ -116,8 +115,8 @@ public class MachineController : ApiControllerBase
                 }
                 };
 
-                _context.Machines.Add(machine);
-                _context.SaveChanges();
+                await _context.Machines.AddAsync(machine);
+                await _context.SaveChangesAsync();
 
                 var token = machineFingerPrint;
 
@@ -154,11 +153,11 @@ public class MachineController : ApiControllerBase
                     Status = MachineStatus.Closed,
                     ConnectionId = machineModel.ConnectionId
                 };
-                _context.MachineLogs.Add(machineLog);
+                await _context.MachineLogs.AddAsync(machineLog);
                 machineDisconnected.CurrentStatus = MachineStatus.Closed;
             }
             //machineDisconnected.ConnectionId = string.Empty;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(true);
         }
         return Ok(false);
@@ -179,10 +178,10 @@ public class MachineController : ApiControllerBase
                 Status = MachineStatus.Alive,
                 ConnectionId = newConnectionId
             };
-            _context.MachineLogs.Add(log);
+            await _context.MachineLogs.AddAsync(log);
             //machineobj.ConnectionId = newConnectionId;
             machineobj.CurrentStatus = MachineStatus.Alive;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return machineobj.FingerPrint;
         }
         // if token not valid

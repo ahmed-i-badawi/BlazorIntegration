@@ -1,26 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-//using SharedLibrary.Commands;
 using BlazorServer.Services;
-using BlazorServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using BlazorServer.Data.Entities;
+using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Commands;
+using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers
 {
     [Authorize]
     public class IntegratorController : ApiControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         public IConfiguration _config { get; }
 
-        public IntegratorController(ApplicationDbContext context, IConfiguration config)
+        public IntegratorController(IApplicationDbContext context, IConfiguration config)
         {
             _context = context;
             _config = config;

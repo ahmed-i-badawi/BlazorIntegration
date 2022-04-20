@@ -1,8 +1,9 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using SharedLibrary.Entities
 @attribute [IgnoreAntiforgeryToken]
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 @attribute [AllowAnonymous]
 
 @functions {
