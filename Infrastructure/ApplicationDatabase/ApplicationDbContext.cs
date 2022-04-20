@@ -9,7 +9,7 @@ using System.Reflection;
 namespace Infrastructure.ApplicationDatabase;
 
 
-public class ApplicationDbContext : IdentityDbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
@@ -25,7 +25,6 @@ public class ApplicationDbContext : IdentityDbContext, IApplicationDbContext
     public DbSet<Brand> Brands => Set<Brand>();
     public DbSet<Site> Sites => Set<Site>();
     public DbSet<Machine> Machines => Set<Machine>();
-    public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
     public DbSet<Integrator> Integrators => Set<Integrator>();
     public DbSet<Zone> Zones => Set<Zone>();
 

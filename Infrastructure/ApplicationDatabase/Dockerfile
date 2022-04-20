@@ -4,19 +4,19 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-
+-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Infrastructure/LogDatabase/LogDatabase.csproj", "Infrastructure/LogDatabase/"]
-RUN dotnet restore "Infrastructure/LogDatabase/LogDatabase.csproj"
+COPY ["Infrastructure/ApplicationDatabase/ApplicationDatabase.csproj", "Infrastructure/ApplicationDatabase/"]
+RUN dotnet restore "Infrastructure/ApplicationDatabase/ApplicationDatabase.csproj"
 COPY . .
-WORKDIR "/src/Infrastructure/LogDatabase"
+WORKDIR "/src/Infrastructure/ApplicationDatabase"
 RUN dotnet build "LogDatabase.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "LogDatabase.csproj" -c Release -o /app/publish
+RUN dotnet publish "ApplicationDatabase.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LogDatabase.dll"]
+ENTRYPOINT ["dotnet", "ApplicationDatabase.dll"]

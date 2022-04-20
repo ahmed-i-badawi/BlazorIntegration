@@ -18,6 +18,7 @@ using SharedLibrary.Dto;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using BlazorServer.Extensions;
 using SharedLibrary.Entities;
+using Infrastructure.LogDatabase.Common.Interfaces;
 
 namespace BlazorServer.Controllers;
 
@@ -26,11 +27,13 @@ public class MachineController : ApiControllerBase
 {
     private readonly IApplicationDbContext _context;
     public IConfiguration _config { get; }
+    public ILogDbContext _logDbContext { get; }
 
-    public MachineController(IApplicationDbContext context, IConfiguration config)
+    public MachineController(IApplicationDbContext context, IConfiguration config, ILogDbContext logDbContext)
     {
         _context = context;
         _config = config;
+        _logDbContext = logDbContext;
     }
 
     [HttpPost]
@@ -78,7 +81,10 @@ public class MachineController : ApiControllerBase
         SystemInfo systemGuid = new SystemInfo();
 
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
-        var machineobj = _context.Machines.Include(e => e.Site).ThenInclude(e => e.SiteZones).FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+        var machineobj = _context.Machines
+            .Include(e => e.Site).ThenInclude(e => e.Brand)
+            .Include(e => e.Site).ThenInclude(e => e.SiteZones)
+            .FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
 
         // if machine exist return it to cache
         if (machineobj != null)
@@ -104,19 +110,32 @@ public class MachineController : ApiControllerBase
                     FingerPrint = machineFingerPrint,
                     CurrentStatus = MachineStatus.Alive,
                     Name = machineModel.MachineName,
-                    MachineLogs = new List<MachineLog>()
-                {
-                    new MachineLog()
-                    {
-                        OccurredAt = DateTime.Now,
-                        Status=MachineStatus.Alive,
-                        ConnectionId=machineModel.ConnectionId,
-                    }
-                }
                 };
 
                 await _context.Machines.AddAsync(machine);
                 await _context.SaveChangesAsync();
+
+
+                var newMachineAdded = _context.Machines
+    .Include(e => e.Site).ThenInclude(e => e.Brand)
+    .Include(e => e.Site).ThenInclude(e => e.SiteZones)
+    .FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+
+                MachineLog machineLog = new MachineLog()
+                {
+                    MachineId = newMachineAdded.Id,
+                    OccurredAt = DateTime.Now,
+                    Status = MachineStatus.Alive,
+                    ConnectionId = machineModel.ConnectionId,
+                    SiteId = newMachineAdded.SiteId,
+                    SiteHash = newMachineAdded.Site.HashString,
+                    SiteName = newMachineAdded.Site.Name,
+                    BrandId = newMachineAdded.Site.Brand.Id,
+                    BrandName = newMachineAdded.Site.Brand.Name,
+                };
+
+                await _logDbContext.MachineLogs.AddAsync(machineLog);
+                await _logDbContext.SaveChangesAsync();
 
                 var token = machineFingerPrint;
 
@@ -140,7 +159,7 @@ public class MachineController : ApiControllerBase
         SystemInfo systemGuid = new SystemInfo();
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
 
-        var machineDisconnected = _context.Machines.FirstOrDefault(m => m.FingerPrint == machineFingerPrint);
+        var machineDisconnected = _context.Machines.Include(e => e.Site).ThenInclude(e => e.Brand).FirstOrDefault(m => m.FingerPrint == machineFingerPrint);
         if (machineDisconnected != null)
         {
             // if registered close connection log
@@ -149,14 +168,21 @@ public class MachineController : ApiControllerBase
                 MachineLog machineLog = new MachineLog()
                 {
                     MachineId = machineDisconnected.Id,
+                    MachineName = machineDisconnected?.Name,
+                    SiteId = machineDisconnected.SiteId,
+                    SiteHash = machineDisconnected.Site.HashString,
+                    SiteName = machineDisconnected.Site.Name,
+                    BrandId = machineDisconnected.Site.Brand.Id,
+                    BrandName = machineDisconnected.Site.Brand.Name,
                     OccurredAt = DateTime.Now,
                     Status = MachineStatus.Closed,
                     ConnectionId = machineModel.ConnectionId
                 };
-                await _context.MachineLogs.AddAsync(machineLog);
+                await _logDbContext.MachineLogs.AddAsync(machineLog);
                 machineDisconnected.CurrentStatus = MachineStatus.Closed;
             }
             //machineDisconnected.ConnectionId = string.Empty;
+            await _logDbContext.SaveChangesAsync();
             await _context.SaveChangesAsync();
             return Ok(true);
         }
@@ -176,12 +202,26 @@ public class MachineController : ApiControllerBase
                 MachineId = machineobj.Id,
                 OccurredAt = DateTime.Now,
                 Status = MachineStatus.Alive,
-                ConnectionId = newConnectionId
+                ConnectionId = newConnectionId,
+                MachineName = machineobj.Name,
+                SiteId = machineobj.SiteId,
+                SiteHash = machineobj.Site.HashString,
+                SiteName = machineobj.Site.Name,
+                BrandId = machineobj.Site.Brand.Id,
+                BrandName = machineobj.Site.Brand.Name,
             };
-            await _context.MachineLogs.AddAsync(log);
-            //machineobj.ConnectionId = newConnectionId;
+            await _logDbContext.MachineLogs.AddAsync(log);
             machineobj.CurrentStatus = MachineStatus.Alive;
             await _context.SaveChangesAsync();
+            try
+            {
+                await _logDbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return machineobj.FingerPrint;
         }
         // if token not valid

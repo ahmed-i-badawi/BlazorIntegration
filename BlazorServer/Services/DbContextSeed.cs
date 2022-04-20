@@ -7,7 +7,7 @@ namespace BlazorServer.Data;
 
 public static class DbContextSeed
 {
-  // ApplicationDBContext
+    // ApplicationDBContext
     public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IIdentityService identityService
@@ -45,12 +45,14 @@ public static class DbContextSeed
 
         if (!context.Sites?.Any() ?? false)
         {
+            List<int> brandids = context.Brands.Select(e => e.Id).ToList();
+
             var Sites = Enumerable.Range(1, 2500).Select(x => new Site()
             {
                 Name = $"Site{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
                 Notes = $"this is Site{x} Notes",
-                BrandId = new Random().Next(1, 100),
+                BrandId = new Random().Next(brandids.Min(), brandids.Max()),
             });
 
             await context.Sites.AddRangeAsync(Sites);

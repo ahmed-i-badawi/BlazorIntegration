@@ -9,5 +9,10 @@ public class MachineLog
     public MachineStatus Status { get; set; }
     public string? ConnectionId { get; set; }
     public int MachineId { get; set; }
-    public Machine Machine { get; set; }
+    public string MachineName { get; set; }
+    public int SiteId { get; set; }
+    public string SiteHash { get; set; }
+    public string SiteName { get; set; }
+    public int BrandId { get; set; }
+    public string BrandName { get; set; }
 }

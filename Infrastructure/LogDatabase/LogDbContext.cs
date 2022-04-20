@@ -12,7 +12,7 @@ public class LogDbContext : DbContext, ILogDbContext
         : base(options)
     {
     }
-    public DbSet<TestLog> TestLogs => Set<TestLog>();
+    public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

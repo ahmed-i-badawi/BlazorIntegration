@@ -20,7 +20,7 @@ public class Site
     public List<SiteZone>? SiteZones { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public int NumberOfZones
+    public int? NumberOfZones
     {
         get { return SiteZones?.Count ?? 0; }
         private set { /* needed for EF */ }

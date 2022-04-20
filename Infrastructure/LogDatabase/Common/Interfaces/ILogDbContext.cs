@@ -5,7 +5,7 @@ namespace Infrastructure.LogDatabase.Common.Interfaces;
 
 public interface ILogDbContext
 {
-    DbSet<TestLog> TestLogs { get; }
+    DbSet<MachineLog> MachineLogs { get; }
 
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
