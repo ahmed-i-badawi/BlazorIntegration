@@ -19,5 +19,7 @@ public class MapFromEntityToDto : Profile
         CreateMap<SiteZone, SiteZoneDto>();
         CreateMap<Site, SiteDto>();
         CreateMap<Machine, MachineDto>();
+        CreateMap<MachineStatusLog, MachineStatusLogDto>();
+        CreateMap<MachineMessageLog, MachineMessageLogDto>();
     }
 }
