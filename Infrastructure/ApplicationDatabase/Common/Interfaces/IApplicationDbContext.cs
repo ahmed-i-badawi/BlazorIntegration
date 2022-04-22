@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     DbSet<Machine> Machines { get; }
     DbSet<Integrator> Integrators { get; }
     DbSet<Zone> Zones { get; }
+    DbSet<SiteZone> SiteZones { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
 }

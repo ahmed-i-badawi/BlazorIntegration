@@ -4,9 +4,9 @@ using SharedLibrary.Entities;
 
 namespace Infrastructure.LogDatabase.Configurations;
 
-public class MachineLogConfiguration : IEntityTypeConfiguration<MachineLog>
+public class MachineLogConfiguration : IEntityTypeConfiguration<MachineStatusLog>
 {
-    public void Configure(EntityTypeBuilder<MachineLog> builder)
+    public void Configure(EntityTypeBuilder<MachineStatusLog> builder)
     {
         builder.HasKey(p => p.Id);
     }

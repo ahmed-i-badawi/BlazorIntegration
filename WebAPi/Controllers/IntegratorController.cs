@@ -104,14 +104,24 @@ public class IntegratorController : ApiControllerBase
 
                 if (machineLoggedInObj != null)
                 {
-                    string connectionId = machineLoggedInObj.ConnectionId;
+                    bool isLoged = await OnSendToMachineBeingOffline(command, machineLoggedInObj, receivedAt: DateTime.Now);
 
-                    await _hubContext.Clients.Client(connectionId).SendAsync("NewOrder", command.Notes);
-                    return Ok("Order has been sent to Site");
+                    if (isLoged)
+                    {
+                        await _hubContext.Clients.Client(machineLoggedInObj.ConnectionId).SendAsync("NewOrder", command.Notes);
+                        return Ok("Order has been sent to Site");
+                    }
+                    return Ok("Error happened unexpectedly");
                 }
                 else
                 {
-                    return Ok("Site is offline, try again later");
+                    bool isLoged = await OnSendToMachineBeingOffline(command, machineLoggedInObj);
+
+                    if (isLoged)
+                    {
+                        return Ok("Site is offline now, but your order will proceed automatically when target site being online");
+                    }
+                    return Ok("Brand has no site on this zone");
                 }
             }
             else
@@ -123,6 +133,26 @@ public class IntegratorController : ApiControllerBase
         {
             return Ok("Not authourized");
         }
+    }
+
+    private async Task<bool> OnSendToMachineBeingOffline(OrderCommand order, MachineRegistrationCommand machine, DateTime? receivedAt = null)
+    {
+        MachineMessageLogCommand request = new MachineMessageLogCommand()
+        {
+            SentAt = DateTime.Now,
+            ReceivedAt = receivedAt,
+            Payload = order.Notes,
+            BrandId = order.BrandId,
+            ZoneId = order.ZoneId,
+            MachineName = machine?.MachineName,
+            ConnectionId = machine?.ConnectionId,
+            SiteId = machine?.SiteId,
+            SiteHash = machine?.Hash,
+        };
+        var response = _http.PostAsJsonAsync($"api/Machine/OnSendMessagesToMachine", request);
+        bool isLoged = await response.Result.Content.ReadFromJsonAsync<bool>();
+
+        return isLoged;
     }
 
 }

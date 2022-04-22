@@ -72,7 +72,7 @@ public class MessagingHub : Hub
 
 
         var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
-        
+
         var machine = pendingMachinesRegistration?.FirstOrDefault(e => e.SystemInfo == sysInfo);
 
         MachineModel myObj = new MachineModel()
@@ -106,7 +106,7 @@ public class MessagingHub : Hub
                 return listMachinesLoggedIn;
             });
 
-            if(!machinesLoggedIn.Any(e => e.ConnectionId == connectionId && e.SystemInfo == myObj.SystemInfo))
+            if (!machinesLoggedIn.Any(e => e.ConnectionId == connectionId && e.SystemInfo == myObj.SystemInfo))
             {
                 machinesLoggedIn.Add(new MachineRegistrationCommand()
                 {
@@ -123,10 +123,51 @@ public class MessagingHub : Hub
             }
 
             await this.Clients.Client(connectionId).SendAsync("MachineIsLoggedIn", true);
+
+            try
+            {
+                var ordersObj = _http.GetFromJsonAsync<List<string>>($"api/Machine/GetMachinePendingOrdersWhenBeingOnline?brandId={machineObjRes.BrandId}&siteId={machineObjRes.SiteId}");
+                var orders = await ordersObj;
+
+                if (orders?.Any() ?? false)
+                {
+                    foreach (var item in orders)
+                    {
+                        await this.Clients.Client(connectionId).SendAsync("NewOrder", item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+         
+
         }
 
         return base.OnConnectedAsync();
     }
+
+    //private async Task<bool> OnSendToMachineBeingOffline(OrderCommand order, MachineRegistrationCommand machine, DateTime? receivedAt = null)
+    //{
+    //    MachineMessageLogCommand request = new MachineMessageLogCommand()
+    //    {
+    //        SentAt = DateTime.Now,
+    //        ReceivedAt = receivedAt,
+    //        Payload = order.Notes,
+    //        BrandId = order.BrandId,
+    //        ZoneId = order.ZoneId,
+    //        MachineName = machine.MachineName,
+    //        ConnectionId = machine.ConnectionId,
+    //        SiteId = machine.SiteId,
+    //        SiteHash = machine.Hash,
+    //    };
+    //    var response = _http.PostAsJsonAsync($"api/Machine/OnSendToMachineBeingOffline", request);
+    //    bool isLoged = await response.Result.Content.ReadFromJsonAsync<bool>();
+
+    //    return isLoged;
+    //}
 
     public override async Task OnDisconnectedAsync(Exception e)
     {

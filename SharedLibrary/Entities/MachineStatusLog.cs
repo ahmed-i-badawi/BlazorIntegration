@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Entities;
 
-public class MachineLog
+public class MachineStatusLog
 {
     public int Id { get; set; }
     public DateTime OccurredAt { get; set; }

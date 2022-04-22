@@ -122,7 +122,7 @@ public class MachineController : ApiControllerBase
                     await _context.Machines.AddAsync(machine);
                     await _context.SaveChangesAsync();
 
-                    await AddMachineLog
+                    await AddMachineLogOnLoginLogout
                         (
                         connectionId: machineModel.ConnectionId,
                         machineStatus: MachineStatus.Alive,
@@ -156,7 +156,7 @@ public class MachineController : ApiControllerBase
         SystemInfo systemGuid = new SystemInfo();
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
 
-        bool isLogged = await AddMachineLog
+        bool isLogged = await AddMachineLogOnLoginLogout
             (
             connectionId: machineModel.ConnectionId,
             machineStatus: MachineStatus.Closed,
@@ -164,6 +164,49 @@ public class MachineController : ApiControllerBase
             );
 
         return Ok(isLogged);
+    }
+
+    [HttpGet]
+    public async Task<List<string>> GetMachinePendingOrdersWhenBeingOnline([FromQuery] int brandId, [FromQuery] int? siteId)
+    {
+        List<string> orders = new List<string>();
+
+        var machineMessageLogs = _logDbContext.MachineMessageLogs.Where(e => e.BrandId == brandId && e.SiteId == siteId && e.ReceivedAt == null);
+
+        if (machineMessageLogs?.Any() ?? false)
+        {
+            orders.AddRange(machineMessageLogs.Select(e => e.Payload).ToList());
+            await machineMessageLogs.ForEachAsync(e => e.ReceivedAt = DateTime.Now);
+        }
+        await _logDbContext.SaveChangesAsync();
+
+        return orders;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<bool>> OnSendMessagesToMachine([FromBody] MachineMessageLogCommand request)
+    {
+        var siteZone = _context.SiteZones.Include(e => e.Site).Where(e => e.ZoneId == request.ZoneId).FirstOrDefault(e => e.Site.BrandId == request.BrandId);
+        if (siteZone != null)
+        {
+            MachineMessageLog machineMessageLog = new MachineMessageLog()
+            {
+                SentAt = request.SentAt,
+                ReceivedAt = request.ReceivedAt,
+                Payload = request.Payload,
+                BrandId = request.BrandId,
+                ZoneId = request.ZoneId,
+                MachineName = request.MachineName,
+                ConnectionId = request.ConnectionId,
+                SiteId = siteZone.SiteId,
+                SiteHash = siteZone.Site.HashString,
+            };
+            await _logDbContext.MachineMessageLogs.AddAsync(machineMessageLog);
+            await _logDbContext.SaveChangesAsync();
+            return Ok(true);
+        }
+
+        return Ok(false);
     }
 
     private async Task<string> MachineLogin(Machine machineobj, string newConnectionId)
@@ -175,7 +218,7 @@ public class MachineController : ApiControllerBase
         if (!string.IsNullOrWhiteSpace(machineobj.FingerPrint))
         {
 
-            bool isLogged = await AddMachineLog
+            bool isLogged = await AddMachineLogOnLoginLogout
                 (
                 connectionId: newConnectionId,
                 machineStatus: MachineStatus.Alive,
@@ -194,7 +237,7 @@ public class MachineController : ApiControllerBase
         //return "";
     }
 
-    private async Task<bool> AddMachineLog(MachineStatus machineStatus, string fingerPrint, string connectionId)
+    private async Task<bool> AddMachineLogOnLoginLogout(MachineStatus machineStatus, string fingerPrint, string connectionId)
     {
         Machine dbMachine = _context.Machines
 .Include(e => e.Site).ThenInclude(e => e.Brand)
@@ -207,7 +250,7 @@ public class MachineController : ApiControllerBase
             dbMachine.CurrentStatus = machineStatus;
             await _context.SaveChangesAsync();
 
-            MachineLog machineLog = new MachineLog()
+            MachineStatusLog machineLog = new MachineStatusLog()
             {
                 MachineId = dbMachine.Id,
                 OccurredAt = DateTime.Now,
@@ -221,7 +264,7 @@ public class MachineController : ApiControllerBase
                 BrandName = dbMachine.Site.Brand.Name,
             };
 
-            await _logDbContext.MachineLogs.AddAsync(machineLog);
+            await _logDbContext.MachineStatusLogs.AddAsync(machineLog);
             await _logDbContext.SaveChangesAsync();
 
             return true;

@@ -12,7 +12,8 @@ public class LogDbContext : DbContext, ILogDbContext
         : base(options)
     {
     }
-    public DbSet<MachineLog> MachineLogs => Set<MachineLog>();
+    public DbSet<MachineStatusLog> MachineStatusLogs => Set<MachineStatusLog>();
+    public DbSet<MachineMessageLog> MachineMessageLogs => Set<MachineMessageLog>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

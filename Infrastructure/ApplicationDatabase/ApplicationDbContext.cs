@@ -27,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Machine> Machines => Set<Machine>();
     public DbSet<Integrator> Integrators => Set<Integrator>();
     public DbSet<Zone> Zones => Set<Zone>();
+    public DbSet<SiteZone> SiteZones => Set<SiteZone>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
