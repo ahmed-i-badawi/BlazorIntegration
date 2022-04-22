@@ -1,4 +1,4 @@
-using BlazorServer.Areas.Identity;
+﻿using BlazorServer.Areas.Identity;
 using BlazorServer.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -28,6 +28,7 @@ using SharedLibrary.Entities;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase;
+using System.Security.Principal;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
@@ -47,8 +48,7 @@ var logConnectionString = builder.Configuration.GetConnectionString("LogConnecti
 // Add services to the container.
 
 
-builder.Services.AddHttpClient("BlazorServer");
-builder.Services.AddTransient<ApiService>();
+
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -57,7 +57,12 @@ builder.Services.AddLogDatabase(logConnectionString);
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ILogDbContext>(provider => provider.GetRequiredService<LogDbContext>());
+//builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+//builder.Services.AddTransient(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddHttpClient("BlazorServer");
+builder.Services.AddTransient<ApiService>();
 
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));

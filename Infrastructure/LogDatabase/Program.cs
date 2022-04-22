@@ -1,4 +1,4 @@
-using Infrastructure.LogDatabase;
+﻿using Infrastructure.LogDatabase;
 using LogDatabase;
 using Microsoft.EntityFrameworkCore;
 

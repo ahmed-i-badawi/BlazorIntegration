@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Entities;
 
-public class Zone
+public class Zone : AuditableEntity
 {
     public int Id { get; }
     public string Name { get; set; }

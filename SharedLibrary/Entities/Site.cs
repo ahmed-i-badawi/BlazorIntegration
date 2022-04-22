@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Entities;
 
-public class Site
+public class Site : AuditableEntity
 {
     public int Id { get; }
-    public Guid Hash { get; }
+    public Guid Hash { get; set; }
     [NotMapped]
     public string HashString { get { return Hash.ToString(); } }
 

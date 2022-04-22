@@ -38,7 +38,6 @@ public class IdentityService : IIdentityService
             Email = userName+"@mail.com",
             EmailConfirmed = isEmailConfirmed
         };
-
         var result = await _userManager.CreateAsync(user, password);
 
         return (result.ToApplicationResult(), user.Id);

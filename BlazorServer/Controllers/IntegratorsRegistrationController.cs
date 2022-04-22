@@ -14,23 +14,33 @@ using SharedLibrary.Dto;
 using Infrastructure.ApplicationDatabase.Services;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BlazorServer.Controllers
 {
+
     public class IntegratorsRegistrationController : ApiControllerBase
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IntegratorsRegistrationController(IApplicationDbContext context, IMapper mapper)
+        public IntegratorsRegistrationController(IApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost]
         public async Task<ActionResult> GetIntegrators([FromBody] DataManagerRequest dm)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+
             var query = _context.Integrators.AsQueryable();
 
             query = await query.FilterBy(dm);

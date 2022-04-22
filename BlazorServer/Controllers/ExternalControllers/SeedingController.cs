@@ -25,6 +25,7 @@ using SharedLibrary.Entities;
 
 namespace BlazorServer.Controllers;
 
+[AllowAnonymous]
 public class SeedingController : ApiControllerBase
 {
     private readonly IApplicationDbContext _context;
@@ -32,24 +33,31 @@ public class SeedingController : ApiControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IIdentityService _identityService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public SeedingController(IApplicationDbContext context,
         IConfiguration config,
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        IIdentityService identityService)
+        IIdentityService identityService,
+        IHttpContextAccessor httpContextAccessor
+)
     {
         _context = context;
         _config = config;
         _userManager = userManager;
         _roleManager = roleManager;
         _identityService = identityService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<bool>> Init()
     {
+        var user2 = _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+
+
         await DbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager, _identityService);
         await DbContextSeed.SeedSampleDataAsync(_context);
 

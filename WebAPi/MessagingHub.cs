@@ -88,7 +88,7 @@ public class MessagingHub : Hub
         var machineObjResponse = _http.PostAsJsonAsync<MachineModel>($"api/Machine/OnMachineConnect", myObj);
         MachineDto machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<MachineDto>();
 
-        if (machineObjRes != null && machine != null)
+        if (machineObjRes?.SiteId == 0 && machine != null)
         {
             _cache.Remove("pendingMachineRegistration");
             pendingMachinesRegistration.Remove(machine);
@@ -96,7 +96,7 @@ public class MessagingHub : Hub
 
             await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully and logged in");
         }
-        if (machineObjRes != null)
+        if (machineObjRes?.SiteId > 0)
         {
             var machinesLoggedIn = await _cache.GetOrCreateAsync("machinesLoggedIn", async entry =>
             {
@@ -127,6 +127,7 @@ public class MessagingHub : Hub
 
         return base.OnConnectedAsync();
     }
+
     public override async Task OnDisconnectedAsync(Exception e)
     {
         var httpContext = Context.GetHttpContext();

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Entities;
 
-public class Brand
+public class Brand : AuditableEntity
 {
     public int Id { get; set; }
     public string Name { get; set; }

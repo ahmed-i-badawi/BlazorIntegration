@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Entities;
 
-public class Integrator
+public class Integrator : AuditableEntity
 {
     public Integrator()
     {

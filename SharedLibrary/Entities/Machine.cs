@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Entities;
 
-public class Machine
+public class Machine : AuditableEntity
 {
     public int Id { get; set; }
     [MaxLength(1000)]

@@ -4,9 +4,9 @@ using SharedLibrary.Entities;
 
 namespace Infrastructure.LogDatabase.Configurations;
 
-public class TestLogConfiguration : IEntityTypeConfiguration<TestLog>
+public class MachineLogConfiguration : IEntityTypeConfiguration<MachineLog>
 {
-    public void Configure(EntityTypeBuilder<TestLog> builder)
+    public void Configure(EntityTypeBuilder<MachineLog> builder)
     {
         builder.HasKey(p => p.Id);
     }
