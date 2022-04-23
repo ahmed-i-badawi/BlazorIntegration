@@ -1,0 +1,115 @@
+﻿@page "/Zones"
+@using BlazorServer.Services
+@inject ApiService _apiService
+@using AutoMapper
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@inject IClientOperations _clientOperations
+@using Syncfusion.Blazor.Grids
+
+<div>
+    @if (IsProcessingItem)
+    {
+        <div>
+            <ZoneCreateOrUpdateComponent EditModel="FModel"
+                                      OnCancelClicked="CancelClicked"
+                                      OnSubmitClicked="SubmitClicked" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <CustomFullGridComponent DTO="ZoneDto"
+                                 SfDataManagerUrl="api/Zones/GetZones"
+                                 Edit="Edit"
+                                 Delete="Delete"
+                                 Add="Add">
+                <GridColumnsTemplate>
+                    <GridColumn Field=@nameof(ZoneDto.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(ZoneDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(ZoneDto.Notes) HeaderText="Notes"></GridColumn>
+                </GridColumnsTemplate>
+            </CustomFullGridComponent>
+        </div>
+    }
+
+</div>
+@code {
+    private bool IsProcessingItem { get; set; } = false;
+    public ZoneCreateFM FModel { get; set; } = null;
+
+    public async Task<bool> Add(bool added)
+    {
+        IsProcessingItem = true;
+
+        StateHasChanged();
+
+        return false;
+    }
+
+    public async Task SubmitClicked(SubmitClickedArg submitClickedArg)
+    {
+
+        IsProcessingItem = false;
+
+        if (submitClickedArg.IsNewRecord)
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Create", "Created Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+        }
+        else
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Edit", "Updated Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+            FModel = null;
+        }
+    }
+
+    public async Task CancelClicked()
+    {
+        IsProcessingItem = false;
+        FModel = null;
+    }
+
+    public async Task Edit(ZoneDto dto)
+    {
+        IsProcessingItem = true;
+
+        FModel = _mapper.Map<ZoneCreateFM>(dto);
+
+        StateHasChanged();
+    }
+
+    public async Task<bool> Delete(ZoneDto dto)
+    {
+        //ActionsDisabled = true;
+
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/Zones/DeleteZone", dto.Id);
+        bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+        if (!result)
+        {
+            await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            return result;
+        }
+        else
+        {
+            await _clientOperations.ShowToast("Delete", "Deleted Successfully", "success");
+            return result;
+
+            //ActionsDisabled = false;
+        }
+    }
+
+}

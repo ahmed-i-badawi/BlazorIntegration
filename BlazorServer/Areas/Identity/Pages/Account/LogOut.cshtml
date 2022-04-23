@@ -1,15 +1,18 @@
 ﻿@page
-@using BlazorServer.Data.Entities
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using SharedLibrary.Entities
 @attribute [IgnoreAntiforgeryToken]
 @inject SignInManager<ApplicationUser> SignInManager
+@attribute [AllowAnonymous]
+
 @functions {
     public async Task<IActionResult> OnPost()
     {
-        if (SignInManager.IsSignedIn(User))
-        {
-            await SignInManager.SignOutAsync();
-        }
+        //if (SignInManager.IsSignedIn(User))
+        //{
+        //}
+        await SignInManager.SignOutAsync();
 
         return Redirect("~/");
     }

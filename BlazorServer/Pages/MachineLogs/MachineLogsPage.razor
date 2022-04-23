@@ -1,0 +1,65 @@
+﻿@page "/MachineLogs"
+@using Syncfusion.Blazor.Navigations
+@*@inherits SampleBaseComponent;*@
+@using SharedLibrary.Enums
+@using Syncfusion.Blazor.Grids
+
+<div class="col-lg-12 control-section">
+    <SfTab CssClass="default-tab" LoadOn="ContentLoad.Demand">
+        <TabItems>
+            <TabItem>
+                <ChildContent>
+                    <TabHeader Text="Machine Status"></TabHeader>
+                </ChildContent>
+                <ContentTemplate>
+                    <CustomFullGridComponent DTO="MachineStatusLogDto"
+                                             SfDataManagerUrl="api/Logs/GetMachineStatusLogs">
+                        <GridColumnsTemplate>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.Id) HeaderText="Id" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.OccurredAt) HeaderText="Occurred At" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.Status) HeaderText="Status" TextAlign="TextAlign.Center" Width="100">
+                                <Template>
+                                    @{
+                                        var obj = ((MachineStatusLogDto)context);
+                                        <span>@(obj.Status.ToString())</span>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.ConnectionId) HeaderText="Connection Id" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.MachineId) HeaderText="Machine Id" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.MachineName) HeaderText="Machine Name" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.SiteId) HeaderText="Site Id" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.SiteName) HeaderText="Site Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.SiteHash) HeaderText="Site Hash" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.BrandId) HeaderText="Brand Id" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                            <GridColumn Field=@nameof(MachineStatusLogDto.BrandName) HeaderText="Brand Name" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                        </GridColumnsTemplate>
+                    </CustomFullGridComponent>
+                </ContentTemplate>
+            </TabItem>
+            <TabItem>
+                <ChildContent>
+                    <TabHeader Text="Machine Messages"></TabHeader>
+                </ChildContent>
+                <ContentTemplate>
+                    <CustomFullGridComponent DTO="MachineMessageLogDto"
+                                             SfDataManagerUrl="api/Logs/GetMachineMessageLogs">
+                        <GridColumnsTemplate>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.Id) HeaderText="Id" TextAlign="TextAlign.Center" Width="60"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.SentAt) HeaderText="Sent At" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.ReceivedAt) HeaderText="Received At" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.ConnectionId) HeaderText="Connection Id" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.MachineName) HeaderText="Machine Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.SiteId) HeaderText="Site Id" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.SiteHash) HeaderText="Site Hash" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.BrandId) HeaderText="Brand Id" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(MachineMessageLogDto.Payload) HeaderText="Payload" TextAlign="TextAlign.Center" Width="300"></GridColumn>
+                        </GridColumnsTemplate>
+                    </CustomFullGridComponent>
+                </ContentTemplate>
+            </TabItem>
+        </TabItems>
+    </SfTab>
+</div>
+@code {
+}

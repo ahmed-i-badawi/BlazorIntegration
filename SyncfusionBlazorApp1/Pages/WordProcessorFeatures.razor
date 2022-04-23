@@ -1,0 +1,133 @@
+﻿@page "/wordprocessor-features"
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DocumentEditor
+@using SyncfusionBlazorApp1.Data
+<h2>Word Processor</h2>
+<br/>
+<div id = "ControlRegion">
+<div class="control-section">
+    <div id="control-container">
+        <div id='documenteditor_titlebar' class="e-de-ctn-title">
+            <div class="single-line" id="documenteditor_title_contentEditor" style="border: 1px solid transparent;" title="Document Name." contenteditable="false">
+                <label id="documenteditor_title_name" class="doc-edit-title"> @DocumentName</label>
+            </div>
+            <div style="float: right">
+                <SfButton IconCss="e-de-ctn-title-print" CssClass="title-bar-btn" @onclick="Print">Print</SfButton>
+            </div>
+            <div style="float: right">
+                <SfButton IconCss="e-de-ctn-title-download" CssClass="title-bar-btn" @onclick="OnExport">Download</SfButton>
+            </div>
+        </div>
+        <div id="control-container">
+            <SfDocumentEditorContainer @ref="container" Height="550px" Width="1000px" >
+                <DocumentEditorContainerEvents Created="OnCreated" DocumentChanged="OnDocumentChange"></DocumentEditorContainerEvents>
+            </SfDocumentEditorContainer>
+        </div>
+    </div>
+</div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Default</li>
+      <li class="list"> Theme - Bootstrap v5</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+    #control-container {
+        width: 1000px;
+        margin: 0 auto;
+    }
+    #edit_container {
+        width: 950px;
+    }
+    .title-bar-btn, .title-bar-btn:hover, .title-bar-btn:focus {
+        background: transparent;
+        box-shadow: none;
+        font-family: inherit;
+        border-color: transparent;
+        border-radius: 2px;
+        color: inherit;
+        font-size: 12px;
+        text-transform: capitalize;
+        height: 28px;
+        font-weight: 400;
+        margin-top: 2px;
+    }
+    #documenteditor_titlebar {       
+        height: 36px;
+        line-height: 26px;
+        width: 1000px;
+        font-size: 12px;
+        padding-left: 15px;
+        padding-right: 10px;
+        font-family: inherit;
+        margin: 0 auto;
+    }
+    #documenteditor_title_contentEditor {
+        height: 26px;
+        max-width: 85%;
+        width: auto;
+        overflow: hidden;
+        display: inline-block;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin: 5px;
+    }
+    .doc-edit-title {
+        text-transform: capitalize;
+        font-weight: 400;
+        font-family: inherit;
+        text-overflow: ellipsis;
+        outline: none;
+        white-space: pre;
+        overflow: hidden;
+        user-select: none;
+        cursor: text
+    }
+    .print-ctnr {
+        cursor: pointer;
+        margin-top: 6px;
+    }
+</style>
+@code {
+    internal string DocumentName { get; set; }
+    SfDocumentEditorContainer container;
+    public void OnExport(object args)
+    {
+        SfDocumentEditor documentEditor = container.DocumentEditor;
+        documentEditor.Save(DocumentName, FormatType.Docx);
+    }
+    public void Print(object args)
+    {
+        SfDocumentEditor documentEditor = container.DocumentEditor;
+        documentEditor.Print();
+    }
+    public void OnCreated(object args)
+    {
+        SfDocumentEditor documentEditor = container.DocumentEditor;
+        documentEditor.Open(Data.DefaultDocument);
+        DocumentName = "Getting Started";
+    }
+    public void OnDocumentChange()
+    {
+        string name = container.DocumentEditor.DocumentName;
+        if (name != "")
+        {
+            DocumentName = name;
+        }
+    }
+}

@@ -1,0 +1,124 @@
+﻿@using BlazorServer.Services
+@using System.Net.Http.Headers
+@inject ApiService _apiService
+@inject IConfiguration configuration
+@using FluentValidation;
+@using FluentValidation.Validators;
+@using AutoMapper;
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+@using BlazorServer.Exceptions;
+
+<div class="container">
+
+    @if (FModel != null)
+    {
+        @if (EditModel == null)
+        {
+            <h3>Add New Zone to Site</h3>
+        }
+        else
+        {
+            <h3>Edit zone @FModel.ZoneId for site @FModel.SiteId</h3>
+        }
+
+        <EditForm OnValidSubmit="Submit" Model="FModel">
+            <FluentValidator />
+            <div class="row">
+                <div class="col-6">
+                    <SfDropDownList Readonly="@(EditModel != null)" TValue="int" TItem="ZoneDto" @bind-Value="@FModel.ZoneId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Zone">
+                        <SfDataManager Url="api/Zones/GetZonesDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id" />
+                    </SfDropDownList>
+                </div>
+                <div class="col-6">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <InputText id="Notes" class="form-control" @bind-Value="@FModel.Notes" placeholder="Notes" /><br />
+                    <ValidationMessage For="() => FModel.Notes"></ValidationMessage>
+                </div>
+            </div>
+            <button id="Save" type="submit" class="btn btn-primary">Submit</button>
+            <button id="Cancel" type="button" @onclick="CancelClick" class="btn btn-danger">Cancel</button>
+        </EditForm>
+    }
+</div>
+
+@code {
+    public SiteZoneCreateFM FModel { get; set; } = null;
+    [Parameter]
+    public SiteZoneCreateFM EditModel { get; set; }
+    public SubmitClickedArg SubmitClickedArguments { get; set; }
+    [Parameter]
+    public EventCallback OnCancelClicked { get; set; }
+    [Parameter]
+    public EventCallback<SubmitClickedArg> OnSubmitClicked { get; set; }
+    [Parameter]
+    public int SiteId { get; set; }
+    public Query RemoteDataQuery = new Query();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RemoteDataQuery.AddParams("take", 6);
+
+        if (EditModel == null)
+        {
+            FModel = new SiteZoneCreateFM()
+                {
+                    SiteId = SiteId
+                };
+        }
+        else
+        {
+            FModel = _mapper.Map<SiteZoneCreateFM>(EditModel);
+            RemoteDataQuery.AddParams("selectedId", FModel.ZoneId);
+        }
+    }
+    public async Task CancelClick()
+    {
+        OnCancelClicked.InvokeAsync();
+    }
+
+    protected async Task Submit()
+    {
+        if (EditModel == null)
+        {
+            var response = await _apiService.HttpClient.PostAsJsonAsync<SiteZoneCreateFM>("api/Sites/PostSiteZone", FModel);
+            string returnMessage = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, false, returnMessage);
+                await OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+                return;
+            }
+            if (OnSubmitClicked.HasDelegate)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, true);
+                await OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+
+            StateHasChanged();
+        }
+        else
+        {
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteZoneCreateFM>($"api/Sites/EditSiteZone", FModel);
+            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+            if (result)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, true);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            else
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, false);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            StateHasChanged();
+        }
+
+    }
+}

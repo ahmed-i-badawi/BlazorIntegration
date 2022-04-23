@@ -1,0 +1,175 @@
+﻿@page "/Sites"
+@using BlazorServer.Services
+@inject ApiService _apiService
+@using AutoMapper
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@inject IClientOperations _clientOperations
+@using SharedLibrary.Enums
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.SplitButtons;
+
+<div>
+    @if (ProcessingItem == ProcessingItem.Grid)
+    {
+        <div>
+            <h3>Sites</h3>
+            <hr />
+            <CustomFullGridComponent DTO="SiteDto"
+                                 SfDataManagerUrl="api/Sites/GetSites"
+                                 Edit="Edit"
+                                 Delete="Delete"
+                                 Add="Add">
+                <GridColumnsTemplate>
+                    <GridColumn Field=@nameof(SiteDto.Id) HeaderText="Id" TextAlign="TextAlign.Center" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.HashString) HeaderText="Hash" TextAlign="TextAlign.Center" Width="300"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Name) HeaderText="Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.NumberOfZones) AllowFiltering="false" HeaderText="Zones" TextAlign="TextAlign.Center" Width="100">
+                        <Template Context="cContext">
+                            @{
+                                var obj = ((SiteDto)cContext);
+                                <button style="width:80px;" type="button" class="btn btn-outline-danger" onclick="@(() => OpenSiteZoneCreateOrUpdate(obj.Id))">@(obj.NumberOfZones)</button>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Address) HeaderText="Address" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="Brand.Name" AllowFiltering="false" HeaderText="Brand Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="Machine.Name" AllowFiltering="false" HeaderText="Machine Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.Notes) HeaderText="Notes" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+
+                    <GridColumn Field="ApplicationUser.UserName" HeaderText="User Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="ApplicationUser.Email" HeaderText="Email" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+
+                </GridColumnsTemplate>
+                @*<GridDetailTemplate>
+                    @{
+                    var site = context as SiteDto;
+
+                    //SiteZones = site.Zones;
+                    // add SiteZones to Datasource
+                    <h5>Zones</h5>
+                    <SfGrid TValue="ZoneDto" Height=200 DataSource="site.Zones">
+                    <GridColumns>
+                    <GridColumn Field=@nameof(ZoneDto.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(ZoneDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(ZoneDto.Notes) HeaderText="Notes"></GridColumn>
+
+                    </GridColumns>
+                    </SfGrid>
+                    }
+                    </GridDetailTemplate>*@
+                @*<GridColumn HeaderText="Actions" TextAlign="TextAlign.Center" Width="250">
+                    <Template Context="cContext">
+                    <SfButtonGroup CssClass="e-round-corner" style="text-align:center">
+                    @{
+                    var obj = ((ZoneDto)cContext);
+                    <button style="width:80px;" type="button" class="btn btn-danger" onclick="@(() => DeleteZone(obj.Id, site.Id))">Delete</button>
+                    }
+                    </SfButtonGroup>
+                    </Template>
+                    </GridColumn>*@
+            </CustomFullGridComponent>
+        </div>
+    }
+    else if (ProcessingItem == ProcessingItem.FirstCreateOrUpdate)
+    {
+        <div>
+            <SiteCreateOrUpdateComponent EditModel="FModel"
+                                     OnCancelClicked="CancelClicked"
+                                     OnSubmitClicked="SubmitClicked" />
+        </div>
+    }
+    else if (ProcessingItem == ProcessingItem.SecondCreateOrUpdate)
+    {
+        <div>
+            <SiteZonesViewComponent SiteId="SiteIdIsProcessing" OnCancelClicked="CancelClicked" />
+        </div>
+    }
+</div>
+@code {
+    private ProcessingItem ProcessingItem { get; set; }
+    public SiteCreateFM FModel { get; set; } = null;
+    //public List<ZoneDto> SiteZones { get; set; }
+
+    public int SiteIdIsProcessing { get; set; }
+
+    public async Task<bool> Add(bool added)
+    {
+        ProcessingItem = ProcessingItem.FirstCreateOrUpdate;
+
+        StateHasChanged();
+
+        return false;
+    }
+
+    public async Task SubmitClicked(SubmitClickedArg submitClickedArg)
+    {
+        ProcessingItem = ProcessingItem.Grid;
+
+        if (submitClickedArg.IsNewRecord)
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Create", "Created Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+        }
+        else
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Edit", "Updated Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+            FModel = null;
+        }
+    }
+    public async Task OpenSiteZoneCreateOrUpdate(int siteId)
+    {
+        SiteIdIsProcessing = siteId;
+        ProcessingItem = ProcessingItem.SecondCreateOrUpdate;
+        StateHasChanged();
+
+    }
+    public async Task CancelClicked()
+    {
+        ProcessingItem = ProcessingItem.Grid;
+        FModel = null;
+    }
+
+    public async Task Edit(SiteDto dto)
+    {
+        ProcessingItem = ProcessingItem.FirstCreateOrUpdate;
+
+        FModel = _mapper.Map<SiteCreateFM>(dto);
+
+        StateHasChanged();
+    }
+
+    public async Task<bool> Delete(SiteDto dto)
+    {
+        //ActionsDisabled = true;
+
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/Sites/DeleteSite", dto.Id);
+        bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+        if (!result)
+        {
+            await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            return result;
+        }
+        else
+        {
+            await _clientOperations.ShowToast("Delete", "Deleted Successfully", "success");
+            return result;
+
+            //ActionsDisabled = false;
+        }
+    }
+
+}

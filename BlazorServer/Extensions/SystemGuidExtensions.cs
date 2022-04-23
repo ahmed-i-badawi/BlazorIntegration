@@ -23,7 +23,7 @@ public class SystemGuid
         return val.DecryptString();
     }
 
-    public string ValueAsync()
+    public string SystemInfoAsync()
     {
         var lVolSl = GetRunningOSDriveSerialNumber();
         //var lCompMod = GetComputerModel();
@@ -33,6 +33,12 @@ public class SystemGuid
         var lGpuId = GetGpuId();
         var lMac = GetMac();
         var lConcatStr = $"CPU: {lCpuId}\nBIOS:{lBiosId}\nMainboard: {lMainboard}\nGPU: {lGpuId}\nMAC: {lMac}\nVolume: {lVolSl}";
+        return lConcatStr;
+    }
+
+    public string ValueAsync()
+    {
+        var lConcatStr = SystemInfoAsync();
         _systemGuid = GetHash(lConcatStr);
         return _systemGuid;
     }

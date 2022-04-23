@@ -1,4 +1,5 @@
-﻿@using System.Net.Http
+@using System.Net.Http
+@using BlazorServer.Services
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
@@ -8,4 +9,10 @@
 @using Microsoft.JSInterop
 @using BlazorServer
 @using BlazorServer.Shared
+@using SharedLibrary.Dto
+@using SharedLibrary.Commands
 @inject NavigationManager navigationManager
+@using Syncfusion.Blazor
+@inject ApiService _apiService
+@using Resources
+@using Syncfusion.Blazor.Navigations

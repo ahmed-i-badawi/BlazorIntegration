@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,6 +19,8 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opt =>
 {
@@ -26,6 +28,10 @@ builder.Services.AddResponseCompression(opt =>
         new[] {"application/octet-stream"});
 });
 builder.Services.AddControllers();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("INTEGRATOR", policy => policy.RequireClaim("INTEGRATOR"));
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options => {
                   options.TokenValidationParameters = new TokenValidationParameters
@@ -60,6 +66,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<MessagingHub>(MessagingHub.HubUrl);
+app.MapHub<MessagingHub>(configuration["HubUrl"]);
 
 app.Run();

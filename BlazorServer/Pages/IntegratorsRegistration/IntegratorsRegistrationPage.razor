@@ -1,0 +1,116 @@
+﻿@page "/IntegratorsRegistration"
+@using BlazorServer.Resources
+@using BlazorServer.Services
+@inject ApiService _apiService
+@using AutoMapper
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@inject IClientOperations _clientOperations
+@using Syncfusion.Blazor.Grids
+
+<div>
+    @if (IsProcessingItem)
+    {
+        <div>
+            <IntegratorsRegistrationCreateOrUpdateComponent EditModel="FModel"
+                                                        OnCancelClicked="CancelClicked"
+                                                        OnSubmitClicked="SubmitClicked" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <CustomFullGridComponent DTO="IntegratorsDto"
+                                               SfDataManagerUrl="api/IntegratorsRegistration/GetIntegrators"
+                                               Edit="Edit"
+                                               Delete="Delete"
+                                               Add="Add">
+                <GridColumnsTemplate>
+                    <GridColumn Field=@nameof(IntegratorsDto.Hash) HeaderText="Hash"></GridColumn>
+                    <GridColumn Field=@nameof(IntegratorsDto.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(IntegratorsDto.Notes) HeaderText="Notes"></GridColumn>
+                </GridColumnsTemplate>
+            </CustomFullGridComponent>
+        </div>
+    }
+
+</div>
+@code {
+    private bool IsProcessingItem { get; set; } = false;
+    public IntegratorsRegistrationCreateFM FModel { get; set; } = null;
+
+    public async Task<bool> Add(bool added)
+    {
+        IsProcessingItem = true;
+
+        StateHasChanged();
+
+        return false;
+    }
+
+    public async Task SubmitClicked(SubmitClickedArg submitClickedArg)
+    {
+
+        IsProcessingItem = false;
+
+        if (submitClickedArg.IsNewRecord)
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Create", "Created Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+        }
+        else
+        {
+            if (submitClickedArg.IsSuccess)
+            {
+                await _clientOperations.ShowToast("Edit", "Updated Successfully", "success");
+            }
+            else
+            {
+                await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            }
+            FModel = null;
+        }
+    }
+
+    public async Task CancelClicked()
+    {
+        IsProcessingItem = false;
+        FModel = null;
+    }
+
+    public async Task Edit(IntegratorsDto dto)
+    {
+        IsProcessingItem = true;
+
+        FModel = _mapper.Map<IntegratorsRegistrationCreateFM>(dto);
+
+        StateHasChanged();
+    }
+
+    public async Task<bool> Delete(IntegratorsDto dto)
+    {
+        //ActionsDisabled = true;
+
+        var response = _apiService.HttpClient.PostAsJsonAsync("api/IntegratorsRegistration/DeleteIntegrator", dto.Hash);
+        bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+        if (!result)
+        {
+            await _clientOperations.ShowToast("Error", "Mission Incompleted", "error");
+            return result;
+        }
+        else
+        {
+            await _clientOperations.ShowToast("Delete", "Deleted Successfully", "success");
+            return result;
+
+            //ActionsDisabled = false;
+        }
+    }
+
+}

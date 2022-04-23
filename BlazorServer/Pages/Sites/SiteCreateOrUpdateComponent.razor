@@ -1,0 +1,146 @@
+﻿@using BlazorServer.Services
+@using System.Net.Http.Headers
+@inject ApiService _apiService
+@inject IConfiguration configuration
+@using FluentValidation;
+@using FluentValidation.Validators;
+@using AutoMapper;
+@using SharedLibrary.Arguments
+@inject IMapper _mapper
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+
+<div class="container">
+
+    @if (FModel != null)
+    {
+        @if (EditModel == null)
+        {
+            <h3>Add New Site</h3>
+        }
+        else
+        {
+            <h3>Edit Site with Hash @FModel.HashString</h3>
+        }
+
+        <EditForm OnValidSubmit="Submit" Model="FModel">
+            <FluentValidator />
+            <div class="row">
+                <div class="col-6">
+                    <InputText id="Name" class="form-control" @bind-Value="@FModel.Name" placeholder="Name" /><br />
+                    <ValidationMessage For="() => FModel.Name"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <InputText id="Address" class="form-control" @bind-Value="@FModel.Address" placeholder="Address" /><br />
+                    <ValidationMessage For="() => FModel.Address"></ValidationMessage>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <SfDropDownList TValue="int" TItem="BrandDto" @bind-Value="@FModel.BrandId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Brand">
+                        <SfDataManager Url="api/Brands/GetBrandsDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id" />
+                    </SfDropDownList>
+                    <ValidationMessage For="() => FModel.BrandId"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <InputText readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.Email" placeholder="Email" /><br />
+                    <ValidationMessage For="() => FModel.Email"></ValidationMessage>
+                </div>
+            </div>
+            <div class="row">
+                  <div class="col-6">
+                    <InputText readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.UserName" placeholder="User Name" /><br />
+                    <ValidationMessage For="() => FModel.UserName"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <InputText id="Address" class="form-control" @bind-Value="@FModel.Password" placeholder="Password" /><br />
+                    <ValidationMessage For="() => FModel.Password"></ValidationMessage>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <InputText id="Notes" class="form-control" @bind-Value="@FModel.Notes" placeholder="Notes" /><br />
+                    <ValidationMessage For="() => FModel.Notes"></ValidationMessage>
+                </div>
+            </div>
+            <button id="Save" type="submit" class="btn btn-primary">Submit</button>
+            <button id="Cancel" type="button" @onclick="CancelClick" class="btn btn-danger">Cancel</button>
+        </EditForm>
+    }
+</div>
+
+@code {
+    public SiteCreateFM FModel { get; set; } = null;
+    [Parameter]
+    public SiteCreateFM EditModel { get; set; }
+    public SubmitClickedArg SubmitClickedArguments { get; set; }
+    [Parameter]
+    public EventCallback OnCancelClicked { get; set; }
+    [Parameter]
+    public EventCallback<SubmitClickedArg> OnSubmitClicked { get; set; }
+
+    public bool IsEdit { get; set; } = false;
+
+    public Query RemoteDataQuery = new Query();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RemoteDataQuery.AddParams("take", 6);
+
+        if (EditModel == null)
+        {
+            IsEdit = false;
+            FModel = new SiteCreateFM();
+        }
+        else
+        {
+            IsEdit = true;
+            FModel = _mapper.Map<SiteCreateFM>(EditModel);
+            RemoteDataQuery.AddParams("selectedId", FModel.BrandId);
+
+        }
+        //_http.BaseAddress = new Uri(configuration["API"]);
+    }
+    public async Task CancelClick()
+    {
+        OnCancelClicked.InvokeAsync();
+    }
+
+    protected async Task Submit()
+    {
+        if (EditModel == null)
+        {
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/PostSite", FModel);
+            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+            if (result)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, true);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            else
+            {
+                SubmitClickedArguments = new SubmitClickedArg(true, false);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            StateHasChanged();
+        }
+        else
+        {
+            var response = _apiService.HttpClient.PostAsJsonAsync<SiteCreateFM>($"api/Sites/EditSite", FModel);
+            bool result = await response.Result.Content.ReadFromJsonAsync<bool>();
+            if (result)
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, true);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            else
+            {
+                SubmitClickedArguments = new SubmitClickedArg(false, false);
+                OnSubmitClicked.InvokeAsync(SubmitClickedArguments);
+            }
+            StateHasChanged();
+        }
+
+    }
+}
