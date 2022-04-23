@@ -11,6 +11,7 @@ public class MachineStatusLog
     public int MachineId { get; set; }
     public string MachineName { get; set; }
     public int SiteId { get; set; }
+    public string? SiteUserId { get; set; }
     public string SiteHash { get; set; }
     public string SiteName { get; set; }
     public int BrandId { get; set; }

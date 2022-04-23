@@ -37,6 +37,9 @@
                     <GridColumn Field="Machine.Name" AllowFiltering="false" HeaderText="Machine Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
                     <GridColumn Field=@nameof(SiteDto.Notes) HeaderText="Notes" TextAlign="TextAlign.Center" Width="200"></GridColumn>
 
+                    <GridColumn Field="ApplicationUser.UserName" HeaderText="User Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="ApplicationUser.Email" HeaderText="Email" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+
                 </GridColumnsTemplate>
                 @*<GridDetailTemplate>
                     @{

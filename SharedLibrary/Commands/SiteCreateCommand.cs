@@ -15,6 +15,10 @@ public class SiteCreateCommand
     public string Address { get; set; }
     public string Notes { get; set; }
     public int BrandId { get; set; }
+    public string? ApplicationUserId { get; set; }
+    public string? UserName { get; set; }
+    public string? Password { get; set; }
+    public string? Email { get; set; }
 }
 
 public class SiteCreateFM : SiteCreateCommand
@@ -30,5 +34,8 @@ public class SiteCreateFMValidator : AbstractValidator<SiteCreateFM>
         RuleFor(o => o.Address).NotEmpty();
         RuleFor(o => o.Notes).NotEmpty();
         RuleFor(o => o.BrandId).NotEmpty();
+        RuleFor(o => o.Email).NotEmpty();
+        RuleFor(o => o.UserName).NotEmpty();
+        RuleFor(o => o.Password).NotEmpty().When(e=>string.IsNullOrWhiteSpace(e.HashString));
     }
 }

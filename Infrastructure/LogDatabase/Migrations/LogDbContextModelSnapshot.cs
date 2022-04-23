@@ -55,6 +55,9 @@ namespace LogDatabase.Migrations
                     b.Property<int?>("SiteId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SiteUserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ZoneId")
                         .HasColumnType("int");
 
@@ -100,6 +103,9 @@ namespace LogDatabase.Migrations
 
                     b.Property<string>("SiteName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SiteUserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")

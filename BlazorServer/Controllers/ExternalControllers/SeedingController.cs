@@ -59,7 +59,7 @@ public class SeedingController : ApiControllerBase
 
 
         await DbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager, _identityService);
-        await DbContextSeed.SeedSampleDataAsync(_context);
+        await DbContextSeed.SeedSampleDataAsync(_context, _userManager);
 
         return Ok(true);
     }

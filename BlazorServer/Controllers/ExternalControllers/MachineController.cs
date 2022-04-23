@@ -199,7 +199,8 @@ public class MachineController : ApiControllerBase
                 MachineName = request.MachineName,
                 ConnectionId = request.ConnectionId,
                 SiteId = siteZone.SiteId,
-                SiteHash = siteZone.Site.HashString,
+                SiteUserId = siteZone.Site?.ApplicationUserId,
+                SiteHash = siteZone.Site?.HashString,
             };
             await _logDbContext.MachineMessageLogs.AddAsync(machineMessageLog);
             await _logDbContext.SaveChangesAsync();
@@ -258,6 +259,7 @@ public class MachineController : ApiControllerBase
                 ConnectionId = connectionId,
                 MachineName = dbMachine.Name,
                 SiteId = dbMachine.SiteId,
+                SiteUserId = dbMachine.Site.ApplicationUserId,
                 SiteHash = dbMachine.Site.HashString,
                 SiteName = dbMachine.Site.Name,
                 BrandId = dbMachine.Site.Brand.Id,

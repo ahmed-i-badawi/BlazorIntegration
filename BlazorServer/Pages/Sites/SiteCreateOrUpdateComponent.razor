@@ -37,7 +37,6 @@
             </div>
             <div class="row">
                 <div class="col-6">
-
                     <SfDropDownList TValue="int" TItem="BrandDto" @bind-Value="@FModel.BrandId" AllowFiltering="true" Query="RemoteDataQuery" Placeholder="Select a Brand">
                         <SfDataManager Url="api/Brands/GetBrandsDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                         <DropDownListFieldSettings Text="Name" Value="Id" />
@@ -45,6 +44,18 @@
                     <ValidationMessage For="() => FModel.BrandId"></ValidationMessage>
                 </div>
                 <div class="col-6">
+                    <InputText readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.Email" placeholder="Email" /><br />
+                    <ValidationMessage For="() => FModel.Email"></ValidationMessage>
+                </div>
+            </div>
+            <div class="row">
+                  <div class="col-6">
+                    <InputText readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.UserName" placeholder="User Name" /><br />
+                    <ValidationMessage For="() => FModel.UserName"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <InputText id="Address" class="form-control" @bind-Value="@FModel.Password" placeholder="Password" /><br />
+                    <ValidationMessage For="() => FModel.Password"></ValidationMessage>
                 </div>
             </div>
             <div class="row">
@@ -69,6 +80,8 @@
     [Parameter]
     public EventCallback<SubmitClickedArg> OnSubmitClicked { get; set; }
 
+    public bool IsEdit { get; set; } = false;
+
     public Query RemoteDataQuery = new Query();
 
     protected override async Task OnInitializedAsync()
@@ -77,10 +90,12 @@
 
         if (EditModel == null)
         {
+            IsEdit = false;
             FModel = new SiteCreateFM();
         }
         else
         {
+            IsEdit = true;
             FModel = _mapper.Map<SiteCreateFM>(EditModel);
             RemoteDataQuery.AddParams("selectedId", FModel.BrandId);
 

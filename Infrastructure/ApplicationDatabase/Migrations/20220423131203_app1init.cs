@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApplicationDatabase.Migrations
 {
-    public partial class init : Migration
+    public partial class app1init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,7 @@ namespace ApplicationDatabase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -55,7 +56,11 @@ namespace ApplicationDatabase.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +73,11 @@ namespace ApplicationDatabase.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,7 +91,11 @@ namespace ApplicationDatabase.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -201,16 +214,27 @@ namespace ApplicationDatabase.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Hash = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    NumberOfZones = table.Column<int>(type: "int", nullable: false),
-                    IsCallCenter = table.Column<bool>(type: "bit", nullable: false)
+                    NumberOfZones = table.Column<int>(type: "int", nullable: true),
+                    IsCallCenter = table.Column<bool>(type: "bit", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sites_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Sites_Brands_BrandId",
                         column: x => x.BrandId,
@@ -228,7 +252,11 @@ namespace ApplicationDatabase.Migrations
                     FingerPrint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
-                    SiteId = table.Column<int>(type: "int", nullable: false)
+                    SiteId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -242,24 +270,28 @@ namespace ApplicationDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SiteZone",
+                name: "SiteZones",
                 columns: table => new
                 {
                     SiteId = table.Column<int>(type: "int", nullable: false),
                     ZoneId = table.Column<int>(type: "int", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SiteZone", x => new { x.SiteId, x.ZoneId });
+                    table.PrimaryKey("PK_SiteZones", x => new { x.SiteId, x.ZoneId });
                     table.ForeignKey(
-                        name: "FK_SiteZone_Sites_SiteId",
+                        name: "FK_SiteZones_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SiteZone_Zones_ZoneId",
+                        name: "FK_SiteZones_Zones_ZoneId",
                         column: x => x.ZoneId,
                         principalTable: "Zones",
                         principalColumn: "Id",
@@ -319,13 +351,20 @@ namespace ApplicationDatabase.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sites_ApplicationUserId",
+                table: "Sites",
+                column: "ApplicationUserId",
+                unique: true,
+                filter: "[ApplicationUserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sites_BrandId",
                 table: "Sites",
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SiteZone_ZoneId",
-                table: "SiteZone",
+                name: "IX_SiteZones_ZoneId",
+                table: "SiteZones",
                 column: "ZoneId");
         }
 
@@ -353,19 +392,19 @@ namespace ApplicationDatabase.Migrations
                 name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "SiteZone");
+                name: "SiteZones");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Sites");
 
             migrationBuilder.DropTable(
                 name: "Zones");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Brands");

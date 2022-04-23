@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationDatabase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220422205546_app2")]
-    partial class app2
+    [Migration("20220423131203_app1init")]
+    partial class app1init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -348,6 +348,9 @@ namespace ApplicationDatabase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -383,6 +386,10 @@ namespace ApplicationDatabase.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.HasIndex("BrandId");
 
@@ -515,11 +522,17 @@ namespace ApplicationDatabase.Migrations
 
             modelBuilder.Entity("SharedLibrary.Entities.Site", b =>
                 {
+                    b.HasOne("SharedLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("Site")
+                        .HasForeignKey("SharedLibrary.Entities.Site", "ApplicationUserId");
+
                     b.HasOne("SharedLibrary.Entities.Brand", "Brand")
                         .WithMany("Sites")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Brand");
                 });
@@ -541,6 +554,12 @@ namespace ApplicationDatabase.Migrations
                     b.Navigation("Site");
 
                     b.Navigation("Zone");
+                });
+
+            modelBuilder.Entity("SharedLibrary.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Site")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SharedLibrary.Entities.Brand", b =>

@@ -30,17 +30,56 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, bool isEmailConfirmed)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, bool isEmailConfirmed = true, string mail = default)
     {
         var user = new ApplicationUser
         {
             UserName = userName,
-            Email = userName+"@mail.com",
+            Email = !string.IsNullOrWhiteSpace(mail) ? userName + "@mail.com" : mail,
             EmailConfirmed = isEmailConfirmed
         };
-        var result = await _userManager.CreateAsync(user, password);
+        try
+        {
+            //var result = await _userManager.CreateAsync(user, password);
+            var result = _userManager.CreateAsync(user, password);
 
-        return (result.ToApplicationResult(), user.Id);
+            return (result.Result.ToApplicationResult(), user.Id);
+            //return (result.ToApplicationResult(), user.Id);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
+    }
+
+    public async Task<bool> AddUserToRole(string userId, string role)
+    {
+
+        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        var result = await _userManager.AddToRolesAsync(user, new[] { role });
+        return result.Succeeded;
+    }
+
+
+    public async Task<bool> SetUserPasswrod(string userId, string newPassword)
+    {
+
+        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        var result = await _userManager.AddPasswordAsync(user, newPassword);
+        return result.Succeeded;
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)

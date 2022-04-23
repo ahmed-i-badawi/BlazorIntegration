@@ -15,6 +15,7 @@ using BlazorServer.Exceptions;
 using Infrastructure.ApplicationDatabase.Services;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
+using SharedLibrary.Models;
 
 namespace BlazorServer.Controllers
 {
@@ -22,11 +23,13 @@ namespace BlazorServer.Controllers
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IIdentityService _identityService;
 
-        public SitesController(IApplicationDbContext context, IMapper mapper)
+        public SitesController(IApplicationDbContext context, IMapper mapper, IIdentityService identityService)
         {
             _context = context;
             _mapper = mapper;
+            _identityService = identityService;
         }
         private async Task GetSiteZones(List<SiteDto> dto, List<Site> db)
         {
@@ -80,7 +83,7 @@ namespace BlazorServer.Controllers
 
             query = await query.FilterBy(dm);
             query = query.Include(e => e.Brand).Include(e => e.Machine)
-                .Include(e => e.SiteZones).ThenInclude(e => e.Zone);
+                .Include(e => e.SiteZones).ThenInclude(e => e.Zone).Include(e=>e.ApplicationUser);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
 
@@ -111,58 +114,52 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> EditSite(SiteCreateCommand command)
         {
-            Site commnad = _mapper.Map<Site>(command);
-            Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);
-
-            if (db != null)
+            bool? isPasswordAdded = null;
+            if (!string.IsNullOrWhiteSpace(command.Password))
             {
-                db.Name = command.Name;
-                db.Notes = command.Notes;
-                db.Address = command.Address;
-                db.BrandId = command.BrandId;
+                isPasswordAdded = await _identityService.SetUserPasswrod(command.ApplicationUserId, command.Password);
             }
-
-            try
+            if (isPasswordAdded == null)
             {
+                Site commnad = _mapper.Map<Site>(command);
+                Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);
+
+                if (db != null)
+                {
+                    db.Name = command.Name;
+                    db.Notes = command.Notes;
+                    db.Address = command.Address;
+                    db.BrandId = command.BrandId;
+                }
+                
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SiteExists(command.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok(true);
             }
 
-            return Ok(true);
+            return Ok(false);
         }
 
         [HttpPost]
         public async Task<ActionResult<bool>> PostSite(SiteCreateCommand command)
         {
-            Site Site = _mapper.Map<Site>(command);
+            // createUser
+            var user = await _identityService.CreateUserAsync(command.UserName, command.Password, true, command.Email);
 
-            _context.Sites.Add(Site);
-            try
+            if (user.Result.Succeeded)
             {
+                await _identityService.AddUserToRole(command.ApplicationUserId, "SITE");
+
+                // createSite
+                command.ApplicationUserId = user.UserId;
+                Site Site = _mapper.Map<Site>(command);
+
+                _context.Sites.Add(Site);
                 await _context.SaveChangesAsync();
+
+                return Ok(true);
             }
-            catch (DbUpdateException)
-            {
-                if (SiteExists(Site.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return Ok(true);
+         
+            return Ok(false);
         }
 
 

@@ -27,4 +27,7 @@ public class Site : AuditableEntity
     }
     public bool IsCallCenter { get; set; }
     public Machine Machine { get; set; }
+
+    public string? ApplicationUserId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
 }

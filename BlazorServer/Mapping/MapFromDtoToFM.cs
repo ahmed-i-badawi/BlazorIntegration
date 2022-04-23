@@ -14,7 +14,9 @@ public class MapFromDtoToFM : Profile
     {
         CreateMap<IntegratorsDto , IntegratorsRegistrationCreateFM>();
         CreateMap<BrandDto , BrandCreateFM>();
-        CreateMap<SiteDto , SiteCreateFM>();
+        CreateMap<SiteDto , SiteCreateFM>()
+             .ForMember(fm => fm.UserName, o => o.MapFrom(dto => dto.ApplicationUser.UserName))
+             .ForMember(fm => fm.Email, o => o.MapFrom(dto => dto.ApplicationUser.Email));
         CreateMap<ZoneDto, ZoneCreateFM>();
         CreateMap<SiteZoneDto, SiteZoneCreateFM>();
     }

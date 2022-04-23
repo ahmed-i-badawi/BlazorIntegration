@@ -346,6 +346,9 @@ namespace ApplicationDatabase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -381,6 +384,10 @@ namespace ApplicationDatabase.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.HasIndex("BrandId");
 
@@ -513,11 +520,17 @@ namespace ApplicationDatabase.Migrations
 
             modelBuilder.Entity("SharedLibrary.Entities.Site", b =>
                 {
+                    b.HasOne("SharedLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("Site")
+                        .HasForeignKey("SharedLibrary.Entities.Site", "ApplicationUserId");
+
                     b.HasOne("SharedLibrary.Entities.Brand", "Brand")
                         .WithMany("Sites")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Brand");
                 });
@@ -539,6 +552,11 @@ namespace ApplicationDatabase.Migrations
                     b.Navigation("Site");
 
                     b.Navigation("Zone");
+                });
+
+            modelBuilder.Entity("SharedLibrary.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("SharedLibrary.Entities.Brand", b =>

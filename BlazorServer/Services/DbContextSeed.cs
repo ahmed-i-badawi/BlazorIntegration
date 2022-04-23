@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Entities;
 
 namespace BlazorServer.Data;
@@ -13,22 +14,55 @@ public static class DbContextSeed
         IIdentityService identityService
         )
     {
-        var administratorRole = new IdentityRole("Administrator");
+        // create roles
 
-        if (roleManager.Roles.All(r => r.Name != administratorRole.Name))
+        if (!roleManager.Roles?.Any() ?? false)
         {
-            await roleManager.CreateAsync(administratorRole);
+            List<IdentityRole> roles = new List<IdentityRole>()
+            {
+                new IdentityRole() { Name="ADMINISTRATOR" },
+                new IdentityRole() { Name="SITE" },
+            };
+            foreach (var role in roles)
+            {
+                await roleManager.CreateAsync(role);
+
+            }
         }
 
-        var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
 
-        if (userManager.Users.All(r => r.UserName != administrator.UserName))
+        // create users
+        if (!userManager.Users?.Any() ?? false)
         {
+            // admin user
+            var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
+
             await identityService.CreateUserAsync(administrator.UserName, "12!@qwQW", administrator.EmailConfirmed);
-            await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+            await userManager.AddToRolesAsync(administrator, new[] { "ADMINISTRATOR" });
+
+            // --------
+
+            ////site users
+            //var sitesUsers = Enumerable.Range(1, 10).Select(x => new ApplicationUser()
+            //{
+            //    UserName = $"SiteUser{x}",
+            //    EmailConfirmed = true,
+            //}).ToList();
+            //string defaultPassword = "12!@qwQW";
+
+            //foreach (var sitesUser in sitesUsers)
+            //{
+            //    await userManager.CreateAsync(sitesUser, defaultPassword);
+            //    //identityService.CreateUserAsync(sitesUser.UserName, defaultPassword, sitesUser.EmailConfirmed);
+            //    //userManager.AddToRolesAsync(sitesUser, new[] { "SITE" });
+            //}
+            ////var applicationUsers = await userManager.Users.Where(e => e.UserName != "admin").ToListAsync();
+            ////foreach (var applicationUser in applicationUsers)
+            ////{
+            ////}
         }
     }
-    public static async Task SeedSampleDataAsync(IApplicationDbContext context)
+    public static async Task SeedSampleDataAsync(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
 
         if (!context.Brands?.Any() ?? false)
@@ -46,16 +80,28 @@ public static class DbContextSeed
         if (!context.Sites?.Any() ?? false)
         {
             List<int> brandids = context.Brands.Select(e => e.Id).ToList();
+            List<string> applicationUserIds = userManager.Users.Where(e => e.UserName != "admin").Select(e => e.Id).ToList();
 
-            var Sites = Enumerable.Range(1, 2500).Select(x => new Site()
+            var sites = Enumerable.Range(1, 2500).Select(x => new Site()
             {
                 Name = $"Site{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
                 Notes = $"this is Site{x} Notes",
                 BrandId = new Random().Next(brandids.Min(), brandids.Max()),
-            });
+            }); ;
 
-            await context.Sites.AddRangeAsync(Sites);
+            int i = 1;
+            foreach (var userId in applicationUserIds)
+            {
+                var siteItem = sites.FirstOrDefault(e => e.Id == i);
+                if (siteItem != null)
+                {
+                    siteItem.ApplicationUserId = userId;
+                }
+                i++;
+            }
+
+            await context.Sites.AddRangeAsync(sites);
             await context.SaveChangesAsync();
         }
 

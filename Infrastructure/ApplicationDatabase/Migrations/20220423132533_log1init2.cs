@@ -4,7 +4,7 @@
 
 namespace ApplicationDatabase.Migrations
 {
-    public partial class init3 : Migration
+    public partial class log1init2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

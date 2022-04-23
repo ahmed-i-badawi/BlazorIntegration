@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationDatabase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220420205853_init6")]
-    partial class init6
+    [Migration("20220423132533_log1init2")]
+    partial class log1init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -348,6 +348,9 @@ namespace ApplicationDatabase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -384,6 +387,10 @@ namespace ApplicationDatabase.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+
                     b.HasIndex("BrandId");
 
                     b.ToTable("Sites");
@@ -416,7 +423,7 @@ namespace ApplicationDatabase.Migrations
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("SiteZone");
+                    b.ToTable("SiteZones");
                 });
 
             modelBuilder.Entity("SharedLibrary.Entities.Zone", b =>
@@ -515,11 +522,17 @@ namespace ApplicationDatabase.Migrations
 
             modelBuilder.Entity("SharedLibrary.Entities.Site", b =>
                 {
+                    b.HasOne("SharedLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("Site")
+                        .HasForeignKey("SharedLibrary.Entities.Site", "ApplicationUserId");
+
                     b.HasOne("SharedLibrary.Entities.Brand", "Brand")
                         .WithMany("Sites")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Brand");
                 });
@@ -541,6 +554,11 @@ namespace ApplicationDatabase.Migrations
                     b.Navigation("Site");
 
                     b.Navigation("Zone");
+                });
+
+            modelBuilder.Entity("SharedLibrary.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("SharedLibrary.Entities.Brand", b =>

@@ -149,7 +149,7 @@ public class IntegratorController : ApiControllerBase
             SiteId = machine?.SiteId,
             SiteHash = machine?.Hash,
         };
-        var response = _http.PostAsJsonAsync($"api/Machine/OnSendMessagesToMachine", request);
+        var response = _http.PostAsJsonAsync<MachineMessageLogCommand>($"api/Machine/OnSendMessagesToMachine", request);
         bool isLoged = await response.Result.Content.ReadFromJsonAsync<bool>();
 
         return isLoged;

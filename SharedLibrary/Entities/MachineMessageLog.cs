@@ -13,6 +13,7 @@ public class MachineMessageLog
     public string? ConnectionId { get; set; }
     public string? MachineName { get; set; }
     public int? SiteId { get; set; }
+    public string? SiteUserId { get; set; }
     public string? SiteHash { get; set; }
 
 }

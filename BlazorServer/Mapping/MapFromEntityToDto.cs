@@ -21,5 +21,6 @@ public class MapFromEntityToDto : Profile
         CreateMap<Machine, MachineDto>();
         CreateMap<MachineStatusLog, MachineStatusLogDto>();
         CreateMap<MachineMessageLog, MachineMessageLogDto>();
+        CreateMap<ApplicationUser, ApplicationUserDto>();
     }
 }

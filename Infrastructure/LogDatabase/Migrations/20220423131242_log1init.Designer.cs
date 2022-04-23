@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LogDatabase.Migrations
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20220422200734_log2")]
-    partial class log2
+    [Migration("20220423131242_log1init")]
+    partial class log1init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

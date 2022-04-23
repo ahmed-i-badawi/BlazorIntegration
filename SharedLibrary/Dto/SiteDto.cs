@@ -19,6 +19,9 @@ public class SiteDto
     public string Address { get; set; }
     public string Notes { get; set; }
     public int NumberOfZones { get; set; }
+    
+    public string? ApplicationUserId { get; set; }
+    public ApplicationUserDto ApplicationUser { get; set; }
 
     public List<ZoneDto>? Zones { get; set; }
     public int BrandId { get; set; }
