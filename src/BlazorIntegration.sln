@@ -19,11 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationDatabase", "Infr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{92A42766-4446-443E-AD03-202C3E1E9372}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerServices", "IdentityServerServices", "{9EA56471-71AF-42AC-956A-3C72D0EF7DED}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerId4", "BlazorServerId4\BlazorServerId4\BlazorServerId4.csproj", "{181AB60A-11EB-49A8-94AB-214E7D1E13E7}"
 EndProject
 Global
