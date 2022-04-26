@@ -2,64 +2,45 @@
   "IdentityData": {
     "Roles": [
       {
-        "Name": "MyRole"
+        "Name": "IdentityAdminAdministrator"
       },
       {
-        "Name": "Employee"
+        "Name": "ADMINISTRATOR"
       },
       {
-        "Name": "Manager"
+        "Name": "SITE"
       },
       {
-        "Name": "HRAdmin"
+        "Name": "INTEGRATOR"
       }
     ],
     "Users": [
       {
+        "Username": "idadmin",
+        "Password": "12!@qwQW",
+        "Email": "idadmin@example.com",
+        "Roles": [
+          "IdentityAdminAdministrator"
+        ],
+        "Claims": [
+          {
+            "Type": "name",
+            "Value": "idadmin"
+          }
+        ]
+      },
+      {
         "Username": "admin",
-        "Password": "Pa$$word123",
-
+        "Password": "12!@qwQW",
         "Email": "admin@example.com",
         "Roles": [
-          "MyRole"
+          "ADMINISTRATOR"
         ],
         "Claims": [
           {
             "Type": "name",
             "Value": "admin"
           }
-        ]
-      },
-      {
-        "Username": "janedoe",
-        "Password": "Pa$$word123",
-        "Email": "janedoe@ethereal.email"
-      },
-      {
-        "Username": "antoinette16",
-        "Password": "Pa$$word123",
-        "Email": "antoinette16@ethereal.email",
-        "Roles": [
-          "Employee"
-        ]
-      },
-      {
-        "Username": "rosamond33",
-        "Password": "Pa$$word123",
-        "Email": "rosamond33@ethereal.email",
-        "Roles": [
-          "Employee",
-          "Manager"
-        ]
-      },
-      {
-        "Username": "ashtyn1",
-        "Password": "Pa$$word123",
-        "Email": "ashtyn1@ethereal.email",
-        "Roles": [
-          "Employee",
-          "Manager",
-          "HRAdmin"
         ]
       }
     ]
