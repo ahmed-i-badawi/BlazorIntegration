@@ -61,6 +61,15 @@ public class IntegratorController : ApiControllerBase
     [HttpPost]
     public async Task<ActionResult> Login([FromBody] IntegratorModel model)
     {
+    //    string userName = "admin";
+    //    string password = "12!@qwQW";
+
+    //    _http.DefaultRequestHeaders.Authorization =
+    //new AuthenticationHeaderValue(
+    //    "Basic", Convert.ToBase64String(
+    //        System.Text.ASCIIEncoding.ASCII.GetBytes(
+    //           $"{userName}:{password}")));
+
         var loginResponse = _http.PostAsJsonAsync<IntegratorModel>($"api/Integrator/Login", model);
         string loginToken = await loginResponse.Result.Content.ReadAsStringAsync();
         if (!string.IsNullOrWhiteSpace(loginToken))

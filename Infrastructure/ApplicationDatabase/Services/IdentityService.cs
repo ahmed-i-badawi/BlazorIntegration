@@ -63,7 +63,7 @@ public class IdentityService : IIdentityService
         {
             return false;
         }
-        var result = await _userManager.AddToRolesAsync(user, new[] { role });
+        var result = await _userManager.AddToRolesAsync(user, new List<string>() { role });
         return result.Succeeded;
     }
 

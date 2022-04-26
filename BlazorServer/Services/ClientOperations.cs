@@ -1,4 +1,6 @@
-﻿using Syncfusion.Blazor.Notifications;
+﻿using SharedLibrary.Dto;
+using Syncfusion.Blazor.Notifications;
+using System.Security.Claims;
 
 namespace BlazorServer.Services;
 
@@ -8,6 +10,9 @@ public interface IClientOperations
     public string Content { get; set; }
     public SfToast ToastObj { get; set; }
     public Task ShowToast(string Title, string Content, string Type = "None");
+    Task<UserDataDto> GetLoggedInUser();
+    Task SetLoggedInUser(ClaimsPrincipal claimsPrincipal);
+
 }
 
 public class ClientOperations : IClientOperations
@@ -15,7 +20,26 @@ public class ClientOperations : IClientOperations
     public string Title { get; set; } = "";
     public string Content { get; set; } = "";
     public SfToast ToastObj { get; set; }
+    private UserDataDto LoggedInUser { get; set; }
 
+
+    public async Task SetLoggedInUser(ClaimsPrincipal claimsPrincipal)
+    {
+        var identity = (ClaimsIdentity)claimsPrincipal.Identity;
+
+        LoggedInUser = new UserDataDto()
+        {
+            UserId = claimsPrincipal.Claims?.FirstOrDefault(e => e.Type.Contains("identity/claims/nameidentifier"))?.Value,
+            UserName = claimsPrincipal.Claims?.FirstOrDefault(e => e.Type.Contains("identity/claims/name"))?.Value,
+            FullName = claimsPrincipal.Claims?.FirstOrDefault(e => e.Type.Contains("identity/claims/name"))?.Value,
+            Mail = claimsPrincipal.Claims?.FirstOrDefault(e => e.Type.Contains("identity/claims/emailaddress"))?.Value,
+            Roles = claimsPrincipal.Claims?.FirstOrDefault(e => e.Type.Contains("identity/claims/role"))?.Value
+        };
+    }
+    public async Task<UserDataDto> GetLoggedInUser()
+    {
+        return LoggedInUser;
+    }
 
     public async Task ShowToast(string Title, string Content, string Type = "None")
     {

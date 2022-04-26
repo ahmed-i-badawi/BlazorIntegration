@@ -1,7 +1,10 @@
-﻿using Infrastructure.ApplicationDatabase.Common;
+﻿using Duende.IdentityServer.EntityFramework.Options;
+using Infrastructure.ApplicationDatabase.Common;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SharedLibrary.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
@@ -9,18 +12,24 @@ using System.Reflection;
 namespace Infrastructure.ApplicationDatabase;
 
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+                    IOptions<OperationalStoreOptions> operationalStoreOptions,
         ICurrentUserService currentUserService,
-            IDateTime dateTime)
-        : base(options)
+            IDateTime dateTime,
+                    IHttpContextAccessor httpContextAccessor
+        )
+        : base(options, operationalStoreOptions)
     {
         _currentUserService = currentUserService;
         _dateTime = dateTime;
+        _httpContextAccessor = httpContextAccessor;
+
     }
     public DbSet<Brand> Brands => Set<Brand>();
     public DbSet<Site> Sites => Set<Site>();
@@ -31,6 +40,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
+        var kkjkjkff = _httpContextAccessor.HttpContext.User;
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
             switch (entry.State)

@@ -14,6 +14,7 @@ using SharedLibrary.Dto;
 using Infrastructure.ApplicationDatabase.Services;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorServer.Controllers
 {
@@ -79,11 +80,10 @@ namespace BlazorServer.Controllers
                 data = _mapper.Map<List<ZoneDto>>(query.ToList());
             }
 
-
-
             return data;
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
         public async Task<ActionResult> GetZones([FromBody] DataManagerRequest dm)
         {

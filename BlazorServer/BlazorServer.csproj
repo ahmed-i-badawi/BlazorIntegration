@@ -11,6 +11,9 @@
 	<ItemGroup>
 
 
+		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.8" />
+
+
 		<PackageReference Include="Syncfusion.Blazor.Grid" Version="18.4.0.39" />
 		<PackageReference Include="Syncfusion.Blazor.DropDowns" Version="18.4.0.39" />
 		<PackageReference Include="Syncfusion.Blazor.Notifications" Version="18.4.0.39" />
@@ -35,9 +38,10 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.4" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="System.Management" Version="6.0.0" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -49,6 +53,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

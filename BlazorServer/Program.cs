@@ -29,6 +29,8 @@ using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase;
 using System.Security.Principal;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
@@ -94,13 +96,13 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 // Supply HttpClient instances that include access tokens when making requests to the server project
 //builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy", policy =>
-    {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("CorsPolicy", policy =>
+//    {
+//        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+//    });
+//});
 
 builder.Services.AddResponseCompression(opt =>
 {
@@ -127,31 +129,43 @@ builder.Services.AddControllers();
 //                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
 //                  };
 //              });
-builder.Services
-    .AddAuthentication()
-        .AddJwtBearer("Bearer", options => { })
-.AddJwtBearer("MachineToMachine", options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidIssuer = configuration["Jwt:Issuer"],
-        //ValidAudience = Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
-    };
-});
-builder.Services
-    .AddAuthorization(options =>
-    {
-        options.DefaultPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddAuthenticationSchemes("Bearer", "MachineToMachine")
-            .Build();
-        // options.AddPolicy("MyCustomPolicy",
-        //policyBuilder => policyBuilder.RequireClaim("SomeClaim"));
-    });
+//builder.Services
+//    .AddAuthentication()
+//        .AddJwtBearer("Bearer", options => { })
+//.AddJwtBearer("MachineToMachine", options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        ValidateAudience = false,
+//        ValidateLifetime = true,
+//        ValidIssuer = configuration["Jwt:Issuer"],
+//        //ValidAudience = Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
+//    };
+//});
+
+builder.Services.AddApiAuthorization().AddAccountClaimsPrincipalFactory<CustomUserFactory>();
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorServer"));
+
+builder.Services.AddApiAuthorization();
+builder.Services.AddOptions();
+
+builder.Services.AddAuthorizationCore(
+              config =>
+              {
+                  //config.AddPolicy("ADMINISTRATORPolicy", policy => policy.RequireRole("ADMINISTRATOR"));
+                });
+//builder.Services
+//    .AddAuthorization(options =>
+//    {
+//        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+//            .RequireAuthenticatedUser()
+//            .AddAuthenticationSchemes("Bearer", "MachineToMachine")
+//            .Build();
+//        options.AddPolicy("ADMINISTRATORPloicy",
+//       policyBuilder => policyBuilder.RequireRole("ADMINISTRATOR"));
+//    });
 //builder.Services.AddAuthorization(auth =>
 //{
 //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -185,18 +199,23 @@ builder.Services
 //             });
 
 
-builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseResponseCompression();
 
 app.UseRequestLocalization(app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value);
 
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+      app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
@@ -205,24 +224,26 @@ else
     app.UseHsts();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthentication();
+app.UseIdentityServer();
 app.UseAuthorization();
-app.UseCors("CorsPolicy");
+//app.UseCors("CorsPolicy");
 
-app.MapDefaultControllerRoute();
-app.MapControllers();
+//app.MapDefaultControllerRoute();
+//app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    //endpoints.MapControllerRoute(
+    //    name: "default",
+    //    pattern: "{controller}/{action}}");
+});
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

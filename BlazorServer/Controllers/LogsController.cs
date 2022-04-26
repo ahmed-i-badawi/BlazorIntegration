@@ -12,6 +12,7 @@ using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
 using Infrastructure.LogDatabase.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorServer.Controllers
 {
@@ -21,24 +22,31 @@ namespace BlazorServer.Controllers
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogDbContext _logDbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICurrentUserService _currentUserService;
 
-        public LogsController(IApplicationDbContext context, IMapper mapper, ILogDbContext logDbContext)
+        public LogsController(IApplicationDbContext context, IMapper mapper, ILogDbContext logDbContext,
+            IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
             _logDbContext = logDbContext;
+        _userManager = userManager;
+            _currentUserService = currentUserService;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpPost]
-        public async Task<ActionResult> GetMachineStatusLogs([FromBody] DataManagerRequest dm)
+        public async Task<ActionResult> GetMachineStatusLogs([FromBody] DataManagerRequest dm, [FromQuery] string siteId)
         {
-            string userId = "9bab5bab-67c0-420b-a53d-b383e7ea203e";
-
             var query = _logDbContext.MachineStatusLogs.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(siteId))
             {
-                query = query.Where(e => e.SiteUserId == userId);
+                query = query.Where(e => e.SiteUserId == siteId);
             }
 
             query = await query.FilterBy(dm);
@@ -52,15 +60,13 @@ namespace BlazorServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetMachineMessageLogs([FromBody] DataManagerRequest dm)
+        public async Task<ActionResult> GetMachineMessageLogs([FromBody] DataManagerRequest dm, [FromQuery] string siteId)
         {
-            string userId = "9bab5bab-67c0-420b-a53d-b383e7ea203e";
-
             var query = _logDbContext.MachineMessageLogs.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(siteId))
             {
-                query = query.Where(e => e.SiteUserId == userId);
+                query = query.Where(e => e.SiteUserId == siteId);
             }
 
             query = await query.FilterBy(dm);

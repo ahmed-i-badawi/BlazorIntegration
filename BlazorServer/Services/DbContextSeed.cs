@@ -30,6 +30,12 @@ public static class DbContextSeed
             }
         }
 
+        //var aaa = userManager.Users.Where(e => e.UserName != "admin").ToList();
+        //foreach (var item in aaa)
+        //{
+        //    await userManager.AddToRolesAsync(item, new List<string>() { "SITE" });
+        //}
+
 
         // create users
         if (!userManager.Users?.Any() ?? false)
@@ -38,7 +44,7 @@ public static class DbContextSeed
             var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
 
             await identityService.CreateUserAsync(administrator.UserName, "12!@qwQW", administrator.EmailConfirmed);
-            await userManager.AddToRolesAsync(administrator, new[] { "ADMINISTRATOR" });
+            await userManager.AddToRolesAsync(administrator, new List<string>() { "ADMINISTRATOR" });
 
             // --------
 
