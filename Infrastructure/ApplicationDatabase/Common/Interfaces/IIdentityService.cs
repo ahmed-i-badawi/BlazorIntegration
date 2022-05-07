@@ -6,6 +6,7 @@ namespace Infrastructure.ApplicationDatabase.Common.Interfaces;
 public interface IIdentityService
 {
     Task<string> GetUserNameAsync(string userId);
+    Task<bool> IsUserNameOrMailExist(string userName, string mail);
 
     Task<bool> IsInRoleAsync(string userId, string role);
 

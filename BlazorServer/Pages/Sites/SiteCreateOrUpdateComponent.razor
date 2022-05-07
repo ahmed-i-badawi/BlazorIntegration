@@ -9,6 +9,7 @@
 @inject IMapper _mapper
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Inputs
 
 <div class="container">
 
@@ -49,15 +50,22 @@
                 </div>
             </div>
             <div class="row">
-                  <div class="col-6">
-                    <InputText readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.UserName" placeholder="User Name" /><br />
+                <div class="col-6">
+                    <InputText float readonly="@IsEdit" id="Name" class="form-control" @bind-Value="@FModel.UserName" placeholder="User Name" /><br />
                     <ValidationMessage For="() => FModel.UserName"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <InputText id="Address" class="form-control" @bind-Value="@FModel.Password" placeholder="Password" /><br />
+                    <div class="e-input-group">
+                        <div class="e-input-in-wrap">
+                            <InputText class='form-control' type="@TxtType" id="Password" @bind-Value="@FModel.Password" placeholder="Password" /><br />
+                        </div>
+                        <span class="e-input-group-icon e-input-eye" @onclick="ShowPassword"></span>
+                    </div>
                     <ValidationMessage For="() => FModel.Password"></ValidationMessage>
                 </div>
+
             </div>
+
             <div class="row">
                 <div class="col-12">
                     <InputText id="Notes" class="form-control" @bind-Value="@FModel.Notes" placeholder="Notes" /><br />
@@ -70,7 +78,33 @@
     }
 </div>
 
+
 @code {
+
+
+    SfTextBox TextPasswordObj;
+
+    public void AddPasswordIcon()
+    {
+        this.TextPasswordObj.AddIcon("append", "e-icons e-eye");
+    }
+
+
+    // -----------
+    public string TxtType = "password";
+
+    public void ShowPassword()
+    {
+        if (this.TxtType == "password")
+        {
+            this.TxtType = "text";
+        }
+        else
+        {
+            this.TxtType = "password";
+        }
+    }
+
     public SiteCreateFM FModel { get; set; } = null;
     [Parameter]
     public SiteCreateFM EditModel { get; set; }
@@ -144,3 +178,13 @@
 
     }
 }
+
+
+
+<style>
+    .e-input-eye:before {
+        content: '\e345';
+        font-family: e-icons;
+        font-size: 13px;
+    }
+</style>

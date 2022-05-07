@@ -32,13 +32,16 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult> GetMachineStatusLogs([FromBody] DataManagerRequest dm)
         {
-            string userId = "9bab5bab-67c0-420b-a53d-b383e7ea203e";
+            var queryString = Request.Query;
 
+            string siteId = queryString["siteId"];
+
+            
             var query = _logDbContext.MachineStatusLogs.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(siteId))
             {
-                query = query.Where(e => e.SiteUserId == userId);
+                query = query.Where(e => e.SiteUserId == siteId);
             }
 
             query = await query.FilterBy(dm);
@@ -54,13 +57,15 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult> GetMachineMessageLogs([FromBody] DataManagerRequest dm)
         {
-            string userId = "9bab5bab-67c0-420b-a53d-b383e7ea203e";
+            var queryString = Request.Query;
+
+            string siteId = queryString["siteId"];
 
             var query = _logDbContext.MachineMessageLogs.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(siteId))
             {
-                query = query.Where(e => e.SiteUserId == userId);
+                query = query.Where(e => e.SiteUserId == siteId);
             }
 
             query = await query.FilterBy(dm);

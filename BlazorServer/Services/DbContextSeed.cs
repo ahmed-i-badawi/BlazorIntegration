@@ -2,6 +2,7 @@
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Constants;
 using SharedLibrary.Entities;
 
 namespace BlazorServer.Data;
@@ -16,12 +17,13 @@ public static class DbContextSeed
     {
         // create roles
 
+
         if (!roleManager.Roles?.Any() ?? false)
         {
             List<IdentityRole> roles = new List<IdentityRole>()
             {
-                new IdentityRole() { Name="ADMINISTRATOR" },
-                new IdentityRole() { Name="SITE" },
+                new IdentityRole() { Name=RolesConstants.Admin },
+                new IdentityRole() { Name=RolesConstants.Site },
             };
             foreach (var role in roles)
             {
@@ -30,15 +32,14 @@ public static class DbContextSeed
             }
         }
 
-
         // create users
         if (!userManager.Users?.Any() ?? false)
         {
             // admin user
             var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
 
-            await identityService.CreateUserAsync(administrator.UserName, "12!@qwQW", administrator.EmailConfirmed);
-            await userManager.AddToRolesAsync(administrator, new[] { "ADMINISTRATOR" });
+            var user = await identityService.CreateUserAsync(administrator.UserName, "12!@qwQW", administrator.EmailConfirmed);
+            await identityService.AddUserToRole(user.UserId, RolesConstants.Admin);
 
             // --------
 
@@ -82,12 +83,16 @@ public static class DbContextSeed
             List<int> brandids = context.Brands.Select(e => e.Id).ToList();
             List<string> applicationUserIds = userManager.Users.Where(e => e.UserName != "admin").Select(e => e.Id).ToList();
 
+            var ff = brandids.Min();
+            var dd = brandids.Max();
             var sites = Enumerable.Range(1, 2500).Select(x => new Site()
             {
                 Name = $"Site{x}",
                 Address = (new string[] { "Cairo", "Giza", "Alex", "USA", "KSA" })[new Random().Next(5)],
                 Notes = $"this is Site{x} Notes",
-                BrandId = new Random().Next(brandids.Min(), brandids.Max()),
+
+                BrandId = brandids[new Random().Next(brandids.Count)],
+                //BrandId  = new Random().Next(brandids.Min(), brandids.Max()),
             }); ;
 
             int i = 1;
@@ -102,7 +107,15 @@ public static class DbContextSeed
             }
 
             await context.Sites.AddRangeAsync(sites);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         if (!context.Integrators?.Any() ?? false)

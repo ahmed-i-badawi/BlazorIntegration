@@ -30,6 +30,13 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
+    public async Task<bool> IsUserNameOrMailExist(string userName, string mail)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName || u.Email == mail);
+
+        return user != null;
+    }
+
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, bool isEmailConfirmed = true, string mail = default)
     {
         var user = new ApplicationUser

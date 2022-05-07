@@ -3,17 +3,27 @@
 @*@inherits SampleBaseComponent;*@
 @using SharedLibrary.Enums
 @using Syncfusion.Blazor.Grids
+@inject IHttpContextAccessor httpContextAccessor;
+@using SharedLibrary.Constants;
 
 <div class="col-lg-12 control-section">
     <SfTab CssClass="default-tab" LoadOn="ContentLoad.Demand">
         <TabItems>
+            @{
+                var isSite = httpContextAccessor.HttpContext.User.IsInRole(RolesConstants.Site);
+
+                if(isSite)
+                {
+                    SiteUserId = httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                }
+            }
             <TabItem>
                 <ChildContent>
                     <TabHeader Text="Machine Status"></TabHeader>
                 </ChildContent>
                 <ContentTemplate>
                     <CustomFullGridComponent DTO="MachineStatusLogDto"
-                                             SfDataManagerUrl="api/Logs/GetMachineStatusLogs">
+                                             SfDataManagerUrl=@($"api/Logs/GetMachineStatusLogs?siteId={SiteUserId}")>
                         <GridColumnsTemplate>
                             <GridColumn Field=@nameof(MachineStatusLogDto.Id) HeaderText="Id" TextAlign="TextAlign.Center" Width="80"></GridColumn>
                             <GridColumn Field=@nameof(MachineStatusLogDto.OccurredAt) HeaderText="Occurred At" TextAlign="TextAlign.Center" Width="150"></GridColumn>
@@ -43,7 +53,7 @@
                 </ChildContent>
                 <ContentTemplate>
                     <CustomFullGridComponent DTO="MachineMessageLogDto"
-                                             SfDataManagerUrl="api/Logs/GetMachineMessageLogs">
+                                             SfDataManagerUrl=@($"api/Logs/GetMachineMessageLogs?siteId={SiteUserId}")>
                         <GridColumnsTemplate>
                             <GridColumn Field=@nameof(MachineMessageLogDto.Id) HeaderText="Id" TextAlign="TextAlign.Center" Width="60"></GridColumn>
                             <GridColumn Field=@nameof(MachineMessageLogDto.SentAt) HeaderText="Sent At" TextAlign="TextAlign.Center" Width="150"></GridColumn>
@@ -62,4 +72,5 @@
     </SfTab>
 </div>
 @code {
+    public string SiteUserId { get; set; }
 }

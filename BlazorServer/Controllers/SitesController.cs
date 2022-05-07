@@ -16,6 +16,7 @@ using Infrastructure.ApplicationDatabase.Services;
 using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
 using SharedLibrary.Models;
+using SharedLibrary.Constants;
 
 namespace BlazorServer.Controllers
 {
@@ -142,12 +143,17 @@ namespace BlazorServer.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> PostSite(SiteCreateCommand command)
         {
+            bool isUserExist = await _identityService.IsUserNameOrMailExist(command.UserName, command.Email);
+            if (isUserExist)
+            {
+                return Ok(false);
+            }
             // createUser
             var user = await _identityService.CreateUserAsync(command.UserName, command.Password, true, command.Email);
 
             if (user.Result.Succeeded)
             {
-                await _identityService.AddUserToRole(command.ApplicationUserId, "SITE");
+                await _identityService.AddUserToRole(user.UserId, RolesConstants.Site);
 
                 // createSite
                 command.ApplicationUserId = user.UserId;
