@@ -120,7 +120,7 @@ namespace BlazorServer.Controllers
             {
                 isPasswordAdded = await _identityService.SetUserPasswrod(command.ApplicationUserId, command.Password);
             }
-            if (isPasswordAdded == null)
+            if (isPasswordAdded.Value)
             {
                 Site commnad = _mapper.Map<Site>(command);
                 Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);

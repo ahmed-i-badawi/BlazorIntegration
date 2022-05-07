@@ -35,7 +35,19 @@ public static class DbContextSeed
         // create users
         if (!userManager.Users?.Any() ?? false)
         {
-            // admin user
+            //siteUsers
+
+            for (int i = 1; i <= 2500; i++)
+            {
+                identityService.CreateUserAsync($"SiteUser{i}", "12!@qwQW", true, $"SiteUser{i}@mail.com");
+            }
+            var siteUsers = userManager.Users.Where(e => e.UserName.StartsWith("SiteUser")).ToList();
+            foreach (var siteUser in siteUsers)
+            {
+                identityService.AddUserToRole(siteUser.Id, RolesConstants.Site);
+            }
+
+            //admin user
             var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
 
             var user = await identityService.CreateUserAsync(administrator.UserName, "12!@qwQW", administrator.EmailConfirmed);
@@ -78,6 +90,20 @@ public static class DbContextSeed
             await context.SaveChangesAsync();
         }
 
+        //var sitesExiat = context.Sites.ToList();
+        //var siteUsers = userManager.Users.Where(e=>e.UserName.StartsWith("SiteUser")).Select(e=>e.Id).ToList();
+
+        //int i2 = 1;
+        //foreach (var site in sitesExiat)
+        //{
+        //    var sss = siteUsers[i2];
+        //    if (sss != null)
+        //    {
+        //        site.ApplicationUserId = sss;
+        //    }
+        //    i2++;
+        //    context.SaveChangesAsync();
+        //}
         if (!context.Sites?.Any() ?? false)
         {
             List<int> brandids = context.Brands.Select(e => e.Id).ToList();

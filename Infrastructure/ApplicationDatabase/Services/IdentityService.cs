@@ -77,7 +77,6 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> SetUserPasswrod(string userId, string newPassword)
     {
-
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
         if (user == null)
@@ -85,7 +84,11 @@ public class IdentityService : IIdentityService
             return false;
         }
 
-        var result = await _userManager.AddPasswordAsync(user, newPassword);
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+        //var result = await _userManager.AddPasswordAsync(user, newPassword);
         return result.Succeeded;
     }
 
