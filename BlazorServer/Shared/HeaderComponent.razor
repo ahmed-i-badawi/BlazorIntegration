@@ -1,0 +1,62 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="float-left">
+                <div class="hamburger sidebar-toggle">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="float-right">
+                <AuthorizeView>
+                    <Authorized>
+
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <NotificationManagementComponent />
+                            </div>
+                        </div>
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <MailManagementpComponent />
+                            </div>
+                        </div>
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <UserManagementComponent />
+                            </div>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div>
+                            <div class="header-icon">
+                                <div>
+                                    <a href="MachineRegistration">
+                                        <span class="text-left">Machine Registration</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="header-icon">
+                                <div>
+                                    <a href="Identity/Account/Register">
+                                        <span class="text-left">Register</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="header-icon">
+                                <div>
+                                    <a href="Identity/Account/Login">
+                                        <span class="text-left">Log in</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+            </div>
+        </div>
+    </div>
+</div>

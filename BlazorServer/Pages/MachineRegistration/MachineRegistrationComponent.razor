@@ -6,7 +6,7 @@
 @using FluentValidation.Validators;
 @inject IClientOperations _clientOperations
 
-<div class="container">
+<div>
 
     @if (FModel != null)
     {
@@ -20,10 +20,8 @@
                     <ValidationMessage For="() => FModel.Hash"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <div class="col-6">
                     <InputText id="MachineName" class="form-control" @bind-Value="@FModel.MachineName" placeholder="Machine Name" /><br />
                     <ValidationMessage For="() => FModel.MachineName"></ValidationMessage>
-                </div
                 </div>
             </div>
             <div class="row">
@@ -51,15 +49,15 @@
         var response = await _apiService.HttpClient.PostAsJsonAsync<MachineRegistrationFM>("api/Machine/RegisterMachine", FModel);
         string registerRes = await response.Content.ReadAsStringAsync();
 
-        
+
         if (!response.IsSuccessStatusCode)
         {
-        await _clientOperations.ShowToast("Error", $"{registerRes}", "error");
-            }
-            else
-            {
+            await _clientOperations.ShowToast("Error", $"{registerRes}", "error");
+        }
+        else
+        {
             await _clientOperations.ShowToast($"{FModel.MachineName}", $"{registerRes}", "success");
-            }
+        }
 
         StateHasChanged();
     }

@@ -8,15 +8,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="BlazorServer.styles.css" rel="stylesheet" />
     <link href="css/syncfusion-blazor-icons.css" rel="stylesheet" />
-    <link href="https://cdn.syncfusion.com/ej2/fabric.css" rel="stylesheet">
+
+
+    <!-- Styles -->
+    <link href="assets/css/lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
+    <link href="assets/css/lib/chartist/chartist.min.css" rel="stylesheet">
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/themify-icons.css" rel="stylesheet">
+    <link href="assets/css/lib/owl.carousel.min.css" rel="stylesheet" />
+    <link href="assets/css/lib/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="assets/css/lib/weather-icons.css" rel="stylesheet" />
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
 
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
     <link rel="stylesheet" href="_content/Syncfusion.Blazor.Themes/bootstrap5.css" />
     <script src="_content/Syncfusion.Blazor.Core/scripts/syncfusion-blazor.min.js" type="text/javascript"></script>
+    <link href="assets/css/style.css" rel="stylesheet">
+
 </head>
 <body>
     @RenderBody()
@@ -33,11 +48,34 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
-    <script>
-        function isSidebar(x, y) {
-            var sidebarEle = document.elementFromPoint(x, y);
-            return (sidebarEle && sidebarEle.closest('.sidebar') != null) ? true : false;
-        }
-    </script>
+
+    <!-- jquery vendor -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <!-- nano scroller -->
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+    <!-- sidebar -->
+
+    <script src="assets/js/lib/bootstrap.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <!-- bootstrap -->
+
+    <script src="assets/js/lib/calendar-2/moment.latest.min.js"></script>
+    <script src="assets/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <script src="assets/js/lib/calendar-2/pignose.init.js"></script>
+
+    <script src="assets/js/lib/weather/jquery.simpleWeather.min.js"></script>
+    <script src="assets/js/lib/weather/weather-init.js"></script>
+    <script src="assets/js/lib/circle-progress/circle-progress.min.js"></script>
+    <script src="assets/js/lib/circle-progress/circle-progress-init.js"></script>
+    <script src="assets/js/lib/chartist/chartist.min.js"></script>
+    <script src="assets/js/lib/sparklinechart/jquery.sparkline.min.js"></script>
+    <script src="assets/js/lib/sparklinechart/sparkline.init.js"></script>
+    <script src="assets/js/lib/owl-carousel/owl.carousel.min.js"></script>
+    <script src="assets/js/lib/owl-carousel/owl.carousel-init.js"></script>
+    <!-- scripit init-->
+    <script src="assets/js/dashboard2.js"></script>
+
 </body>
 </html>
