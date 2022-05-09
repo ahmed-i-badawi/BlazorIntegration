@@ -56,24 +56,36 @@ public class Worker : BackgroundService
         // if exist => log in
         // if not => waiting registeration event from server Interface
         // on server register on current systeminfo if machine status pending
-
-        SystemInfo sysInfoObj = new SystemInfo();
-        var sysInfo = sysInfoObj.ValueAsync();
-
-        _hubUrl = $"{_hubBaseUrl}?sysInfo={sysInfo}";
-        connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
-        await connection.StartAsync();
-
-        connection.Closed += async (e) =>
+        try
         {
+            SystemInfo sysInfoObj = new SystemInfo();
+            var sysInfo = sysInfoObj.ValueAsync();
+
+            _hubUrl = $"{_hubBaseUrl}?sysInfo={sysInfo}";
+            connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
             await connection.StartAsync();
-        };
 
-        connection.On<string>("MachineIsAdded", this.MachineIsAdded);
-        connection.On<string>("NewOrder", this.NewOrder);
-        connection.On<bool>("MachineIsLoggedIn", this.MachineIsLoggedIn);
+            connection.Closed += async (e) =>
+            {
+                await connection.StartAsync();
+            };
 
-        return;
+            connection.On<string>("MachineIsAdded", this.MachineIsAdded);
+            connection.On<string>("NewOrder", this.NewOrder);
+            connection.On<bool>("MachineIsLoggedIn", this.MachineIsLoggedIn);
+
+            return;
+        }
+        catch (System.Net.Http.HttpRequestException ex)
+        {
+            Console.WriteLine("No Internet Connection, Kindly Connect to the internet then start worker again");
+            Console.ReadLine();
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public override async Task StartAsync(CancellationToken stoppingToken)
