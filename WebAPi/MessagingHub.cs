@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SharedLibrary.Commands;
 using SharedLibrary.Dto;
 using SharedLibrary.Enums;
@@ -70,8 +71,8 @@ public class MessagingHub : Hub
         var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
         var connectionId = Context.ConnectionId;
 
-
         var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
+
 
         var machine = pendingMachinesRegistration?.FirstOrDefault(e => e.SystemInfo == sysInfo);
 
@@ -88,10 +89,11 @@ public class MessagingHub : Hub
         var machineObjResponse = _http.PostAsJsonAsync<MachineModel>($"api/Machine/OnMachineConnect", myObj);
         MachineDto machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<MachineDto>();
 
+
         if (machineObjRes?.SiteId == 0 && machine != null)
         {
             _cache.Remove("pendingMachineRegistration");
-            pendingMachinesRegistration.Remove(machine);
+            pendingMachinesRegistration?.Remove(machine);
             _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
 
             await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully and logged in");
@@ -139,10 +141,8 @@ public class MessagingHub : Hub
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-         
 
         }
 

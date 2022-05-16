@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Entities;
 
 IConfiguration configuration = new ConfigurationBuilder()
-                            .AddJsonFile("appsettings.json")
+                            .AddJsonFile("appsettingsApplicationDatabase.json")
                             .Build();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +18,11 @@ var defaultConnectionString = builder.Configuration.GetConnectionString("Default
 builder.Services.AddApplicationDatabase(defaultConnectionString);
 
 var app = builder.Build();
+
+
+var dbApplicationcontext = app.Services.GetRequiredService<ApplicationDbContext>();
+
+dbApplicationcontext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 

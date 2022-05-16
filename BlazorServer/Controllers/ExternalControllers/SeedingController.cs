@@ -55,11 +55,16 @@ public class SeedingController : ApiControllerBase
     [HttpGet]
     public async Task<ActionResult<bool>> Init()
     {
-        var user2 = _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+        await DbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager, _identityService, _context);
 
+        return Ok(true);
+    }
 
-        await DbContextSeed.SeedDefaultUserAsync(_userManager, _roleManager, _identityService);
-        await DbContextSeed.SeedSampleDataAsync(_context, _userManager);
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<ActionResult<bool>> Init2()
+    {
+        await DbContextSeed.SeedSampleDataAsync(_context, _userManager, _identityService);
 
         return Ok(true);
     }

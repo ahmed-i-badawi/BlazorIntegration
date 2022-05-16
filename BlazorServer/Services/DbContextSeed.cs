@@ -12,12 +12,10 @@ public static class DbContextSeed
     // ApplicationDBContext
     public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        IIdentityService identityService
+        IIdentityService identityService, IApplicationDbContext context
         )
     {
         // create roles
-
-
         if (!roleManager.Roles?.Any() ?? false)
         {
             List<IdentityRole> roles = new List<IdentityRole>()
@@ -35,18 +33,6 @@ public static class DbContextSeed
         // create users
         if (!userManager.Users?.Any() ?? false)
         {
-            //siteUsers
-
-            for (int i = 1; i <= 2500; i++)
-            {
-                identityService.CreateUserAsync($"SiteUser{i}", "12!@qwQW", true, $"SiteUser{i}@mail.com");
-            }
-            var siteUsers = userManager.Users.Where(e => e.UserName.StartsWith("SiteUser")).ToList();
-            foreach (var siteUser in siteUsers)
-            {
-                identityService.AddUserToRole(siteUser.Id, RolesConstants.Site);
-            }
-
             //admin user
             var administrator = new ApplicationUser { UserName = "admin", EmailConfirmed = true };
 
@@ -75,7 +61,8 @@ public static class DbContextSeed
             ////}
         }
     }
-    public static async Task SeedSampleDataAsync(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
+    public static async Task SeedSampleDataAsync(IApplicationDbContext context,
+        UserManager<ApplicationUser> userManager, IIdentityService identityService)
     {
 
         if (!context.Brands?.Any() ?? false)
@@ -135,6 +122,18 @@ public static class DbContextSeed
             await context.Sites.AddRangeAsync(sites);
             try
             {
+                await context.SaveChangesAsync();
+
+                // seed sites users
+                for (int h = 1; h <= 2500; h++)
+                {
+                    identityService.CreateUserAsync($"SiteUser{h}", "12!@qwQW", true, $"SiteUser{h}@mail.com");
+                }
+                var siteUsers = userManager.Users.Where(e => e.UserName.StartsWith("SiteUser")).ToList();
+                foreach (var siteUser in siteUsers)
+                {
+                    identityService.AddUserToRole(siteUser.Id, RolesConstants.Site);
+                }
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)

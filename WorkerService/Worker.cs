@@ -24,7 +24,6 @@ public class Worker : BackgroundService
         _httpClient = httpClient.CreateClient();
         _config = config;
         _logger = logger;
-
         _httpClient.BaseAddress = new Uri(_config["API"]);
         _hubBaseUrl = $"{_config["API"]}/{_config["HubName"]}";
     }
@@ -32,21 +31,18 @@ public class Worker : BackgroundService
     Task MachineIsAdded(string arg)
     {
         _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
-        //connection.StopAsync();
         return Task.CompletedTask;
     }
 
     Task MachineIsLoggedIn(bool arg)
     {
         _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Logging {arg}");
-        //connection.StopAsync();
         return Task.CompletedTask;
     }
 
     Task NewOrder(string arg)
     {
         _logger.LogInformation($"at: {DateTimeOffset.Now} - This Machine Added New Order: {arg}");
-        //connection.StopAsync();
         return Task.CompletedTask;
     }
 
@@ -69,6 +65,7 @@ public class Worker : BackgroundService
             {
                 await connection.StartAsync();
             };
+
 
             connection.On<string>("MachineIsAdded", this.MachineIsAdded);
             connection.On<string>("NewOrder", this.NewOrder);

@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-WorkerService-A14D1F40-66D4-43FA-B0C7-AFADABE8C1C7</UserSecretsId>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

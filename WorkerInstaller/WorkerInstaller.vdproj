@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_62BD1C35482648E38C384D6731C2E9B4"
+        "MsmKey" = "8:_C996DA9D089F46EAB917985004DC0D00"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C996DA9D089F46EAB917985004DC0D00"
+        "MsmKey" = "8:_FA06571D10A84510866F01592E509241"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +43,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -59,6 +75,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -167,7 +191,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Simple Touch Worker Installer"
         "ProductCode" = "8:{0A3D2CBB-7295-4E58-974B-BF8864043133}"
-        "PackageCode" = "8:{B6FAF163-85FA-4C25-9337-067145D07B23}"
+        "PackageCode" = "8:{A5001992-1722-43E0-BD55-2527F2802629}"
         "UpgradeCode" = "8:{578509BA-312F-4BF1-A0A5-47ADCAC4F8A3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -287,18 +311,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CC6C49773A9544FC9C8CCC1D973E18D5"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EBC14C870A6F45CD8777939CCCAA8537"
             {
-            "Name" = "8:Start Worker"
+            "Name" = "8:worker"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_62BD1C35482648E38C384D6731C2E9B4"
+            "Target" = "8:_FA06571D10A84510866F01592E509241"
             "Folder" = "8:_D679B101E9C04EF9B7BB41F224ED5DC3"
             "WorkingFolder" = "8:_94CD5577FE9C4F049A084063A82922CE"
-            "Icon" = "8:_C996DA9D089F46EAB917985004DC0D00"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -700,7 +724,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_62BD1C35482648E38C384D6731C2E9B4"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FA06571D10A84510866F01592E509241"
             {
             "SourcePath" = "8:..\\WorkerService\\obj\\Release\\net6.0\\apphost.exe"
             "TargetName" = "8:"

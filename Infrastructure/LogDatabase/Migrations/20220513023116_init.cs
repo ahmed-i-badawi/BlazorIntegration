@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LogDatabase.Migrations
 {
-    public partial class log1init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +23,7 @@ namespace LogDatabase.Migrations
                     ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MachineName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SiteId = table.Column<int>(type: "int", nullable: true),
+                    SiteUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SiteHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -42,6 +43,7 @@ namespace LogDatabase.Migrations
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     MachineName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SiteId = table.Column<int>(type: "int", nullable: false),
+                    SiteUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SiteHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SiteName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),

@@ -12,11 +12,6 @@ namespace Infrastructure.ApplicationDatabase;
 public static class DependencyInjection
 {
 
-
-
-
-
-
     public static IServiceCollection AddApplicationDatabase(this IServiceCollection services, string connectionString)
     {
 

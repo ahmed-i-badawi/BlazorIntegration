@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d8b900f0-23f3-4153-b868-93b8987a278e</UserSecretsId>

@@ -3,7 +3,7 @@ using LogDatabase;
 using Microsoft.EntityFrameworkCore;
 
 IConfiguration configuration = new ConfigurationBuilder()
-                            .AddJsonFile("appsettings.json")
+                            .AddJsonFile("appsettingsLogDatabase.json")
                             .Build();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +15,11 @@ var logConnectionString = builder.Configuration.GetConnectionString("LogConnecti
 builder.Services.AddLogDatabase(logConnectionString);
 
 var app = builder.Build();
+
+
+var dbLogcontext = app.Services.GetRequiredService<LogDbContext>();
+
+dbLogcontext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 

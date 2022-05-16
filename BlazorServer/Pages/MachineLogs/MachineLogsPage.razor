@@ -10,9 +10,9 @@
     <SfTab CssClass="default-tab" LoadOn="ContentLoad.Demand">
         <TabItems>
             @{
-                var isSite = httpContextAccessor.HttpContext.User.IsInRole(RolesConstants.Site);
+                bool? isSite = httpContextAccessor?.HttpContext?.User.IsInRole(RolesConstants.Site) ?? null;
 
-                if(isSite)
+                if (isSite.HasValue && isSite.Value)
                 {
                     SiteUserId = httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
                 }
