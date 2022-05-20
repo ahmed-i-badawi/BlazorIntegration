@@ -28,10 +28,10 @@ public class Worker : BackgroundService
         _hubBaseUrl = $"{_config["API"]}/{_config["HubName"]}";
     }
 
-    Task MachineIsAdded(string arg)
+    async Task MachineIsAdded(string arg)
     {
-        _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - This Machine Added Successfully");
-        return Task.CompletedTask;
+        _logger.LogInformation($"Worker running at: {DateTimeOffset.Now} - {arg}");
+        await connection.StopAsync();
     }
 
     Task MachineIsLoggedIn(bool arg)
@@ -63,6 +63,7 @@ public class Worker : BackgroundService
 
             connection.Closed += async (e) =>
             {
+                Task.Delay(TimeSpan.FromSeconds(5)).Wait();
                 await connection.StartAsync();
             };
 
@@ -88,7 +89,6 @@ public class Worker : BackgroundService
     public override async Task StartAsync(CancellationToken stoppingToken)
     {
         await OpenConnectionToServer();
-        //await base.StartAsync(stoppingToken);
     }
 
     public override async Task StopAsync(CancellationToken stoppingToken)

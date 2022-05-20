@@ -11,7 +11,7 @@ IConfiguration configuration = new ConfigurationBuilder()
 
 var builder = WebApplication.CreateBuilder(args);
 
-var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 

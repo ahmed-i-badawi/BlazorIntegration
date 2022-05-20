@@ -8,7 +8,7 @@ IConfiguration configuration = new ConfigurationBuilder()
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logConnectionString = builder.Configuration.GetConnectionString("LogConnection");
+var logConnectionString = configuration.GetConnectionString("LogConnection");
 
 // Add services to the container.
 

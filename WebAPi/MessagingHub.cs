@@ -71,32 +71,32 @@ public class MessagingHub : Hub
         var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
         var connectionId = Context.ConnectionId;
 
-        var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
+        //var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
 
 
-        var machine = pendingMachinesRegistration?.FirstOrDefault(e => e.SystemInfo == sysInfo);
+        //var machine = pendingMachinesRegistration?.FirstOrDefault(e => e.SystemInfo == sysInfo);
 
         MachineModel myObj = new MachineModel()
         {
             SystemInfo = sysInfo,
             ConnectionId = connectionId,
-            SiteId = machine?.SiteId,
-            Hash = machine?.Hash,
-            MachineName = machine?.MachineName,
-            Notes = machine?.Notes,
         };
 
         var machineObjResponse = _http.PostAsJsonAsync<MachineModel>($"api/Machine/OnMachineConnect", myObj);
         MachineDto machineObjRes = await machineObjResponse.Result.Content.ReadFromJsonAsync<MachineDto>();
 
-
-        if (machineObjRes?.SiteId == 0 && machine != null)
+        if (machineObjRes?.SiteId == null)
         {
-            _cache.Remove("pendingMachineRegistration");
-            pendingMachinesRegistration?.Remove(machine);
-            _cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
+            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"Waiting site to be registered on machine");
+        }
 
-            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully and logged in");
+        if (machineObjRes?.SiteId.GetValueOrDefault() > 0)
+        {
+            //_cache.Remove("pendingMachineRegistration");
+            //pendingMachinesRegistration?.Remove(machine);
+            //_cache.Set("pendingMachineRegistration", pendingMachinesRegistration, DateTime.UtcNow.AddDays(30));
+
+            //await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"machine {machine.MachineName}: added successfully and logged in");
         }
         if (machineObjRes?.SiteId > 0)
         {
