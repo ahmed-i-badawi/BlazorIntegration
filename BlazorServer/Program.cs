@@ -188,6 +188,14 @@ builder.Services
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
 
+
+var emailConfig = configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

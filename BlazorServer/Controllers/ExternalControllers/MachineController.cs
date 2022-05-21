@@ -20,6 +20,7 @@ using BlazorServer.Extensions;
 using SharedLibrary.Entities;
 using Infrastructure.LogDatabase.Common.Interfaces;
 using BlazorServer.Services;
+using SharedLibrary.Models;
 
 namespace BlazorServer.Controllers;
 
@@ -29,15 +30,28 @@ public class MachineController : ApiControllerBase
     private readonly IApplicationDbContext _context;
     public IConfiguration _config { get; }
     public ILogDbContext _logDbContext { get; }
+    public IEmailService _emailService { get; }
 
     public MachineController(IApplicationDbContext context,
         IConfiguration config,
-        ILogDbContext logDbContext
+        ILogDbContext logDbContext,
+        IEmailService emailService
         )
     {
         _context = context;
         _config = config;
         _logDbContext = logDbContext;
+        _emailService = emailService;
+    }
+
+    private async Task SendMachineRegisterationMail(Site dbSite)
+    {
+        EmailMessageModel mailMessage = new EmailMessageModel(
+              "AhmedBadawi127@gmail.com",
+              $"machine registeration details",
+              $"you have registered your machine: {dbSite.Machine.Name} on your hash: {dbSite.Hash}");
+
+        await _emailService.SendEmail(mailMessage);
     }
 
     [AllowAnonymous]
@@ -55,6 +69,9 @@ public class MachineController : ApiControllerBase
                 if (dbSite.Machine != null)
                 {
                     message = $"site with hash:  {dbSite.Hash} has a machine with name: {dbSite.Machine.Name}";
+                    // here
+
+                    await SendMachineRegisterationMail(dbSite);
 
                     return Ok(message);
                 }
