@@ -17,6 +17,7 @@ using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using SharedLibrary.Entities;
 using SharedLibrary.Models;
 using SharedLibrary.Constants;
+using BlazorServer.Services;
 
 namespace BlazorServer.Controllers
 {
@@ -25,12 +26,14 @@ namespace BlazorServer.Controllers
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identityService;
+        private readonly IEmailService _emailService;
 
-        public SitesController(IApplicationDbContext context, IMapper mapper, IIdentityService identityService)
+        public SitesController(IApplicationDbContext context, IMapper mapper, IIdentityService identityService, IEmailService emailService)
         {
             _context = context;
             _mapper = mapper;
             _identityService = identityService;
+            _emailService = emailService;
         }
         private async Task GetSiteZones(List<SiteDto> dto, List<Site> db)
         {
@@ -84,7 +87,7 @@ namespace BlazorServer.Controllers
 
             query = await query.FilterBy(dm);
             query = query.Include(e => e.Brand).Include(e => e.Machine)
-                .Include(e => e.SiteZones).ThenInclude(e => e.Zone).Include(e=>e.ApplicationUser);
+                .Include(e => e.SiteZones).ThenInclude(e => e.Zone).Include(e => e.ApplicationUser);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
 
@@ -132,12 +135,26 @@ namespace BlazorServer.Controllers
                     db.Address = command.Address;
                     db.BrandId = command.BrandId;
                 }
-                
+
                 await _context.SaveChangesAsync();
                 return Ok(true);
             }
 
             return Ok(false);
+        }
+
+        private async Task SendSiteRegisterationMail(Site dbSite)
+        {
+            if (string.IsNullOrWhiteSpace(dbSite.ApplicationUser.Email))
+            {
+                return;
+            }
+            EmailMessageModel mailMessage = new EmailMessageModel(
+       dbSite.ApplicationUser.Email,
+       $"Site registeration details",
+       $"you have registered with hash: {dbSite.Hash}, User Name: {dbSite.ApplicationUser.UserName}, Password: 11111111");
+
+            await _emailService.SendEmail(mailMessage);
         }
 
         [HttpPost]
@@ -162,9 +179,11 @@ namespace BlazorServer.Controllers
                 _context.Sites.Add(Site);
                 await _context.SaveChangesAsync();
 
+                await SendSiteRegisterationMail(Site);
+
                 return Ok(true);
             }
-         
+
             return Ok(false);
         }
 

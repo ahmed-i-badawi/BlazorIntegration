@@ -46,8 +46,13 @@ public class MachineController : ApiControllerBase
 
     private async Task SendMachineRegisterationMail(Site dbSite)
     {
+        if (string.IsNullOrWhiteSpace(dbSite?.ApplicationUser?.Email))
+        {
+            return;
+        }
+
         EmailMessageModel mailMessage = new EmailMessageModel(
-              "AhmedBadawi127@gmail.com",
+              dbSite.ApplicationUser.Email,
               $"machine registeration details",
               $"you have registered your machine: {dbSite.Machine.Name} on your hash: {dbSite.Hash}");
 
@@ -68,11 +73,7 @@ public class MachineController : ApiControllerBase
             {
                 if (dbSite.Machine != null)
                 {
-                    message = $"site with hash:  {dbSite.Hash} has a machine with name: {dbSite.Machine.Name}";
-                    // here
-
-                    await SendMachineRegisterationMail(dbSite);
-
+                    message = $"site with hash: {dbSite.Hash} has a machine with name: {dbSite.Machine.Name}";
                     return Ok(message);
                 }
                 else
@@ -93,6 +94,9 @@ public class MachineController : ApiControllerBase
                             dbMachine.Name = request.MachineName;
                             dbMachine.CurrentStatus = MachineStatus.Closed;
                             await _context.SaveChangesAsync();
+
+                            // toDo check if dbSite or dbMachine needed
+                            await SendMachineRegisterationMail(dbSite);
 
                             message = $"machine: {request.MachineName} is now registered on site with hash: {dbSite.Hash}";
                             //await OnMachineConnect(new MachineModel()
