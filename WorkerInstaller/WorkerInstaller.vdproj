@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_C996DA9D089F46EAB917985004DC0D00"
+        "MsmKey" = "8:_BC367D08C59E4125BDC72B7F26BD5165"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA06571D10A84510866F01592E509241"
+        "MsmKey" = "8:_C996DA9D089F46EAB917985004DC0D00"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -191,7 +191,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Simple Touch Worker Installer"
         "ProductCode" = "8:{0A3D2CBB-7295-4E58-974B-BF8864043133}"
-        "PackageCode" = "8:{A5001992-1722-43E0-BD55-2527F2802629}"
+        "PackageCode" = "8:{33C29825-3685-425E-84B6-B4B949D4A355}"
         "UpgradeCode" = "8:{578509BA-312F-4BF1-A0A5-47ADCAC4F8A3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -311,18 +311,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EBC14C870A6F45CD8777939CCCAA8537"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6C37980160E748B79402A92FAF9B17A6"
             {
-            "Name" = "8:worker"
+            "Name" = "8:Worker"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FA06571D10A84510866F01592E509241"
+            "Target" = "8:_BC367D08C59E4125BDC72B7F26BD5165"
             "Folder" = "8:_D679B101E9C04EF9B7BB41F224ED5DC3"
             "WorkingFolder" = "8:_94CD5577FE9C4F049A084063A82922CE"
-            "Icon" = "8:"
+            "Icon" = "8:_C996DA9D089F46EAB917985004DC0D00"
             "Feature" = "8:"
             }
         }
@@ -724,7 +724,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FA06571D10A84510866F01592E509241"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BC367D08C59E4125BDC72B7F26BD5165"
             {
             "SourcePath" = "8:..\\WorkerService\\obj\\Release\\net6.0\\apphost.exe"
             "TargetName" = "8:"

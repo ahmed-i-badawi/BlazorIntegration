@@ -307,8 +307,8 @@ namespace ApplicationDatabase.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FingerPrint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(3000)
+                        .HasColumnType("nvarchar(3000)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");

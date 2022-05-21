@@ -7,7 +7,7 @@ namespace SharedLibrary.Entities;
 public class Machine : AuditableEntity
 {
     public int Id { get; set; }
-    [MaxLength(1000)]
+    [MaxLength(3000)]
     public string? FingerPrint { get; set; }
     public string? Name { get; set; }
     public MachineStatus CurrentStatus { get; set; }

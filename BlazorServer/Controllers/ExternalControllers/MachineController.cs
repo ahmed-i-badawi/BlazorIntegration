@@ -63,7 +63,8 @@ public class MachineController : ApiControllerBase
                     // site has no machine, check if machine has same finger print
                     SystemGuid systemGuid = new SystemGuid();
                     var fingerPrint = systemGuid.ValueAsync();
-
+                    Console.WriteLine("finger from controller server after blazor client");
+                    Console.WriteLine(fingerPrint);
                     var dbMachine = _context.Machines.FirstOrDefault(e => e.FingerPrint == fingerPrint);
 
                     if (dbMachine != null)

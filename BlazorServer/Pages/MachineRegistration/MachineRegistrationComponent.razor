@@ -1,10 +1,12 @@
-﻿@using BlazorServer.Services
+﻿@using BlazorServer.Extensions
+@using BlazorServer.Services
 @using System.Net.Http.Headers
 @inject ApiService _apiService
 @inject IConfiguration configuration
 @using FluentValidation;
 @using FluentValidation.Validators;
 @inject IClientOperations _clientOperations
+@inject IJSRuntime JS
 
 <div>
 
@@ -45,6 +47,13 @@
 
     protected async Task Submit()
     {
+
+        SystemGuid systemGuid = new SystemGuid();
+
+        var finger = systemGuid.ValueAsync();
+        Console.WriteLine("finger from blazor client: ");
+        Console.WriteLine(finger);
+
         var response = await _apiService.HttpClient.PostAsJsonAsync<MachineRegistrationFM>("api/Machine/RegisterMachine", FModel);
         string registerRes = await response.Content.ReadAsStringAsync();
 
