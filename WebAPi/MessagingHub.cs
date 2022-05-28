@@ -69,6 +69,7 @@ public class MessagingHub : Hub
     {
         var httpContext = Context.GetHttpContext();
         var sysInfo = httpContext.Request.Query["sysInfo"].ToString();
+        var siteHash = httpContext.Request.Query["siteHash"].ToString();
         var connectionId = Context.ConnectionId;
 
         //var isChache = _cache.TryGetValue("pendingMachineRegistration", out List<MachineRegistrationCommand> pendingMachinesRegistration);
@@ -80,6 +81,7 @@ public class MessagingHub : Hub
         {
             SystemInfo = sysInfo,
             ConnectionId = connectionId,
+            Hash = siteHash
         };
 
         var machineObjResponse = _http.PostAsJsonAsync<MachineModel>($"api/Machine/OnMachineConnect", myObj);
@@ -87,7 +89,7 @@ public class MessagingHub : Hub
 
         if (machineObjRes?.SiteId == null)
         {
-            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"Waiting site to be registered on machine");
+            await this.Clients.Client(connectionId).SendAsync("MachineIsAdded", $"Trying Again");
         }
 
         if (machineObjRes?.SiteId.GetValueOrDefault() > 0)

@@ -24,6 +24,15 @@ using SharedLibrary.Models;
 
 namespace BlazorServer.Controllers;
 
+
+public class HashValidatorModel
+{
+    public Guid SN { get; set; }
+    public string? UserName { get; set; }
+    public string? Company { get; set; }
+    public string? Email { get; set; }
+}
+
 [Authorize]
 public class MachineController : ApiControllerBase
 {
@@ -44,6 +53,20 @@ public class MachineController : ApiControllerBase
         _emailService = emailService;
     }
 
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<ActionResult> HashValidator([FromForm] HashValidatorModel payload)
+    {
+        //toDO add encryption Key between worker & this api 
+
+        var site = await _context.Sites.FirstOrDefaultAsync(e => e.Hash == payload.SN);
+        if (site == null)
+        {
+            return Ok("602\nHash is not available kindly contact admin");
+        }
+
+        return Ok("601");
+    }
     private async Task SendMachineRegisterationMail(Site dbSite)
     {
         if (string.IsNullOrWhiteSpace(dbSite?.ApplicationUser?.Email))
@@ -135,64 +158,51 @@ public class MachineController : ApiControllerBase
 
         MachineDto result = new MachineDto();
 
-        SystemInfo systemGuid = new SystemInfo();
+        bool isHasGuid = Guid.TryParse(machineModel.Hash, out Guid siteHash);
+        if (!isHasGuid)
+        {
+            return NotFound(result);
+        }
+
+        var sitObj = _context.Sites.FirstOrDefault(e => e.Hash == siteHash);
+        if (sitObj == null)
+        {
+            return NotFound(result);
+        }
 
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
+
+
+        bool isMahineExist = _context.Machines.Any(e => e.FingerPrint == machineFingerPrint && e.Site.Hash == siteHash);
+
+        // if machine not exist, create one and add to db
+        if (!isMahineExist)
+        {
+            Machine machine = new Machine()
+            {
+                FingerPrint = machineFingerPrint,
+                CurrentStatus = MachineStatus.Alive,
+                Name = machineModel.MachineName,
+                SiteId = sitObj.Id
+            };
+
+            await _context.Machines.AddAsync(machine);
+            await _context.SaveChangesAsync();
+        }
 
         var machineobj = _context.Machines
             .Include(e => e.Site).ThenInclude(e => e.Brand)
             .Include(e => e.Site).ThenInclude(e => e.SiteZones)
-            .FirstOrDefault(e => e.FingerPrint == machineFingerPrint);
+            .FirstOrDefault(e => e.FingerPrint == machineFingerPrint && e.Site.Hash == siteHash);
 
         // if machine exist return it to cache
-        if (machineobj != null)
-        {
-            var token = await MachineLogin(machineobj, machineModel.ConnectionId);
-            result.SiteId = machineobj.SiteId;
-            result.BrandId = machineobj.Site?.BrandId ?? 0;
-            result.Token = token;
-            result.ZoneIds = machineobj.Site?.SiteZones?.Select(e => e.ZoneId).ToList();
+        var token = await MachineLogin(machineobj, machineModel.ConnectionId);
+        result.SiteId = machineobj.SiteId;
+        result.BrandId = machineobj.Site?.BrandId ?? 0;
+        result.Token = token;
+        result.ZoneIds = machineobj.Site?.SiteZones?.Select(e => e.ZoneId).ToList();
 
-            return Ok(result);
-        }
-        // if machine not exist, create one and add to db
-        else
-        {
-            try
-            {
-
-                Machine machine = new Machine()
-                {
-                    FingerPrint = machineFingerPrint,
-                    CurrentStatus = MachineStatus.Alive,
-                    Name = machineModel.MachineName,
-                };
-
-                await _context.Machines.AddAsync(machine);
-                await _context.SaveChangesAsync();
-
-
-                await AddMachineLogOnLoginLogout
-                    (
-                    connectionId: machineModel.ConnectionId,
-                    machineStatus: MachineStatus.Alive,
-                    fingerPrint: machineFingerPrint
-                    );
-
-                //var token = machineFingerPrint;
-
-                return Ok(result);
-                //}
-                //else
-                //{
-                //    return NotFound();
-                //}
-            }
-            catch (Exception ex)
-            {
-                return NotFound();
-            }
-        }
+        return Ok(result);
     }
 
     [HttpPost]

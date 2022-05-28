@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using WorkerService.Extensions;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace WorkerService;
 
@@ -15,6 +16,7 @@ public class Worker : BackgroundService
     private string _hubBaseUrl;
     private string _hubUrl;
     private string _username;
+    private string _siteHash;
     private bool IsConnected => HubConnectionState.Connected == connection?.State;
     public string Status { get; set; }
     public IConfiguration _config { get; }
@@ -26,6 +28,7 @@ public class Worker : BackgroundService
         _logger = logger;
         _httpClient.BaseAddress = new Uri(_config["API"]);
         _hubBaseUrl = $"{_config["API"]}/{_config["HubName"]}";
+        _siteHash = _config["SiteHash"];
     }
 
     async Task MachineIsAdded(string arg)
@@ -56,8 +59,7 @@ public class Worker : BackgroundService
         {
             SystemInfo sysInfoObj = new SystemInfo();
             var sysInfo = sysInfoObj.ValueAsync();
-
-            _hubUrl = $"{_hubBaseUrl}?sysInfo={sysInfo}";
+            _hubUrl = $"{_hubBaseUrl}?siteHash={_siteHash}&sysInfo={sysInfo}";
             connection = new HubConnectionBuilder().WithUrl(_hubUrl).Build();
             await connection.StartAsync();
 

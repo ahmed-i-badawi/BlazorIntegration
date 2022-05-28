@@ -26,6 +26,7 @@ public class Site : AuditableEntity
         private set { /* needed for EF */ }
     }
     public bool IsCallCenter { get; set; }
+    //toDo list of machines
     public Machine Machine { get; set; }
 
     public string? ApplicationUserId { get; set; }

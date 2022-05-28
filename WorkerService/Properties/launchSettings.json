@@ -1,11 +1,13 @@
-﻿{
+{
   "profiles": {
     "WorkerService": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
-      }
+      },
+      "jsWebView2Debugging": false,
+      "dotnetRunMessages": true,
+      "nativeDebugging": true
     }
   }
 }

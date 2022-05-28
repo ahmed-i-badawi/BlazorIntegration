@@ -11,6 +11,6 @@ public class Machine : AuditableEntity
     public string? FingerPrint { get; set; }
     public string? Name { get; set; }
     public MachineStatus CurrentStatus { get; set; }
-    public int? SiteId { get; set; }
-    public Site? Site { get; set; }
+    public int SiteId { get; set; }
+    public Site Site { get; set; }
 }
