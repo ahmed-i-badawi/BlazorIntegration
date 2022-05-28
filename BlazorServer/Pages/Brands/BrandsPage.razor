@@ -20,6 +20,10 @@
     else
     {
         <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
+        <div>
             <CustomFullGridComponent DTO="BrandDto"
                                  SfDataManagerUrl="api/Brands/GetBrands"
                                  Edit="Edit"
@@ -36,6 +40,15 @@
 
 </div>
 @code {
+
+       private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Brands", "/Brands", true )
+    };
+
+
+
     private bool IsProcessingItem { get; set; } = false;
     public BrandCreateFM FModel { get; set; } = null;
 

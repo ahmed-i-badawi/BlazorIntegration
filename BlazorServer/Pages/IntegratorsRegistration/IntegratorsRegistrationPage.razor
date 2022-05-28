@@ -19,6 +19,11 @@
     }
     else
     {
+        
+        <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
         <div>
             <CustomFullGridComponent DTO="IntegratorsDto"
                                                SfDataManagerUrl="api/IntegratorsRegistration/GetIntegrators"
@@ -36,6 +41,14 @@
 
 </div>
 @code {
+
+       private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Integrators", "/Integrators", true )
+    };
+
+
     private bool IsProcessingItem { get; set; } = false;
     public IntegratorsRegistrationCreateFM FModel { get; set; } = null;
 

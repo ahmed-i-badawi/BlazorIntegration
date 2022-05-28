@@ -8,6 +8,26 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<IdentityUIFrameworkVersion>Bootstrap5</IdentityUIFrameworkVersion>
 	</PropertyGroup>
+	<!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<WebPublishMethod>FileSystem</WebPublishMethod>
+		<LastUsedBuildConfiguration>Release</LastUsedBuildConfiguration>
+		<LastUsedPlatform>Any CPU</LastUsedPlatform>
+		<SiteUrlToLaunchAfterPublish />
+		<PrecompileBeforePublish>True</PrecompileBeforePublish>
+		<EnableUpdateable>True</EnableUpdateable>
+		<DebugSymbols>False</DebugSymbols>
+		<WDPMergeOption>MergeAllOutputsToASingleAssembly</WDPMergeOption>
+		<UseMerge>True</UseMerge>
+		<SingleAssemblyName>AdoIntranet</SingleAssemblyName>
+		<ExcludeFilesFromDeployment>appsettings.json</ExcludeFilesFromDeployment>
+	</PropertyGroup>-->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <WarningLevel>3</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <WarningLevel>3</WarningLevel>
+	</PropertyGroup>
 	<ItemGroup>
 
 

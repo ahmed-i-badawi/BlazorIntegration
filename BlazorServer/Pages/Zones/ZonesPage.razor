@@ -18,6 +18,10 @@
     }
     else
     {
+         <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
         <div>
             <CustomFullGridComponent DTO="ZoneDto"
                                  SfDataManagerUrl="api/Zones/GetZones"
@@ -35,6 +39,14 @@
 
 </div>
 @code {
+
+      private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Zones", "/Zones", true )
+    };
+
+
     private bool IsProcessingItem { get; set; } = false;
     public ZoneCreateFM FModel { get; set; } = null;
 

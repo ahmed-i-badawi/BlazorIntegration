@@ -13,8 +13,12 @@
     @if (ProcessingItem == ProcessingItem.Grid)
     {
         <div>
-            <h3>Sites</h3>
-            <hr />
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
+        <div>
+            @*<h3>Sites</h3>*@
+            @*<hr />*@
             <CustomFullGridComponent DTO="SiteDto"
                                  SfDataManagerUrl="api/Sites/GetSites"
                                  Edit="Edit"
@@ -33,31 +37,37 @@
                         </Template>
                     </GridColumn>
                     <GridColumn Field=@nameof(SiteDto.Address) HeaderText="Address" TextAlign="TextAlign.Center" Width="150"></GridColumn>
-                    <GridColumn Field="Brand.Name" AllowFiltering="false" HeaderText="Brand Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
-                    <GridColumn Field="Machine.Name" AllowFiltering="false" HeaderText="Machine Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="Brand.Name" AllowFiltering="true" HeaderText="Brand Name" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto.ActualNumberOfMachines) AllowFiltering="true" HeaderText="Actual Number Of Machine" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                    <GridColumn Field=@nameof(SiteDto. MaxNumberOfMachines) AllowFiltering="true" HeaderText="Max Number Of Machine" TextAlign="TextAlign.Center" Width="80"></GridColumn>
                     <GridColumn Field=@nameof(SiteDto.Notes) HeaderText="Notes" TextAlign="TextAlign.Center" Width="200"></GridColumn>
 
-                    <GridColumn Field="ApplicationUser.UserName" HeaderText="User Name" AllowFiltering="false" TextAlign="TextAlign.Center" Width="150"></GridColumn>
-                    <GridColumn Field="ApplicationUser.Email" HeaderText="Email"AllowFiltering="false" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                    <GridColumn Field="ApplicationUser.UserName" HeaderText="User Name" AllowFiltering="true" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                    <GridColumn Field="ApplicationUser.Email" HeaderText="Email" AllowFiltering="true" TextAlign="TextAlign.Center" Width="200"></GridColumn>
 
                 </GridColumnsTemplate>
-                @*<GridDetailTemplate>
+                <GridDetailTemplate>
                     @{
-                    var site = context as SiteDto;
+                        var site = context as SiteDto;
 
-                    //SiteZones = site.Zones;
-                    // add SiteZones to Datasource
-                    <h5>Zones</h5>
-                    <SfGrid TValue="ZoneDto" Height=200 DataSource="site.Zones">
-                    <GridColumns>
-                    <GridColumn Field=@nameof(ZoneDto.Id) HeaderText="Id"></GridColumn>
-                    <GridColumn Field=@nameof(ZoneDto.Name) HeaderText="Name"></GridColumn>
-                    <GridColumn Field=@nameof(ZoneDto.Notes) HeaderText="Notes"></GridColumn>
-
-                    </GridColumns>
-                    </SfGrid>
+                        <h5>Machines</h5>
+                        <SfGrid TValue="MachineDto" Height=200 DataSource="site.Machines" AllowPaging="true">
+                            <GridPageSettings PageSize="5" PageCount="5" PageSizes="true"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(MachineDto.Id) HeaderText="Id"></GridColumn>
+                                <GridColumn Field=@nameof(MachineDto.Name) HeaderText="Name"></GridColumn>
+                                <GridColumn Field=@nameof(MachineDto.CurrentStatus) HeaderText="Current Status">
+                                    <Template Context="cContext">
+                                        @{
+                                            var obj = ((MachineDto)cContext);
+                                            <span>@obj.CurrentStatus.ToString()</span>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     }
-                    </GridDetailTemplate>*@
+                </GridDetailTemplate>
                 @*<GridColumn HeaderText="Actions" TextAlign="TextAlign.Center" Width="250">
                     <Template Context="cContext">
                     <SfButtonGroup CssClass="e-round-corner" style="text-align:center">
@@ -87,6 +97,14 @@
     }
 </div>
 @code {
+    private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Sites", "/Sites", true )
+    };
+
+
+
     private ProcessingItem ProcessingItem { get; set; }
     public SiteCreateFM FModel { get; set; } = null;
     //public List<ZoneDto> SiteZones { get; set; }
@@ -135,7 +153,6 @@
         SiteIdIsProcessing = siteId;
         ProcessingItem = ProcessingItem.SecondCreateOrUpdate;
         StateHasChanged();
-
     }
     public async Task CancelClicked()
     {

@@ -64,98 +64,89 @@ public class MachineController : ApiControllerBase
         {
             return Ok("602\nHash is not available kindly contact admin");
         }
-
+        if (site.MaxNumberOfMachines <= site.ActualNumberOfMachines)
+        {
+            return Ok("602\nHash has exceeded max machines");
+        }
         return Ok("601");
     }
-    private async Task SendMachineRegisterationMail(Site dbSite)
-    {
-        if (string.IsNullOrWhiteSpace(dbSite?.ApplicationUser?.Email))
-        {
-            return;
-        }
 
-        EmailMessageModel mailMessage = new EmailMessageModel(
-              dbSite.ApplicationUser.Email,
-              $"machine registeration details",
-              $"you have registered your machine: {dbSite.Machine.Name} on your hash: {dbSite.Hash}");
+    //[AllowAnonymous]
+    //[HttpPost]
+    //public async Task<ActionResult> RegisterMachine([FromBody] MachineRegistrationCommand request)
+    //{
+    //    string message = "";
 
-        await _emailService.SendEmail(mailMessage);
-    }
+    //    if (Guid.TryParse(request.Hash, out Guid guid))
+    //    {
+    //        var dbSite = _context.Sites.Include(e => e.Machines).FirstOrDefault(e => e.Hash == guid);
 
-    [AllowAnonymous]
-    [HttpPost]
-    public async Task<ActionResult> RegisterMachine([FromBody] MachineRegistrationCommand request)
-    {
-        string message = "";
+    //        if (dbSite == null)
+    //        {
+    //            message = "No Site hash available";
+    //            return Ok(message);
+    //        }
+    //        {
+    //            if (dbSite.Machine != null)
+    //            {
+    //                message = $"site with hash: {dbSite.Hash} has a machine with name: {dbSite.Machine.Name}";
+    //                return Ok(message);
+    //            }
+    //            else
+    //            {
+    //                // site has no machine, check if machine has same finger print
+    //                SystemGuid systemGuid = new SystemGuid();
+    //                var fingerPrint = systemGuid.ValueAsync();
+    //                Console.WriteLine("finger from controller server after blazor client");
+    //                Console.WriteLine(fingerPrint);
+    //                var dbMachine = _context.Machines.FirstOrDefault(e => e.FingerPrint == fingerPrint);
 
-        if (Guid.TryParse(request.Hash, out Guid guid))
-        {
-            var dbSite = _context.Sites.Include(e => e.Machine).FirstOrDefault(e => e.Hash == guid);
+    //                if (dbMachine != null)
+    //                {
+    //                    if (dbMachine.SiteId == null)
+    //                    {
+    //                        // pending => link to site
+    //                        dbMachine.SiteId = dbSite.Id;
+    //                        dbMachine.Name = request.MachineName;
+    //                        dbMachine.CurrentStatus = MachineStatus.Closed;
+    //                        await _context.SaveChangesAsync();
 
-            if (dbSite != null)
-            {
-                if (dbSite.Machine != null)
-                {
-                    message = $"site with hash: {dbSite.Hash} has a machine with name: {dbSite.Machine.Name}";
-                    return Ok(message);
-                }
-                else
-                {
-                    // site has no machine, check if machine has same finger print
-                    SystemGuid systemGuid = new SystemGuid();
-                    var fingerPrint = systemGuid.ValueAsync();
-                    Console.WriteLine("finger from controller server after blazor client");
-                    Console.WriteLine(fingerPrint);
-                    var dbMachine = _context.Machines.FirstOrDefault(e => e.FingerPrint == fingerPrint);
+    //                        // toDo check if dbSite or dbMachine needed
+    //                        await _emailService.SendMachineRegisterationMail(dbSite);
 
-                    if (dbMachine != null)
-                    {
-                        if (dbMachine.SiteId == null)
-                        {
-                            // pending => link to site
-                            dbMachine.SiteId = dbSite.Id;
-                            dbMachine.Name = request.MachineName;
-                            dbMachine.CurrentStatus = MachineStatus.Closed;
-                            await _context.SaveChangesAsync();
+    //                        message = $"machine: {request.MachineName} is now registered on site with hash: {dbSite.Hash}";
+    //                        //await OnMachineConnect(new MachineModel()
+    //                        //{
+    //                        //    ConnectionId = request.ConnectionId,
+    //                        //    Hash = request.Hash,
+    //                        //    MachineName = request.MachineName,
+    //                        //    SiteId = request.SiteId,
+    //                        //    SystemInfo = request.SystemInfo,
+    //                        //    Notes = request.Notes
+    //                        //});
+    //                    }
+    //                    else
+    //                    {
+    //                        message = $"this machine is allready registered on another site";
+    //                    }
+    //                }
+    //                else
+    //                {
 
-                            // toDo check if dbSite or dbMachine needed
-                            await SendMachineRegisterationMail(dbSite);
+    //                    message = $"Kindely download installer and start your worker";
+    //                }
 
-                            message = $"machine: {request.MachineName} is now registered on site with hash: {dbSite.Hash}";
-                            //await OnMachineConnect(new MachineModel()
-                            //{
-                            //    ConnectionId = request.ConnectionId,
-                            //    Hash = request.Hash,
-                            //    MachineName = request.MachineName,
-                            //    SiteId = request.SiteId,
-                            //    SystemInfo = request.SystemInfo,
-                            //    Notes = request.Notes
-                            //});
-                        }
-                        else
-                        {
-                            message = $"this machine is allready registered on another site";
-                        }
-                    }
-                    else
-                    {
+    //                return Ok(message);
+    //            }
+    //        }
+    //    }
 
-                        message = $"Kindely download installer and start your worker";
-                    }
-
-                    return Ok(message);
-                }
-            }
-        }
-        message = "No Site hash available";
-
-        return Ok(message);
-    }
+    //    return Ok(message);
+    //}
 
     [HttpPost]
     public async Task<ActionResult<MachineDto>> OnMachineConnect([FromBody] MachineModel machineModel)
     {
-
         MachineDto result = new MachineDto();
 
         bool isHasGuid = Guid.TryParse(machineModel.Hash, out Guid siteHash);
@@ -170,11 +161,12 @@ public class MachineController : ApiControllerBase
             return NotFound(result);
         }
 
+        //var machineName = machineModel.SystemInfo
         string machineFingerPrint = machineModel.SystemInfo.EncryptString();
 
 
         bool isMahineExist = _context.Machines.Any(e => e.FingerPrint == machineFingerPrint && e.Site.Hash == siteHash);
-
+        
         // if machine not exist, create one and add to db
         if (!isMahineExist)
         {
@@ -194,6 +186,12 @@ public class MachineController : ApiControllerBase
             .Include(e => e.Site).ThenInclude(e => e.Brand)
             .Include(e => e.Site).ThenInclude(e => e.SiteZones)
             .FirstOrDefault(e => e.FingerPrint == machineFingerPrint && e.Site.Hash == siteHash);
+
+        if (!isMahineExist)
+        {
+            await _emailService.SendMachineRegisterationMail(machineobj);
+        }
+
 
         // if machine exist return it to cache
         var token = await MachineLogin(machineobj, machineModel.ConnectionId);

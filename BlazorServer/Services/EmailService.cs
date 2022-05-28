@@ -3,6 +3,7 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 using SharedLibrary;
+using SharedLibrary.Entities;
 using SharedLibrary.Models;
 
 namespace BlazorServer.Services;
@@ -10,6 +11,9 @@ namespace BlazorServer.Services;
 public interface IEmailService
 {
     Task SendEmail(EmailMessageModel message);
+    Task SendMachineRegisterationMail(Machine dbMachine);
+    Task SendSiteRegisterationMail(Site dbSite);
+
 }
 
 public class EmailService : IEmailService
@@ -21,13 +25,39 @@ public class EmailService : IEmailService
         _emailConfig = emailConfig;
     }
 
+    public async Task SendSiteRegisterationMail(Site dbSite)
+    {
+        if (string.IsNullOrWhiteSpace(dbSite.ApplicationUser.Email))
+        {
+            return;
+        }
+        EmailMessageModel mailMessage = new EmailMessageModel(
+   dbSite.ApplicationUser.Email,
+   $"Site registeration details",
+   $"you have registered with hash: {dbSite.Hash}, User Name: {dbSite.ApplicationUser.UserName}, Password: 11111111");
+
+        await this.SendEmail(mailMessage);
+    }
+
+    public async Task SendMachineRegisterationMail(Machine dbMachine)
+    {
+        if (string.IsNullOrWhiteSpace(dbMachine.Site?.ApplicationUser?.Email))
+        {
+            return;
+        }
+
+        EmailMessageModel mailMessage = new EmailMessageModel(
+              dbMachine.Site.ApplicationUser.Email,
+              $"machine registeration details",
+              $"you have registered your machine: {dbMachine.Name} on your hash: {dbMachine.Site.Hash}");
+
+        await this.SendEmail(mailMessage);
+    }
     public async Task SendEmail(EmailMessageModel message)
     {
         var emailMessage = CreateEmailMessage(message);
         await Send(emailMessage);
     }
-
-
     private MimeMessage CreateEmailMessage(EmailMessageModel message)
     {
         // create message
@@ -38,7 +68,6 @@ public class EmailService : IEmailService
         emailMessage.Body = new TextPart(TextFormat.Text) { Text = message.Content };
         return emailMessage;
     }
-    
     private async Task Send(MimeMessage mailMessage)
     {
 

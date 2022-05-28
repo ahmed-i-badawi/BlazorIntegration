@@ -22,7 +22,7 @@
     <ROW Property="AI_REQUIRED_DOTNET_VERSION" MultiBuildValue="DefaultBuild:4.0.1" ValueLocId="-"/>
     <ROW Property="AI_RUN_AS_ADMIN" Value="1"/>
     <ROW Property="AI_SERVAL_TYPE" Value="3"/>
-    <ROW Property="AI_SERVAL_URL" Value="http://Localhost:5050/api/Machine/HashValidator"/>
+    <ROW Property="AI_SERVAL_URL" Value="http://localhost:5050/api/Machine/HashValidator"/>
     <ROW Property="AI_ThemeStyle" Value="default" MultiBuildValue="DefaultBuild:metrowhite" MsiKey="AI_ThemeStyle"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
@@ -37,6 +37,7 @@
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Worker"/>
     <ROW Property="ProductVersion" Value="1.0.0"/>
+    <ROW Property="SERVER_IP" Value="40.68.76.71" Options="1"/>
     <ROW Property="SITE_HASH" Value="Your Value"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{B787FD8E-C9DE-45C6-A654-57311C097F4E}"/>
@@ -58,170 +59,171 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{919215A8-A71F-4469-9351-199E6CD26EFC}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="AI_IA_ENABLE" ComponentId="{4A84B976-3E2E-43C1-9ABA-A5D912973247}" Directory_="APPDIR" Attributes="4" KeyPath="AI_IA_ENABLE" Options="1"/>
-    <ROW Component="APIMSWincorexstatel210.dll" ComponentId="{F97EF9F1-1E4B-44DC-858A-C0B7BE7EF57A}" Directory_="APPDIR" Attributes="0" KeyPath="APIMSWincorexstatel210.dll"/>
+    <ROW Component="APIMSWincorexstatel210.dll" ComponentId="{41226497-EE79-435B-8DDA-61B1BD1358BD}" Directory_="APPDIR" Attributes="0" KeyPath="APIMSWincorexstatel210.dll"/>
     <ROW Component="APPDIR" ComponentId="{A27A8653-8D4A-43A2-B84A-8547BBAE50D9}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="Microsoft.AspNetCore.Connections.Abstractions.dll" ComponentId="{697774E7-A01B-4BB8-A328-B08FE54AAAC9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Connections.Abstractions.dll"/>
-    <ROW Component="Microsoft.AspNetCore.Http.Connections.Client.dll" ComponentId="{70142D3F-2A91-4092-9721-5591E8BEA5AA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Http.Connections.Client.dll"/>
-    <ROW Component="Microsoft.AspNetCore.Http.Connections.Common.dll" ComponentId="{0FD40919-E7BA-442E-A6A7-482E9700BBFA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Http.Connections.Common.dll"/>
-    <ROW Component="Microsoft.AspNetCore.SignalR.Client.Core.dll" ComponentId="{B0FF4D44-C8C1-4154-98FC-A6C96CAB8640}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Client.Core.dll"/>
-    <ROW Component="Microsoft.AspNetCore.SignalR.Client.dll" ComponentId="{FA81F86B-BEFB-44B9-94EB-2775770764CD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Client.dll"/>
-    <ROW Component="Microsoft.AspNetCore.SignalR.Common.dll" ComponentId="{D68289DD-A148-42E1-8077-E55D4BB86E1E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Common.dll"/>
-    <ROW Component="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" ComponentId="{D8704442-D22E-4C4E-A947-594C79608FCF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Protocols.Json.dll"/>
-    <ROW Component="Microsoft.DiaSymReader.Native.x86.dll" ComponentId="{56FC8AD4-31EA-40D3-88B9-98E073D3E5D1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.DiaSymReader.Native.x86.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{CA84E388-5FCB-4612-A215-D6B6EF34C2F6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{B4BC621B-CA75-433D-8C60-130055632D90}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{39685ED9-6755-4CC4-B31F-B1D823380251}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{D9E56EFA-0AC5-4142-8577-06CFF51531C4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{39F56C80-C1F8-4CE9-8FFE-557A64DAA4BD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{A6CA7EE5-D03F-4048-A44C-E71CD0B2B5F7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{61D7AC4E-54EA-4CC1-A582-DA6E1F9835A1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{18FB2015-82FA-4EC9-9DE5-6B56F4151623}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{9FD7D9A3-25FE-487B-89F6-91CAC1F60896}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{CCA39587-C246-4CC7-B1B5-47DE306D03EC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
-    <ROW Component="Microsoft.Extensions.Features.dll" ComponentId="{C39DC0B2-090B-4D6F-B7DB-514A2EC0718D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Features.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{02FB7AA0-F690-465D-BA3A-AD146D2F4D7A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{542D79C9-0E2B-4BC6-B0C3-D25EDE0BA0FE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
-    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{C381493B-FD41-43EE-AE4A-2FF522E0B277}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{7989083D-E665-4018-99DD-B7188C9C9CAC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.WindowsServices.dll" ComponentId="{2B7D7DA6-C323-4A0C-9D09-F11808B5D7C8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.WindowsServices.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{41B0C4DE-908C-450F-BA3B-0474EE25DCB7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
-    <ROW Component="Microsoft.Extensions.Http.dll" ComponentId="{DCD0BBF8-F986-405C-81B6-DCF339F269EF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Http.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{6E712377-A296-4021-8F14-41924AC49A2F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{AE505D23-9167-4BE4-9E44-0D484A9932F5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{959CD947-A4E1-4A92-AF52-7B94F35EDEDD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{E44EC7A6-6184-4C63-BE78-7FD58588B8EB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{4FEF5DDD-06FB-463B-99CB-1F8221D4E23A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{5D02B8F6-FFCD-49ED-A2BC-868D189CB239}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{11F0E7B5-BFD9-4EDF-A5B6-A32825CBA2D6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{A049129C-2A98-4841-9411-9163F4061078}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{0A3A515A-2C08-4FC7-AA75-1421D9139351}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
-    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{2BAADDA1-09AB-409C-9136-C880336B8741}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
-    <ROW Component="Microsoft.Win32.Primitives.dll" ComponentId="{CB7D5CC2-4F43-4FF1-8600-401872CFA17C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Win32.Primitives.dll"/>
-    <ROW Component="Microsoft.Win32.Registry.dll" ComponentId="{DE9C7D49-0DF4-42C1-AB65-C22FFA15666E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Win32.Registry.dll"/>
+    <ROW Component="Microsoft.AspNetCore.Connections.Abstractions.dll" ComponentId="{66B6E71B-FA5E-4511-89E5-8F321A4E2E16}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Connections.Abstractions.dll"/>
+    <ROW Component="Microsoft.AspNetCore.Http.Connections.Client.dll" ComponentId="{82B698FF-38D4-4B6F-ABF1-8C1A6A51C7F6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Http.Connections.Client.dll"/>
+    <ROW Component="Microsoft.AspNetCore.Http.Connections.Common.dll" ComponentId="{BBB26473-2F5D-4E06-96AC-7B041F235DD8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.Http.Connections.Common.dll"/>
+    <ROW Component="Microsoft.AspNetCore.SignalR.Client.Core.dll" ComponentId="{4056EBEC-DE62-4073-A4BE-DE085BF780A1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Client.Core.dll"/>
+    <ROW Component="Microsoft.AspNetCore.SignalR.Client.dll" ComponentId="{3791F5EB-39AD-4BF6-9529-B80E3FC4B6F6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Client.dll"/>
+    <ROW Component="Microsoft.AspNetCore.SignalR.Common.dll" ComponentId="{0CD7A674-805E-4F13-915E-29AFE054D39F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Common.dll"/>
+    <ROW Component="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" ComponentId="{4C4120CE-5CA5-4D83-9AF6-9CC821A823A4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AspNetCore.SignalR.Protocols.Json.dll"/>
+    <ROW Component="Microsoft.DiaSymReader.Native.x86.dll" ComponentId="{B208B07E-DEEE-4E36-8F3C-1437A9C2EE34}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.DiaSymReader.Native.x86.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{9C819416-5CDB-443F-8A45-47E12347CBCF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{E9552ABE-B10E-4F8C-862C-F4656C1F1243}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{6EDEAA1B-DB0D-4F6F-B715-DC2B7FE73832}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{DA610792-902D-465B-917B-BD84B5C90FEF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{4EC27186-B9BC-4F0C-84A6-066AAF1417F8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{FB21F4BC-568C-4543-B76A-4C807E27E16E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{20794A19-2C4C-4010-AA48-A203ACCAF541}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{F9063146-8976-4C26-8A05-794CFEBA4171}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{5755E0F7-B65D-4CDC-A0E4-E54050771C42}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{40132988-87A9-49E5-9D58-55BC236E8093}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Component="Microsoft.Extensions.Features.dll" ComponentId="{D9F57CE3-5109-494A-AE74-4C3D52AAE66C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Features.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{0D3DDFE0-2CCB-40D7-9F63-DFF553D13D74}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{60B370EE-75F3-4AD9-B7B4-17B17FB428A1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{04FC8D7D-2DFC-4510-848D-C425198A55C6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{F9D05A5A-C72E-4C0F-95CB-22DA43A5F4C0}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.WindowsServices.dll" ComponentId="{A877D160-6CFF-4FCC-977C-24E61FB161A7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.WindowsServices.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{8215BFD6-9AD3-4F8E-90A8-92954A47C41F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Http.dll" ComponentId="{98CD2266-1838-4BEE-8A5F-494EB4D4A30A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Http.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{F5379D71-F349-448C-ACFE-5AC08C885015}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{F656F293-C8CD-4AD3-BD9B-69520C535C50}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{7943FF6D-1AD5-4BB8-A294-1CAB250FD10D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{012D13F7-CDDA-410F-BA5A-B5E077F6C73F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{A696627A-3249-4208-8E13-7560AA6AAA44}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{86574A80-47AC-47C8-BF0E-702D0336B276}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{E3537AD1-DB88-45C0-8F5B-090467F46BBB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{3C38444A-D83C-44A7-B8C0-6E855A5730C7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{BE2ECF3D-9CF0-4A0D-A5C3-69A0DE0DE1FC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{80D4CBAD-C63C-470E-A528-6F2EAD86A532}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Microsoft.Win32.Primitives.dll" ComponentId="{67594170-32B5-4F26-AA70-AA84F3A012A8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Win32.Primitives.dll"/>
+    <ROW Component="Microsoft.Win32.Registry.dll" ComponentId="{B0687497-38EC-49F1-973F-CC7D26D4D67B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Win32.Registry.dll"/>
     <ROW Component="ProductInformation" ComponentId="{57B4BCB8-E3DC-401E-BC7C-9988AA1E0E36}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{14573F01-4568-4C1E-AC77-32F9D7E24889}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="System.CodeDom.dll" ComponentId="{8D58B6B2-CD05-4BE8-BB04-735F015E1C9C}" Directory_="APPDIR" Attributes="0" KeyPath="System.CodeDom.dll"/>
-    <ROW Component="System.Collections.Concurrent.dll" ComponentId="{33DF94A1-0C7B-40ED-9F3A-312BD6B72F67}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Concurrent.dll"/>
-    <ROW Component="System.Collections.Immutable.dll" ComponentId="{F34F212C-ECE4-48B7-9263-C651DA2EA9C9}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Immutable.dll"/>
-    <ROW Component="System.Collections.NonGeneric.dll" ComponentId="{6F3F0EB4-A5EC-4194-9E13-55A87DE6E138}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.NonGeneric.dll"/>
-    <ROW Component="System.Collections.Specialized.dll" ComponentId="{026990FC-3318-4C25-B8A2-651836A3518A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Specialized.dll"/>
-    <ROW Component="System.Collections.dll" ComponentId="{11DAFD60-9CEC-4242-8132-A5250C0ADB83}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.dll"/>
-    <ROW Component="System.ComponentModel.Primitives.dll" ComponentId="{49B7EBA3-4FC8-4167-B481-D2D43637824F}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.Primitives.dll"/>
-    <ROW Component="System.ComponentModel.TypeConverter.dll" ComponentId="{30D33C3D-6966-4293-934E-72699561B263}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.TypeConverter.dll"/>
-    <ROW Component="System.ComponentModel.dll" ComponentId="{3C492B70-17CD-4AD3-BE76-D2C4152BE8F7}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.dll"/>
-    <ROW Component="System.Console.dll" ComponentId="{B3E72718-923F-4819-B0A2-FCFEB2D521A7}" Directory_="APPDIR" Attributes="0" KeyPath="System.Console.dll"/>
-    <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{87E15C43-D5CE-4D01-93CD-629EE6BE7AF8}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
-    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{31529FC9-2978-43D3-9200-79922D45D2B7}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
-    <ROW Component="System.Diagnostics.Process.dll" ComponentId="{050AB0CA-EFA7-4839-B53F-CF9EEDF58E95}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.Process.dll"/>
-    <ROW Component="System.Diagnostics.StackTrace.dll" ComponentId="{2BCEBD6C-D07C-4D8B-9C00-5BC53B6FC980}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.StackTrace.dll"/>
-    <ROW Component="System.IO.Compression.Brotli.dll" ComponentId="{C15541FB-E0FB-4D8F-88D8-FCA3846976A8}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.Brotli.dll"/>
-    <ROW Component="System.IO.Compression.Native.dll" ComponentId="{EA4C8559-6751-4512-AAB2-B6821B5961F4}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.Native.dll"/>
-    <ROW Component="System.IO.Compression.dll" ComponentId="{D15C3214-58E6-4E1B-99D8-FC9885282AA9}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.dll"/>
-    <ROW Component="System.IO.FileSystem.Watcher.dll" ComponentId="{9C6439DA-C2FD-4528-BAC6-B2EAB258E336}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.FileSystem.Watcher.dll"/>
-    <ROW Component="System.IO.MemoryMappedFiles.dll" ComponentId="{4EEE9302-EDE1-4868-9FC1-EE30E049731A}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.MemoryMappedFiles.dll"/>
-    <ROW Component="System.IO.Pipelines.dll" ComponentId="{177620E6-AC7C-4B88-ABEE-F5B8ADF35A74}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
-    <ROW Component="System.Linq.Expressions.dll" ComponentId="{EED04F79-CC16-432E-A212-773913D44177}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.Expressions.dll"/>
-    <ROW Component="System.Linq.dll" ComponentId="{07C3D8BE-8078-4218-BD42-91E77DDE8807}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.dll"/>
-    <ROW Component="System.Management.dll" ComponentId="{6CDCBFF8-9E31-4539-BE3D-DAFC7B40BA78}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
-    <ROW Component="System.Memory.dll" ComponentId="{4EC3FD0F-7E06-476F-9471-AC03DBE7172A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Memory.dll"/>
-    <ROW Component="System.Net.Http.dll" ComponentId="{77B7FD9A-0031-4DF0-BD8C-A9E4564AFEF4}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Http.dll"/>
-    <ROW Component="System.Net.NameResolution.dll" ComponentId="{6FAE0CF0-08F1-45D3-8D55-F2689B468CEB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.NameResolution.dll"/>
-    <ROW Component="System.Net.NetworkInformation.dll" ComponentId="{24749919-213F-469A-BA2C-B245A06AAE7F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.NetworkInformation.dll"/>
-    <ROW Component="System.Net.Primitives.dll" ComponentId="{E1A82CEF-5D94-430D-8701-24B7D1305790}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Primitives.dll"/>
-    <ROW Component="System.Net.Quic.dll" ComponentId="{C2F7A20E-C29F-4A95-B1A7-BFA953ECB8B3}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Quic.dll"/>
-    <ROW Component="System.Net.Requests.dll" ComponentId="{A70A3872-B347-4BA6-998D-4D3A080D9A78}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Requests.dll"/>
-    <ROW Component="System.Net.Security.dll" ComponentId="{1B72F820-5051-4ED0-BBB2-4DE06F2DD1B1}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Security.dll"/>
-    <ROW Component="System.Net.Sockets.dll" ComponentId="{A99FF03C-9450-4B12-95F7-6086D251CC34}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Sockets.dll"/>
-    <ROW Component="System.Net.WebHeaderCollection.dll" ComponentId="{88DD7AE8-4E17-40A8-AC2B-2F413AE4C8E4}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebHeaderCollection.dll"/>
-    <ROW Component="System.Net.WebSockets.Client.dll" ComponentId="{221F5F97-7C3C-4777-801F-428000626AF8}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebSockets.Client.dll"/>
-    <ROW Component="System.Net.WebSockets.dll" ComponentId="{8916F31F-97A5-402A-A306-D27EB6EB8672}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebSockets.dll"/>
-    <ROW Component="System.ObjectModel.dll" ComponentId="{2463714D-0E02-40FB-A0AA-5EB4C056690A}" Directory_="APPDIR" Attributes="0" KeyPath="System.ObjectModel.dll"/>
-    <ROW Component="System.Private.CoreLib.dll" ComponentId="{8D7A3E2F-56CD-4EF7-8BF1-6C00565481EB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Private.CoreLib.dll"/>
-    <ROW Component="System.Private.Uri.dll" ComponentId="{442E5C9E-FFDD-43D4-8A30-55201F01BF55}" Directory_="APPDIR" Attributes="0" KeyPath="System.Private.Uri.dll"/>
-    <ROW Component="System.Reflection.Metadata.dll" ComponentId="{A59BF669-3DB3-484E-B1C6-2238CAEC4923}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reflection.Metadata.dll"/>
-    <ROW Component="System.Runtime.CompilerServices.Unsafe.dll" ComponentId="{0941284D-5AFA-46DD-BF26-E6E66DEBCFE0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsafe.dll"/>
-    <ROW Component="System.Runtime.InteropServices.RuntimeInformation.dll" ComponentId="{5B0116CB-5EDA-4D58-AACF-B240146A3474}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.InteropServices.RuntimeInformation.dll"/>
-    <ROW Component="System.Runtime.Numerics.dll" ComponentId="{48570AC6-B862-4549-95D2-38F846A88C32}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.Numerics.dll"/>
-    <ROW Component="System.Runtime.dll" ComponentId="{9B6A265C-04E5-4C66-B41B-9646076284D5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.dll"/>
-    <ROW Component="System.Security.Claims.dll" ComponentId="{2319C498-1665-4A43-AEC0-6101F5DE0AA0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Claims.dll"/>
-    <ROW Component="System.Security.Cryptography.Algorithms.dll" ComponentId="{519EACDE-47DC-4C7F-A8B8-03DA8F2CBD15}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Algorithms.dll"/>
-    <ROW Component="System.Security.Cryptography.Cng.dll" ComponentId="{1BC463D8-51F1-43F8-9FCB-5ADE374A96E3}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Cng.dll"/>
-    <ROW Component="System.Security.Cryptography.Csp.dll" ComponentId="{E61CB727-868B-4400-A263-A6DBE2DBE7B3}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Csp.dll"/>
-    <ROW Component="System.Security.Cryptography.Encoding.dll" ComponentId="{28C0F781-D9E4-4453-A7E3-5F3A6058F93B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Encoding.dll"/>
-    <ROW Component="System.Security.Cryptography.Primitives.dll" ComponentId="{58FBCC92-9B37-49E2-81D5-2015F5E515A1}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Primitives.dll"/>
-    <ROW Component="System.Security.Cryptography.X509Certificates.dll" ComponentId="{FAC78398-A7E7-4798-B676-A0D917BFB6CD}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.X509Certificates.dll"/>
-    <ROW Component="System.Security.Principal.Windows.dll" ComponentId="{5F927139-7DBD-4AB8-8976-12983FDC996A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Principal.Windows.dll"/>
-    <ROW Component="System.ServiceProcess.ServiceController.dll" ComponentId="{89DF4983-D150-46E2-879D-272A5E3F32C1}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceProcess.ServiceController.dll"/>
-    <ROW Component="System.Text.Encoding.Extensions.dll" ComponentId="{4C09FC02-FD9C-4A82-9534-781594D3B019}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encoding.Extensions.dll"/>
-    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{6249BCB1-B168-4815-8D28-7C2C14E737CF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
-    <ROW Component="System.Text.Json.dll" ComponentId="{3990F601-EA09-4791-A968-09C2E2CC5261}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
-    <ROW Component="System.Threading.Channels.dll" ComponentId="{C60F00F6-4DD0-4822-9C7F-7F246898E1BA}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.Channels.dll"/>
-    <ROW Component="System.Threading.ThreadPool.dll" ComponentId="{1D79C407-D3EC-4ADB-B643-15515500D78B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.ThreadPool.dll"/>
-    <ROW Component="System.Threading.dll" ComponentId="{E741F38B-DC0B-4A3C-B218-9C8B50819CB1}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.dll"/>
-    <ROW Component="System.dll" ComponentId="{1731FCF3-9705-4EDF-82AF-FD8EB3B009C4}" Directory_="APPDIR" Attributes="0" KeyPath="System.dll"/>
-    <ROW Component="WorkerService.dll" ComponentId="{C11405C3-6559-476E-8EFF-9EA5EB9BC87D}" Directory_="APPDIR" Attributes="0" KeyPath="WorkerService.dll"/>
+    <ROW Component="System.CodeDom.dll" ComponentId="{8AC0A874-370A-4E99-BB4C-E5C7526694A8}" Directory_="APPDIR" Attributes="0" KeyPath="System.CodeDom.dll"/>
+    <ROW Component="System.Collections.Concurrent.dll" ComponentId="{EA939DDF-EDB5-49C8-B9B0-4A5BBECC950F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Concurrent.dll"/>
+    <ROW Component="System.Collections.Immutable.dll" ComponentId="{7CFEC17C-5AE6-4715-8113-0CB1E764531B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Immutable.dll"/>
+    <ROW Component="System.Collections.NonGeneric.dll" ComponentId="{20DD1634-BFDE-42C7-BBA3-F09479822B9A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.NonGeneric.dll"/>
+    <ROW Component="System.Collections.Specialized.dll" ComponentId="{B41F1702-C900-4674-A6D3-A75F3C9CA97C}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.Specialized.dll"/>
+    <ROW Component="System.Collections.dll" ComponentId="{EC6B8E68-7F2F-488F-B0D0-958C368B2B53}" Directory_="APPDIR" Attributes="0" KeyPath="System.Collections.dll"/>
+    <ROW Component="System.ComponentModel.Primitives.dll" ComponentId="{C6ABD18E-6704-4EE6-B974-AFBDBE063365}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.Primitives.dll"/>
+    <ROW Component="System.ComponentModel.TypeConverter.dll" ComponentId="{7D2F2746-4978-42BF-9150-8B6C0CA4106F}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.TypeConverter.dll"/>
+    <ROW Component="System.ComponentModel.dll" ComponentId="{2F3B3E94-EAB2-417F-B38C-ED06F7F3968E}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.dll"/>
+    <ROW Component="System.Console.dll" ComponentId="{E5279F6A-7C28-4C35-8B31-C45178E57902}" Directory_="APPDIR" Attributes="0" KeyPath="System.Console.dll"/>
+    <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{0C2C0C99-E751-4F40-9FF8-51011A066D27}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{D92F930D-D4E4-4F7D-A066-DC2066DAE0C6}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Diagnostics.Process.dll" ComponentId="{7D680C4E-FC5A-4E56-A075-C4EA71068457}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.Process.dll"/>
+    <ROW Component="System.Diagnostics.StackTrace.dll" ComponentId="{CA62F7E0-3B5E-4705-96D9-E5D3F9BE357B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.StackTrace.dll"/>
+    <ROW Component="System.IO.Compression.Brotli.dll" ComponentId="{EA3383F8-4EBA-46FF-A41C-3BD938B6E953}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.Brotli.dll"/>
+    <ROW Component="System.IO.Compression.Native.dll" ComponentId="{A324AD6D-D5C6-475A-8509-2B3B5FD931EA}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.Native.dll"/>
+    <ROW Component="System.IO.Compression.dll" ComponentId="{117E4D41-B96C-4E6A-9481-658D06BD2018}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Compression.dll"/>
+    <ROW Component="System.IO.FileSystem.Watcher.dll" ComponentId="{10A46522-81F3-44A7-A28F-B1D289450185}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.FileSystem.Watcher.dll"/>
+    <ROW Component="System.IO.MemoryMappedFiles.dll" ComponentId="{89F10117-AF15-4074-8B61-DDC856363653}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.MemoryMappedFiles.dll"/>
+    <ROW Component="System.IO.Pipelines.dll" ComponentId="{EC4F33E7-9B7B-471E-AC6D-CF0AEF44F0FC}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
+    <ROW Component="System.Linq.Expressions.dll" ComponentId="{4C75FB4F-99F4-4A0B-B9F6-C312C36F7E27}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.Expressions.dll"/>
+    <ROW Component="System.Linq.dll" ComponentId="{E42A6DB5-1CE9-4D52-8576-C184B21E5E41}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.dll"/>
+    <ROW Component="System.Management.dll" ComponentId="{A2688E71-4F9F-47B0-A141-7465C66B9795}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
+    <ROW Component="System.Memory.dll" ComponentId="{90367A48-BE7E-4DE6-99A3-15FEDEC86A09}" Directory_="APPDIR" Attributes="0" KeyPath="System.Memory.dll"/>
+    <ROW Component="System.Net.Http.dll" ComponentId="{AB785E29-B000-4869-ADAD-D77204EA106C}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Http.dll"/>
+    <ROW Component="System.Net.NameResolution.dll" ComponentId="{4A97A47F-424B-4ECF-9BF5-F2A845C0229F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.NameResolution.dll"/>
+    <ROW Component="System.Net.NetworkInformation.dll" ComponentId="{0F4177C8-538E-45D8-B3C9-15FFDE0742A0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.NetworkInformation.dll"/>
+    <ROW Component="System.Net.Primitives.dll" ComponentId="{4D27CAE0-CF85-47FD-8FC8-B1FD8D62703C}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Primitives.dll"/>
+    <ROW Component="System.Net.Quic.dll" ComponentId="{288EBADA-6257-4D94-BCA6-045FEE40AF33}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Quic.dll"/>
+    <ROW Component="System.Net.Requests.dll" ComponentId="{9903A5EA-F3AE-4ABD-BC14-4C8BB922CA76}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Requests.dll"/>
+    <ROW Component="System.Net.Security.dll" ComponentId="{8B65E25A-674E-4E42-955B-E6FCBFA27C58}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Security.dll"/>
+    <ROW Component="System.Net.Sockets.dll" ComponentId="{5A4F0541-3B1E-440B-9AE2-BC13D34B0CC9}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Sockets.dll"/>
+    <ROW Component="System.Net.WebHeaderCollection.dll" ComponentId="{D02B54E2-87C7-4D3B-B03B-D14030616698}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebHeaderCollection.dll"/>
+    <ROW Component="System.Net.WebSockets.Client.dll" ComponentId="{0F5DE538-D9E3-451D-8576-D8199EF92AEF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebSockets.Client.dll"/>
+    <ROW Component="System.Net.WebSockets.dll" ComponentId="{15609412-BCB1-47BF-A38A-BCFE8BFBCE10}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.WebSockets.dll"/>
+    <ROW Component="System.ObjectModel.dll" ComponentId="{1C59C60B-5D8B-42B8-9CC6-9F87AC5CCFAD}" Directory_="APPDIR" Attributes="0" KeyPath="System.ObjectModel.dll"/>
+    <ROW Component="System.Private.CoreLib.dll" ComponentId="{028B295F-D61B-4F16-83CF-0BD8AA9C5DFB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Private.CoreLib.dll"/>
+    <ROW Component="System.Private.Uri.dll" ComponentId="{DB63E492-473A-4885-92B6-948129EFF1D5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Private.Uri.dll"/>
+    <ROW Component="System.Reflection.Metadata.dll" ComponentId="{BB32BD1C-3D20-4ADB-BAC9-A06B74B20B90}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reflection.Metadata.dll"/>
+    <ROW Component="System.Runtime.CompilerServices.Unsafe.dll" ComponentId="{24470DD4-9D6C-4280-8A6C-A2375543E157}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsafe.dll"/>
+    <ROW Component="System.Runtime.InteropServices.RuntimeInformation.dll" ComponentId="{B0A5942A-367D-4DC5-B014-FFFE0997C32D}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.InteropServices.RuntimeInformation.dll"/>
+    <ROW Component="System.Runtime.Numerics.dll" ComponentId="{BE062336-E4CB-4000-A7BA-4573529973FB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.Numerics.dll"/>
+    <ROW Component="System.Runtime.dll" ComponentId="{099E4887-592A-49AD-A7DC-CFAFC1A56F74}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.dll"/>
+    <ROW Component="System.Security.Claims.dll" ComponentId="{E02DDD25-0FB8-4C0D-B39C-FE964AB50535}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Claims.dll"/>
+    <ROW Component="System.Security.Cryptography.Algorithms.dll" ComponentId="{FCCEC710-11E8-4356-A637-E754ACF6D5A6}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Algorithms.dll"/>
+    <ROW Component="System.Security.Cryptography.Cng.dll" ComponentId="{E95072E8-5389-4C02-BFA3-1F3766339B29}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Cng.dll"/>
+    <ROW Component="System.Security.Cryptography.Csp.dll" ComponentId="{BDDE25AB-9F8E-4667-BDF2-E62D731C6B05}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Csp.dll"/>
+    <ROW Component="System.Security.Cryptography.Encoding.dll" ComponentId="{3865C5D4-F321-457D-8F19-2E9FC7932FB2}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Encoding.dll"/>
+    <ROW Component="System.Security.Cryptography.Primitives.dll" ComponentId="{AE36530E-5F26-42CE-A27A-3D7085B95981}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Primitives.dll"/>
+    <ROW Component="System.Security.Cryptography.X509Certificates.dll" ComponentId="{B0EEDC40-76D3-4B07-8DE4-D386C598B860}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.X509Certificates.dll"/>
+    <ROW Component="System.Security.Principal.Windows.dll" ComponentId="{6F2FA0C0-23D1-4F43-A4B3-40B9736017D0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Principal.Windows.dll"/>
+    <ROW Component="System.ServiceProcess.ServiceController.dll" ComponentId="{E316F32A-C95C-4871-9F17-3B8536C92F74}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceProcess.ServiceController.dll"/>
+    <ROW Component="System.Text.Encoding.Extensions.dll" ComponentId="{7FE040D5-30C6-4E13-86FB-72D11B7536A4}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encoding.Extensions.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{FF9A9840-5393-4B3F-A05B-23F02D0099A7}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{197666DB-F95B-42A7-947D-BF6193ED875F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
+    <ROW Component="System.Threading.Channels.dll" ComponentId="{D53D32A6-FEC8-4AA1-BCC6-D273C1DF7FED}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.Channels.dll"/>
+    <ROW Component="System.Threading.ThreadPool.dll" ComponentId="{792499DF-4775-4160-9719-88E3E0680C44}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.ThreadPool.dll"/>
+    <ROW Component="System.Threading.dll" ComponentId="{D6905760-5FC4-4248-95FB-4189DC9DF3CC}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.dll"/>
+    <ROW Component="System.dll" ComponentId="{62FC4777-3221-4867-9C71-6FF35E89CC08}" Directory_="APPDIR" Attributes="0" KeyPath="System.dll"/>
+    <ROW Component="WorkerService.dll" ComponentId="{43819F9C-CF0B-4558-AAC2-E56A7A49E226}" Directory_="APPDIR" Attributes="0" KeyPath="WorkerService.dll"/>
     <ROW Component="WorkerService.exe" ComponentId="{09E5C045-AEE0-4DDF-9F79-09F664A755DE}" Directory_="APPDIR" Attributes="0" KeyPath="WorkerService.exe"/>
-    <ROW Component="apimswincoreconsolel110.dll" ComponentId="{9010B1A7-2355-4EEC-9E84-12EE878C9A8C}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreconsolel110.dll"/>
-    <ROW Component="apimswincoreconsolel120.dll" ComponentId="{E43BC775-B63C-4651-B795-EF4B02709E1B}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreconsolel120.dll"/>
-    <ROW Component="apimswincoredatetimel110.dll" ComponentId="{F200D78A-9CE8-4FED-BAD8-D9F5CBE4DA38}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoredatetimel110.dll"/>
-    <ROW Component="apimswincoredebugl110.dll" ComponentId="{E618AE1E-5557-4242-BC61-AB51C91172D9}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoredebugl110.dll"/>
-    <ROW Component="apimswincoreerrorhandlingl110.dll" ComponentId="{931C148A-B9E1-4599-B260-D8533D91BCAC}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreerrorhandlingl110.dll"/>
-    <ROW Component="apimswincorefilel110.dll" ComponentId="{39D1F587-AC1D-42B8-B231-52200EE7E9C1}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel110.dll"/>
-    <ROW Component="apimswincorefilel120.dll" ComponentId="{98739B5E-F11F-4817-A1A6-31072A7501CB}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel120.dll"/>
-    <ROW Component="apimswincorefilel210.dll" ComponentId="{661CD56C-874E-45A2-95F2-0589F846CDD5}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel210.dll"/>
-    <ROW Component="apimswincorehandlel110.dll" ComponentId="{B4226187-9338-4F3A-B712-72ABF8048C13}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorehandlel110.dll"/>
-    <ROW Component="apimswincoreheapl110.dll" ComponentId="{4BAC8650-1FA0-479F-B8DD-7CB57705421F}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreheapl110.dll"/>
-    <ROW Component="apimswincoreinterlockedl110.dll" ComponentId="{4EDAD5B6-6388-4365-9AE4-9D5A71E07545}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreinterlockedl110.dll"/>
-    <ROW Component="apimswincorelibraryloaderl110.dll" ComponentId="{62E32B9D-7564-484A-807B-2507F4E4494A}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorelibraryloaderl110.dll"/>
-    <ROW Component="apimswincorelocalizationl120.dll" ComponentId="{7C5D98AB-F697-48A2-A04D-6AA7968EBFEC}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorelocalizationl120.dll"/>
-    <ROW Component="apimswincorememoryl110.dll" ComponentId="{2D8C9EA3-8BCC-4A16-8359-7E83D0941048}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorememoryl110.dll"/>
-    <ROW Component="apimswincorenamedpipel110.dll" ComponentId="{2F84881E-B6F0-4A10-8BFC-636C8BDC0F8D}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorenamedpipel110.dll"/>
-    <ROW Component="apimswincoreprocessenvironmentl110.dll" ComponentId="{4586B273-C385-4C4F-B30F-EFAF7202B2A3}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessenvironmentl110.dll"/>
-    <ROW Component="apimswincoreprocessthreadsl110.dll" ComponentId="{5DF58B80-559B-4C83-B1A9-AB147ECADE70}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessthreadsl110.dll"/>
-    <ROW Component="apimswincoreprocessthreadsl111.dll" ComponentId="{2DD6C4E4-1062-4677-A9AD-6B95536BA9F6}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessthreadsl111.dll"/>
-    <ROW Component="apimswincoreprofilel110.dll" ComponentId="{65A8AEBD-174C-47C4-9C21-A4B72ECA05ED}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprofilel110.dll"/>
-    <ROW Component="apimswincorertlsupportl110.dll" ComponentId="{0FBD8CDD-6B1B-46E3-88A7-6BEC66789768}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorertlsupportl110.dll"/>
-    <ROW Component="apimswincorestringl110.dll" ComponentId="{9AA54DB7-D1C4-4E30-90B2-68ECF9B4899B}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorestringl110.dll"/>
-    <ROW Component="apimswincoresynchl110.dll" ComponentId="{D4BB78B4-BA6C-43DC-B1DB-796AF7C8CD50}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresynchl110.dll"/>
-    <ROW Component="apimswincoresynchl120.dll" ComponentId="{E06B8DA1-0979-4292-8159-F202FC46B650}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresynchl120.dll"/>
-    <ROW Component="apimswincoresysinfol110.dll" ComponentId="{4B5EB039-5084-4C16-9F13-961ABC5C2436}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresysinfol110.dll"/>
-    <ROW Component="apimswincoretimezonel110.dll" ComponentId="{01D42B29-C79E-4F69-BD8F-784B2CD5DD58}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoretimezonel110.dll"/>
-    <ROW Component="apimswincoreutill110.dll" ComponentId="{2BAD2AB8-402C-4866-8E5E-94022DA0A6DF}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreutill110.dll"/>
-    <ROW Component="apimswincrtconiol110.dll" ComponentId="{6B806086-9F2E-4DF4-9BE7-FCC65386B84C}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtconiol110.dll"/>
-    <ROW Component="apimswincrtconvertl110.dll" ComponentId="{BA4E55BD-BF7D-488B-88C5-34EBA91ED5C3}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtconvertl110.dll"/>
-    <ROW Component="apimswincrtenvironmentl110.dll" ComponentId="{EB8E5665-4F1F-42AB-86C7-4AF34D577A49}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtenvironmentl110.dll"/>
-    <ROW Component="apimswincrtfilesysteml110.dll" ComponentId="{53B5219A-8B6E-4388-81A0-2ED77F4BD49D}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtfilesysteml110.dll"/>
-    <ROW Component="apimswincrtheapl110.dll" ComponentId="{0CF42FE3-1726-44B0-AFF2-376C7F516198}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtheapl110.dll"/>
-    <ROW Component="apimswincrtlocalel110.dll" ComponentId="{A3F1B34F-3C94-4505-A4F0-C0D67FC7A217}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtlocalel110.dll"/>
-    <ROW Component="apimswincrtmathl110.dll" ComponentId="{ECFFF719-37DA-49C9-A7A9-FB35A71638C1}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtmathl110.dll"/>
-    <ROW Component="apimswincrtmultibytel110.dll" ComponentId="{AB388974-3584-40D1-BA05-F382ACA4F4C8}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtmultibytel110.dll"/>
-    <ROW Component="apimswincrtprivatel110.dll" ComponentId="{49BD2A80-1C23-4180-9DD8-9362E7BD2B72}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtprivatel110.dll"/>
-    <ROW Component="apimswincrtprocessl110.dll" ComponentId="{4D1C9721-C701-4E8A-AE74-328F9B03ABDB}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtprocessl110.dll"/>
-    <ROW Component="apimswincrtruntimel110.dll" ComponentId="{DD9B4112-321C-4E96-925E-C4B1A7A02F15}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtruntimel110.dll"/>
-    <ROW Component="apimswincrtstdiol110.dll" ComponentId="{D52276FD-EA24-4CF9-867A-013CAB3ACD6F}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtstdiol110.dll"/>
-    <ROW Component="apimswincrtstringl110.dll" ComponentId="{F7BF15DD-9FD1-46AF-94E9-DC13CF9910F0}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtstringl110.dll"/>
-    <ROW Component="apimswincrttimel110.dll" ComponentId="{41D6E7B0-127D-475E-AC45-573F1F90873F}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrttimel110.dll"/>
-    <ROW Component="apimswincrtutilityl110.dll" ComponentId="{D9F18EC2-60E2-41F1-A1BA-AC76A73A4059}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtutilityl110.dll"/>
-    <ROW Component="appsettings.Development.json" ComponentId="{B69A2411-2500-49FC-9A71-8AE717FAFFEC}" Directory_="APPDIR" Attributes="0" KeyPath="appsettings.Development.json" Type="0"/>
-    <ROW Component="clretwrc.dll" ComponentId="{F41DE1EF-D63C-4FB9-A101-F3848D8F9580}" Directory_="APPDIR" Attributes="0" KeyPath="clretwrc.dll"/>
-    <ROW Component="clrjit.dll" ComponentId="{07290E51-7B25-49E0-8BE9-BE392013ABB7}" Directory_="APPDIR" Attributes="0" KeyPath="clrjit.dll"/>
-    <ROW Component="coreclr.dll" ComponentId="{763D7475-03F0-4BFD-96CC-21CB153292B1}" Directory_="APPDIR" Attributes="0" KeyPath="coreclr.dll"/>
-    <ROW Component="createdump.exe" ComponentId="{472B2C81-E356-4A69-ABC2-FB7385F97F1A}" Directory_="APPDIR" Attributes="0" KeyPath="createdump.exe"/>
-    <ROW Component="dbgshim.dll" ComponentId="{4A05EEB9-4222-4EA9-AECF-6FFF49AB725A}" Directory_="APPDIR" Attributes="0" KeyPath="dbgshim.dll"/>
-    <ROW Component="hostfxr.dll" ComponentId="{16B2D135-4FAD-437A-8D7F-F3CBD10069B4}" Directory_="APPDIR" Attributes="0" KeyPath="hostfxr.dll"/>
-    <ROW Component="hostpolicy.dll" ComponentId="{E9B2464D-79CA-455A-9A67-8E6C567DEDA2}" Directory_="APPDIR" Attributes="0" KeyPath="hostpolicy.dll"/>
-    <ROW Component="mscordaccore.dll" ComponentId="{85DBA482-5C51-4FE5-9E7E-F51CA4C811DC}" Directory_="APPDIR" Attributes="0" KeyPath="mscordaccore.dll"/>
-    <ROW Component="mscordaccore_x86_x86_6.0.222.6406.dll" ComponentId="{2DCD59DC-B81E-43E7-97DA-057DCFB2186A}" Directory_="APPDIR" Attributes="0" KeyPath="mscordaccore_x86_x86_6.0.222.6406.dll"/>
-    <ROW Component="mscordbi.dll" ComponentId="{96130955-32A8-4294-B0CE-8CBAC5BB6FAF}" Directory_="APPDIR" Attributes="0" KeyPath="mscordbi.dll"/>
-    <ROW Component="mscorrc.dll" ComponentId="{D6BC9893-CEB3-4440-BCCB-6B84FD75F530}" Directory_="APPDIR" Attributes="0" KeyPath="mscorrc.dll"/>
-    <ROW Component="msquic.dll" ComponentId="{6E9D84E1-5A05-428C-ACA4-32C0AE44216D}" Directory_="APPDIR" Attributes="0" KeyPath="msquic.dll"/>
-    <ROW Component="ucrtbase.dll" ComponentId="{BB54A258-769C-4771-92C0-951EE0A41191}" Directory_="APPDIR" Attributes="0" KeyPath="ucrtbase.dll"/>
+    <ROW Component="apimswincoreconsolel110.dll" ComponentId="{1B647FE0-6A74-4B3A-8749-8014188A3455}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreconsolel110.dll"/>
+    <ROW Component="apimswincoreconsolel120.dll" ComponentId="{02D02502-A557-4D89-A062-A58BD8E09984}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreconsolel120.dll"/>
+    <ROW Component="apimswincoredatetimel110.dll" ComponentId="{10986372-4187-4572-A030-AA8F1C916261}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoredatetimel110.dll"/>
+    <ROW Component="apimswincoredebugl110.dll" ComponentId="{D1F3B0BC-C69F-4367-86B8-7C8C155BC58A}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoredebugl110.dll"/>
+    <ROW Component="apimswincoreerrorhandlingl110.dll" ComponentId="{23647DEA-8605-47DF-A371-349D7983415C}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreerrorhandlingl110.dll"/>
+    <ROW Component="apimswincorefilel110.dll" ComponentId="{54D91DF1-0B5E-48DF-973B-7291E7B13251}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel110.dll"/>
+    <ROW Component="apimswincorefilel120.dll" ComponentId="{07960A34-92F9-4754-904B-706256563DFA}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel120.dll"/>
+    <ROW Component="apimswincorefilel210.dll" ComponentId="{EF975841-0242-4804-B11D-6F2CDD30F54B}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorefilel210.dll"/>
+    <ROW Component="apimswincorehandlel110.dll" ComponentId="{5046EF6E-5C00-4B89-BEB3-1CA67CD26ECA}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorehandlel110.dll"/>
+    <ROW Component="apimswincoreheapl110.dll" ComponentId="{B9F1F7F1-5E47-456C-8704-3FEBB3C9C932}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreheapl110.dll"/>
+    <ROW Component="apimswincoreinterlockedl110.dll" ComponentId="{61AD243B-5EEF-4E33-A0C4-6AD9563E30BB}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreinterlockedl110.dll"/>
+    <ROW Component="apimswincorelibraryloaderl110.dll" ComponentId="{27C9DEB7-4A60-4EE5-8366-1CCB356F8166}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorelibraryloaderl110.dll"/>
+    <ROW Component="apimswincorelocalizationl120.dll" ComponentId="{6202B425-5E4D-42EA-A74A-643139A29DEE}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorelocalizationl120.dll"/>
+    <ROW Component="apimswincorememoryl110.dll" ComponentId="{FAFC1C20-7553-4B0B-A99E-EA3C8C6BFFE9}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorememoryl110.dll"/>
+    <ROW Component="apimswincorenamedpipel110.dll" ComponentId="{A58C2C97-F72A-4C6E-BDE3-08CAEA528D76}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorenamedpipel110.dll"/>
+    <ROW Component="apimswincoreprocessenvironmentl110.dll" ComponentId="{389858AC-80CA-4F1C-A245-35F3A4E6188E}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessenvironmentl110.dll"/>
+    <ROW Component="apimswincoreprocessthreadsl110.dll" ComponentId="{722F6DB8-D99A-48A6-8218-8CE2C4413EE0}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessthreadsl110.dll"/>
+    <ROW Component="apimswincoreprocessthreadsl111.dll" ComponentId="{A9974CE5-D034-4F6D-89B6-7DA2BC731802}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprocessthreadsl111.dll"/>
+    <ROW Component="apimswincoreprofilel110.dll" ComponentId="{23DD4EB0-5E3F-44BF-8CC8-E320EAC2D865}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreprofilel110.dll"/>
+    <ROW Component="apimswincorertlsupportl110.dll" ComponentId="{5BDF0014-BB83-4B9A-B496-B09D163CF22F}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorertlsupportl110.dll"/>
+    <ROW Component="apimswincorestringl110.dll" ComponentId="{C7107C51-3C58-40F1-B33A-53670A3FBAEA}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincorestringl110.dll"/>
+    <ROW Component="apimswincoresynchl110.dll" ComponentId="{F5AC8CB9-C0E8-4668-A872-36B8736B89E6}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresynchl110.dll"/>
+    <ROW Component="apimswincoresynchl120.dll" ComponentId="{F63AAEB6-DB59-46B6-AAB1-EFCB2FF4CD00}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresynchl120.dll"/>
+    <ROW Component="apimswincoresysinfol110.dll" ComponentId="{37192649-D29C-4DAD-A633-9FCC26CF820E}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoresysinfol110.dll"/>
+    <ROW Component="apimswincoretimezonel110.dll" ComponentId="{6834D1A4-6B40-40CE-AECD-8086A60815A0}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoretimezonel110.dll"/>
+    <ROW Component="apimswincoreutill110.dll" ComponentId="{E741554C-3D64-477C-AED1-135944A80B72}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincoreutill110.dll"/>
+    <ROW Component="apimswincrtconiol110.dll" ComponentId="{31B9ABF7-0C40-4A91-8CC3-DFA12B87E608}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtconiol110.dll"/>
+    <ROW Component="apimswincrtconvertl110.dll" ComponentId="{EC4D95DB-B8D7-4B27-A4F5-5B02F4648C0B}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtconvertl110.dll"/>
+    <ROW Component="apimswincrtenvironmentl110.dll" ComponentId="{1B2F0F78-3EE9-4D6C-A047-AC98A3D975EA}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtenvironmentl110.dll"/>
+    <ROW Component="apimswincrtfilesysteml110.dll" ComponentId="{335901B3-77F6-43C3-B2E2-3214E140F28F}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtfilesysteml110.dll"/>
+    <ROW Component="apimswincrtheapl110.dll" ComponentId="{9E9E3932-9A9D-401F-A100-E2921F73A0BA}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtheapl110.dll"/>
+    <ROW Component="apimswincrtlocalel110.dll" ComponentId="{C67669CF-7DC3-4EDE-85EF-E78142A95401}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtlocalel110.dll"/>
+    <ROW Component="apimswincrtmathl110.dll" ComponentId="{9861D227-47DD-439A-AAA8-8DA3E028242C}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtmathl110.dll"/>
+    <ROW Component="apimswincrtmultibytel110.dll" ComponentId="{D35E0587-13A7-4153-937D-11D509A8101C}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtmultibytel110.dll"/>
+    <ROW Component="apimswincrtprivatel110.dll" ComponentId="{025ECA79-FFA2-4FB6-921B-762C6BD82134}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtprivatel110.dll"/>
+    <ROW Component="apimswincrtprocessl110.dll" ComponentId="{6D524CB2-6261-4BB9-922D-9AE08D8BC3C0}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtprocessl110.dll"/>
+    <ROW Component="apimswincrtruntimel110.dll" ComponentId="{52BA0857-F10C-4D23-B495-6FEFD5B0DC44}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtruntimel110.dll"/>
+    <ROW Component="apimswincrtstdiol110.dll" ComponentId="{800BC40B-B6E4-471E-98D7-0AFEC35018CB}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtstdiol110.dll"/>
+    <ROW Component="apimswincrtstringl110.dll" ComponentId="{BE879D85-D9CC-4B9B-9BF8-65C33ABB3049}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtstringl110.dll"/>
+    <ROW Component="apimswincrttimel110.dll" ComponentId="{8FAED7C3-54AF-41EA-9FDC-F729875008CB}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrttimel110.dll"/>
+    <ROW Component="apimswincrtutilityl110.dll" ComponentId="{83CD71FD-B7D4-477B-8F55-45B65C5E1D09}" Directory_="APPDIR" Attributes="0" KeyPath="apimswincrtutilityl110.dll"/>
+    <ROW Component="appsettings.Development.json" ComponentId="{0816E82A-B70A-4DB4-A95E-565DB0417D07}" Directory_="APPDIR" Attributes="0" KeyPath="WorkerService.deps.json" Type="0"/>
+    <ROW Component="clretwrc.dll" ComponentId="{789A8D09-53D6-4617-9D52-BD813D886551}" Directory_="APPDIR" Attributes="0" KeyPath="clretwrc.dll"/>
+    <ROW Component="clrjit.dll" ComponentId="{AAE3B486-4467-4794-A74D-C055B0DD40F7}" Directory_="APPDIR" Attributes="0" KeyPath="clrjit.dll"/>
+    <ROW Component="coreclr.dll" ComponentId="{7B2136B7-D85E-4CEA-8530-E83690789743}" Directory_="APPDIR" Attributes="0" KeyPath="coreclr.dll"/>
+    <ROW Component="createdump.exe" ComponentId="{903B23D9-6D23-4715-B3FF-23DBF16D4243}" Directory_="APPDIR" Attributes="0" KeyPath="createdump.exe"/>
+    <ROW Component="dbgshim.dll" ComponentId="{BE064E87-4C0D-46D8-8744-A87654BE9E8D}" Directory_="APPDIR" Attributes="0" KeyPath="dbgshim.dll"/>
+    <ROW Component="hostfxr.dll" ComponentId="{36CF59E0-4793-4626-8465-C1812B21ED16}" Directory_="APPDIR" Attributes="0" KeyPath="hostfxr.dll"/>
+    <ROW Component="hostpolicy.dll" ComponentId="{0DF6DC76-DD51-45F4-AAD6-CB797E87AF48}" Directory_="APPDIR" Attributes="0" KeyPath="hostpolicy.dll"/>
+    <ROW Component="mscordaccore.dll" ComponentId="{3F990501-1752-4FD9-8104-4514BD024461}" Directory_="APPDIR" Attributes="0" KeyPath="mscordaccore.dll"/>
+    <ROW Component="mscordaccore_x86_x86_6.0.222.6406.dll" ComponentId="{5337A7CB-830B-4903-9DE1-DE6CEB0AA5B6}" Directory_="APPDIR" Attributes="0" KeyPath="mscordaccore_x86_x86_6.0.222.6406.dll"/>
+    <ROW Component="mscordbi.dll" ComponentId="{8A5EB8D9-AFD8-4420-B52E-0A02206D7AF5}" Directory_="APPDIR" Attributes="0" KeyPath="mscordbi.dll"/>
+    <ROW Component="mscorrc.dll" ComponentId="{2AADC65F-9268-4563-B85D-8846F3F96E39}" Directory_="APPDIR" Attributes="0" KeyPath="mscorrc.dll"/>
+    <ROW Component="msquic.dll" ComponentId="{32B2FB7B-1ED7-46A6-9517-7DB9DDF830D7}" Directory_="APPDIR" Attributes="0" KeyPath="msquic.dll"/>
+    <ROW Component="ucrtbase.dll" ComponentId="{C3F7AB2F-ABD0-4983-B5DD-0C87DA636B27}" Directory_="APPDIR" Attributes="0" KeyPath="ucrtbase.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="WorkerService.exe" Component_="WorkerService.exe" FileName="WORKER~1.EXE|WorkerService.exe" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.exe" SelfReg="false" DigSign="true"/>
     <ROW File="apimswincoreconsolel110.dll" Component_="apimswincoreconsolel110.dll" FileName="API-MS~1.DLL|api-ms-win-core-console-l1-1-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-core-console-l1-1-0.dll" SelfReg="false"/>
     <ROW File="apimswincoreconsolel120.dll" Component_="apimswincoreconsolel120.dll" FileName="API-MS~2.DLL|api-ms-win-core-console-l1-2-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-core-console-l1-2-0.dll" SelfReg="false"/>
     <ROW File="apimswincoredatetimel110.dll" Component_="apimswincoredatetimel110.dll" FileName="API-MS~3.DLL|api-ms-win-core-datetime-l1-1-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-core-datetime-l1-1-0.dll" SelfReg="false"/>
@@ -264,7 +266,6 @@
     <ROW File="apimswincrtstringl110.dll" Component_="apimswincrtstringl110.dll" FileName="API-M~40.DLL|api-ms-win-crt-string-l1-1-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-crt-string-l1-1-0.dll" SelfReg="false"/>
     <ROW File="apimswincrttimel110.dll" Component_="apimswincrttimel110.dll" FileName="API-M~41.DLL|api-ms-win-crt-time-l1-1-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-crt-time-l1-1-0.dll" SelfReg="false"/>
     <ROW File="apimswincrtutilityl110.dll" Component_="apimswincrtutilityl110.dll" FileName="API-M~42.DLL|api-ms-win-crt-utility-l1-1-0.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\api-ms-win-crt-utility-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="appsettings.Development.json" Component_="appsettings.Development.json" FileName="APPSET~1.JSO|appsettings.Development.json" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\appsettings.Development.json" SelfReg="false"/>
     <ROW File="clretwrc.dll" Component_="clretwrc.dll" FileName="clretwrc.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\clretwrc.dll" SelfReg="false"/>
     <ROW File="clrjit.dll" Component_="clrjit.dll" FileName="clrjit.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\clrjit.dll" SelfReg="false"/>
     <ROW File="coreclr.dll" Component_="coreclr.dll" FileName="coreclr.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\coreclr.dll" SelfReg="false"/>
@@ -279,107 +280,107 @@
     <ROW File="Microsoft.AspNetCore.SignalR.Client.dll" Component_="Microsoft.AspNetCore.SignalR.Client.dll" FileName="MICROS~5.DLL|Microsoft.AspNetCore.SignalR.Client.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.AspNetCore.SignalR.Client.dll" SelfReg="false"/>
     <ROW File="Microsoft.AspNetCore.SignalR.Common.dll" Component_="Microsoft.AspNetCore.SignalR.Common.dll" FileName="MICROS~6.DLL|Microsoft.AspNetCore.SignalR.Common.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.AspNetCore.SignalR.Common.dll" SelfReg="false"/>
     <ROW File="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Component_="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" FileName="MICROS~7.DLL|Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.AspNetCore.SignalR.Protocols.Json.dll" SelfReg="false"/>
-    <ROW File="Microsoft.DiaSymReader.Native.x86.dll" Component_="Microsoft.DiaSymReader.Native.x86.dll" FileName="MICROS~9.DLL|Microsoft.DiaSymReader.Native.x86.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.DiaSymReader.Native.x86.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Features.dll" Component_="Microsoft.Extensions.Features.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Features.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Features.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.WindowsServices.dll" Component_="Microsoft.Extensions.Hosting.WindowsServices.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.Hosting.WindowsServices.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.WindowsServices.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Http.dll" Component_="Microsoft.Extensions.Http.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.Http.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Http.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~28.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~29.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~30.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~31.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~32.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~33.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~34.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~35.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Options.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~37.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Win32.Primitives.dll" Component_="Microsoft.Win32.Primitives.dll" FileName="MICRO~40.DLL|Microsoft.Win32.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Win32.Primitives.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Win32.Registry.dll" Component_="Microsoft.Win32.Registry.dll" FileName="MICRO~41.DLL|Microsoft.Win32.Registry.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Win32.Registry.dll" SelfReg="false"/>
+    <ROW File="Microsoft.DiaSymReader.Native.x86.dll" Component_="Microsoft.DiaSymReader.Native.x86.dll" FileName="MICROS~8.DLL|Microsoft.DiaSymReader.Native.x86.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.DiaSymReader.Native.x86.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Features.dll" Component_="Microsoft.Extensions.Features.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Features.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Features.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.WindowsServices.dll" Component_="Microsoft.Extensions.Hosting.WindowsServices.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Hosting.WindowsServices.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Hosting.WindowsServices.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Http.dll" Component_="Microsoft.Extensions.Http.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.Http.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Http.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~28.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~29.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~30.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~31.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~32.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~33.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~34.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~35.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Win32.Primitives.dll" Component_="Microsoft.Win32.Primitives.dll" FileName="MICRO~37.DLL|Microsoft.Win32.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Win32.Primitives.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Win32.Registry.dll" Component_="Microsoft.Win32.Registry.dll" FileName="MICRO~38.DLL|Microsoft.Win32.Registry.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\Microsoft.Win32.Registry.dll" SelfReg="false"/>
     <ROW File="mscordaccore.dll" Component_="mscordaccore.dll" FileName="MSCORD~1.DLL|mscordaccore.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\mscordaccore.dll" SelfReg="false"/>
     <ROW File="mscordaccore_x86_x86_6.0.222.6406.dll" Component_="mscordaccore_x86_x86_6.0.222.6406.dll" FileName="MSCORD~2.DLL|mscordaccore_x86_x86_6.0.222.6406.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\mscordaccore_x86_x86_6.0.222.6406.dll" SelfReg="false"/>
     <ROW File="mscordbi.dll" Component_="mscordbi.dll" FileName="mscordbi.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\mscordbi.dll" SelfReg="false"/>
     <ROW File="mscorrc.dll" Component_="mscorrc.dll" FileName="mscorrc.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\mscorrc.dll" SelfReg="false"/>
     <ROW File="msquic.dll" Component_="msquic.dll" FileName="msquic.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\msquic.dll" SelfReg="false"/>
-    <ROW File="System.CodeDom.dll" Component_="System.CodeDom.dll" FileName="SYSTEM~3.DLL|System.CodeDom.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.CodeDom.dll" SelfReg="false"/>
-    <ROW File="System.Collections.Concurrent.dll" Component_="System.Collections.Concurrent.dll" FileName="SYSTEM~4.DLL|System.Collections.Concurrent.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Concurrent.dll" SelfReg="false"/>
-    <ROW File="System.Collections.dll" Component_="System.Collections.dll" FileName="SYSTEM~5.DLL|System.Collections.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.dll" SelfReg="false"/>
-    <ROW File="System.Collections.Immutable.dll" Component_="System.Collections.Immutable.dll" FileName="SYSTEM~6.DLL|System.Collections.Immutable.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Immutable.dll" SelfReg="false"/>
-    <ROW File="System.Collections.NonGeneric.dll" Component_="System.Collections.NonGeneric.dll" FileName="SYSTEM~7.DLL|System.Collections.NonGeneric.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.NonGeneric.dll" SelfReg="false"/>
-    <ROW File="System.Collections.Specialized.dll" Component_="System.Collections.Specialized.dll" FileName="SYSTEM~8.DLL|System.Collections.Specialized.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Specialized.dll" SelfReg="false"/>
-    <ROW File="System.ComponentModel.dll" Component_="System.ComponentModel.dll" FileName="SYSTE~11.DLL|System.ComponentModel.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.dll" SelfReg="false"/>
-    <ROW File="System.ComponentModel.Primitives.dll" Component_="System.ComponentModel.Primitives.dll" FileName="SYSTE~13.DLL|System.ComponentModel.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.Primitives.dll" SelfReg="false"/>
-    <ROW File="System.ComponentModel.TypeConverter.dll" Component_="System.ComponentModel.TypeConverter.dll" FileName="SYSTE~14.DLL|System.ComponentModel.TypeConverter.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.TypeConverter.dll" SelfReg="false"/>
-    <ROW File="System.Console.dll" Component_="System.Console.dll" FileName="SYSTE~16.DLL|System.Console.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Console.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.DiagnosticSource.dll" Component_="System.Diagnostics.DiagnosticSource.dll" FileName="SYSTE~23.DLL|System.Diagnostics.DiagnosticSource.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.DiagnosticSource.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTE~24.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.EventLog.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.Process.dll" Component_="System.Diagnostics.Process.dll" FileName="SYSTE~27.DLL|System.Diagnostics.Process.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.Process.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.StackTrace.dll" Component_="System.Diagnostics.StackTrace.dll" FileName="SYSTE~28.DLL|System.Diagnostics.StackTrace.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.StackTrace.dll" SelfReg="false"/>
+    <ROW File="System.CodeDom.dll" Component_="System.CodeDom.dll" FileName="SYSTEM~1.DLL|System.CodeDom.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.CodeDom.dll" SelfReg="false"/>
+    <ROW File="System.Collections.Concurrent.dll" Component_="System.Collections.Concurrent.dll" FileName="SYSTEM~2.DLL|System.Collections.Concurrent.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Concurrent.dll" SelfReg="false"/>
+    <ROW File="System.Collections.dll" Component_="System.Collections.dll" FileName="SYSTEM~3.DLL|System.Collections.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.dll" SelfReg="false"/>
+    <ROW File="System.Collections.Immutable.dll" Component_="System.Collections.Immutable.dll" FileName="SYSTEM~4.DLL|System.Collections.Immutable.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Immutable.dll" SelfReg="false"/>
+    <ROW File="System.Collections.NonGeneric.dll" Component_="System.Collections.NonGeneric.dll" FileName="SYSTEM~5.DLL|System.Collections.NonGeneric.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.NonGeneric.dll" SelfReg="false"/>
+    <ROW File="System.Collections.Specialized.dll" Component_="System.Collections.Specialized.dll" FileName="SYSTEM~6.DLL|System.Collections.Specialized.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Collections.Specialized.dll" SelfReg="false"/>
+    <ROW File="System.ComponentModel.dll" Component_="System.ComponentModel.dll" FileName="SYSTEM~7.DLL|System.ComponentModel.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.dll" SelfReg="false"/>
+    <ROW File="System.ComponentModel.Primitives.dll" Component_="System.ComponentModel.Primitives.dll" FileName="SYSTEM~8.DLL|System.ComponentModel.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.Primitives.dll" SelfReg="false"/>
+    <ROW File="System.ComponentModel.TypeConverter.dll" Component_="System.ComponentModel.TypeConverter.dll" FileName="SYSTEM~9.DLL|System.ComponentModel.TypeConverter.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ComponentModel.TypeConverter.dll" SelfReg="false"/>
+    <ROW File="System.Console.dll" Component_="System.Console.dll" FileName="SYSTE~10.DLL|System.Console.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Console.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.DiagnosticSource.dll" Component_="System.Diagnostics.DiagnosticSource.dll" FileName="SYSTE~11.DLL|System.Diagnostics.DiagnosticSource.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.DiagnosticSource.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTE~12.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.Process.dll" Component_="System.Diagnostics.Process.dll" FileName="SYSTE~13.DLL|System.Diagnostics.Process.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.Process.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.StackTrace.dll" Component_="System.Diagnostics.StackTrace.dll" FileName="SYSTE~14.DLL|System.Diagnostics.StackTrace.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Diagnostics.StackTrace.dll" SelfReg="false"/>
     <ROW File="System.dll" Component_="System.dll" FileName="System.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.dll" SelfReg="false"/>
-    <ROW File="System.IO.Compression.Brotli.dll" Component_="System.IO.Compression.Brotli.dll" FileName="SYSTE~40.DLL|System.IO.Compression.Brotli.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.Brotli.dll" SelfReg="false"/>
-    <ROW File="System.IO.Compression.dll" Component_="System.IO.Compression.dll" FileName="SYSTE~41.DLL|System.IO.Compression.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.dll" SelfReg="false"/>
-    <ROW File="System.IO.Compression.Native.dll" Component_="System.IO.Compression.Native.dll" FileName="SYSTE~43.DLL|System.IO.Compression.Native.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.Native.dll" SelfReg="false"/>
-    <ROW File="System.IO.FileSystem.Watcher.dll" Component_="System.IO.FileSystem.Watcher.dll" FileName="SYSTE~50.DLL|System.IO.FileSystem.Watcher.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.FileSystem.Watcher.dll" SelfReg="false"/>
-    <ROW File="System.IO.MemoryMappedFiles.dll" Component_="System.IO.MemoryMappedFiles.dll" FileName="SYSTE~52.DLL|System.IO.MemoryMappedFiles.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.MemoryMappedFiles.dll" SelfReg="false"/>
-    <ROW File="System.IO.Pipelines.dll" Component_="System.IO.Pipelines.dll" FileName="SYSTE~53.DLL|System.IO.Pipelines.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Pipelines.dll" SelfReg="false"/>
-    <ROW File="System.Linq.dll" Component_="System.Linq.dll" FileName="SYSTE~57.DLL|System.Linq.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Linq.dll" SelfReg="false"/>
-    <ROW File="System.Linq.Expressions.dll" Component_="System.Linq.Expressions.dll" FileName="SYSTE~58.DLL|System.Linq.Expressions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Linq.Expressions.dll" SelfReg="false"/>
-    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTE~61.DLL|System.Management.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Management.dll" SelfReg="false"/>
-    <ROW File="System.Memory.dll" Component_="System.Memory.dll" FileName="SYSTE~62.DLL|System.Memory.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Memory.dll" SelfReg="false"/>
-    <ROW File="System.Net.Http.dll" Component_="System.Net.Http.dll" FileName="SYSTE~64.DLL|System.Net.Http.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Http.dll" SelfReg="false"/>
-    <ROW File="System.Net.NameResolution.dll" Component_="System.Net.NameResolution.dll" FileName="SYSTE~68.DLL|System.Net.NameResolution.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.NameResolution.dll" SelfReg="false"/>
-    <ROW File="System.Net.NetworkInformation.dll" Component_="System.Net.NetworkInformation.dll" FileName="SYSTE~69.DLL|System.Net.NetworkInformation.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.NetworkInformation.dll" SelfReg="false"/>
-    <ROW File="System.Net.Primitives.dll" Component_="System.Net.Primitives.dll" FileName="SYSTE~71.DLL|System.Net.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Primitives.dll" SelfReg="false"/>
-    <ROW File="System.Net.Quic.dll" Component_="System.Net.Quic.dll" FileName="SYSTE~72.DLL|System.Net.Quic.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Quic.dll" SelfReg="false"/>
-    <ROW File="System.Net.Requests.dll" Component_="System.Net.Requests.dll" FileName="SYSTE~73.DLL|System.Net.Requests.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Requests.dll" SelfReg="false"/>
-    <ROW File="System.Net.Security.dll" Component_="System.Net.Security.dll" FileName="SYSTE~74.DLL|System.Net.Security.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Security.dll" SelfReg="false"/>
-    <ROW File="System.Net.Sockets.dll" Component_="System.Net.Sockets.dll" FileName="SYSTE~76.DLL|System.Net.Sockets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Sockets.dll" SelfReg="false"/>
-    <ROW File="System.Net.WebHeaderCollection.dll" Component_="System.Net.WebHeaderCollection.dll" FileName="SYSTE~78.DLL|System.Net.WebHeaderCollection.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebHeaderCollection.dll" SelfReg="false"/>
-    <ROW File="System.Net.WebSockets.Client.dll" Component_="System.Net.WebSockets.Client.dll" FileName="SYSTE~80.DLL|System.Net.WebSockets.Client.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebSockets.Client.dll" SelfReg="false"/>
-    <ROW File="System.Net.WebSockets.dll" Component_="System.Net.WebSockets.dll" FileName="SYSTE~81.DLL|System.Net.WebSockets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebSockets.dll" SelfReg="false"/>
-    <ROW File="System.ObjectModel.dll" Component_="System.ObjectModel.dll" FileName="SYSTE~84.DLL|System.ObjectModel.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ObjectModel.dll" SelfReg="false"/>
-    <ROW File="System.Private.CoreLib.dll" Component_="System.Private.CoreLib.dll" FileName="SYSTE~85.DLL|System.Private.CoreLib.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Private.CoreLib.dll" SelfReg="false"/>
-    <ROW File="System.Private.Uri.dll" Component_="System.Private.Uri.dll" FileName="SYSTE~87.DLL|System.Private.Uri.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Private.Uri.dll" SelfReg="false"/>
-    <ROW File="System.Reflection.Metadata.dll" Component_="System.Reflection.Metadata.dll" FileName="SYSTE~96.DLL|System.Reflection.Metadata.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Reflection.Metadata.dll" SelfReg="false"/>
-    <ROW File="System.Runtime.CompilerServices.Unsafe.dll" Component_="System.Runtime.CompilerServices.Unsafe.dll" FileName="SYST~102.DLL|System.Runtime.CompilerServices.Unsafe.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.CompilerServices.Unsafe.dll" SelfReg="false"/>
-    <ROW File="System.Runtime.dll" Component_="System.Runtime.dll" FileName="SYST~104.DLL|System.Runtime.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.dll" SelfReg="false"/>
-    <ROW File="System.Runtime.InteropServices.RuntimeInformation.dll" Component_="System.Runtime.InteropServices.RuntimeInformation.dll" FileName="SYST~108.DLL|System.Runtime.InteropServices.RuntimeInformation.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.InteropServices.RuntimeInformation.dll" SelfReg="false"/>
-    <ROW File="System.Runtime.Numerics.dll" Component_="System.Runtime.Numerics.dll" FileName="SYST~111.DLL|System.Runtime.Numerics.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.Numerics.dll" SelfReg="false"/>
-    <ROW File="System.Security.Claims.dll" Component_="System.Security.Claims.dll" FileName="SYST~118.DLL|System.Security.Claims.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Claims.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.Algorithms.dll" Component_="System.Security.Cryptography.Algorithms.dll" FileName="SYST~119.DLL|System.Security.Cryptography.Algorithms.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Algorithms.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.Cng.dll" Component_="System.Security.Cryptography.Cng.dll" FileName="SYST~120.DLL|System.Security.Cryptography.Cng.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Cng.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.Csp.dll" Component_="System.Security.Cryptography.Csp.dll" FileName="SYST~121.DLL|System.Security.Cryptography.Csp.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Csp.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.Encoding.dll" Component_="System.Security.Cryptography.Encoding.dll" FileName="SYST~122.DLL|System.Security.Cryptography.Encoding.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Encoding.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.Primitives.dll" Component_="System.Security.Cryptography.Primitives.dll" FileName="SYST~124.DLL|System.Security.Cryptography.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Primitives.dll" SelfReg="false"/>
-    <ROW File="System.Security.Cryptography.X509Certificates.dll" Component_="System.Security.Cryptography.X509Certificates.dll" FileName="SYST~125.DLL|System.Security.Cryptography.X509Certificates.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.X509Certificates.dll" SelfReg="false"/>
-    <ROW File="System.Security.Principal.Windows.dll" Component_="System.Security.Principal.Windows.dll" FileName="SYST~128.DLL|System.Security.Principal.Windows.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Principal.Windows.dll" SelfReg="false"/>
-    <ROW File="System.ServiceProcess.ServiceController.dll" Component_="System.ServiceProcess.ServiceController.dll" FileName="SYST~132.DLL|System.ServiceProcess.ServiceController.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ServiceProcess.ServiceController.dll" SelfReg="false"/>
-    <ROW File="System.Text.Encoding.Extensions.dll" Component_="System.Text.Encoding.Extensions.dll" FileName="SYST~135.DLL|System.Text.Encoding.Extensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Encoding.Extensions.dll" SelfReg="false"/>
-    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYST~136.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYST~137.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Json.dll" SelfReg="false"/>
-    <ROW File="System.Threading.Channels.dll" Component_="System.Threading.Channels.dll" FileName="SYST~139.DLL|System.Threading.Channels.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.Channels.dll" SelfReg="false"/>
-    <ROW File="System.Threading.dll" Component_="System.Threading.dll" FileName="SYST~140.DLL|System.Threading.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.dll" SelfReg="false"/>
-    <ROW File="System.Threading.ThreadPool.dll" Component_="System.Threading.ThreadPool.dll" FileName="SYST~147.DLL|System.Threading.ThreadPool.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.ThreadPool.dll" SelfReg="false"/>
+    <ROW File="System.IO.Compression.Brotli.dll" Component_="System.IO.Compression.Brotli.dll" FileName="SYSTE~15.DLL|System.IO.Compression.Brotli.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.Brotli.dll" SelfReg="false"/>
+    <ROW File="System.IO.Compression.dll" Component_="System.IO.Compression.dll" FileName="SYSTE~16.DLL|System.IO.Compression.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.dll" SelfReg="false"/>
+    <ROW File="System.IO.Compression.Native.dll" Component_="System.IO.Compression.Native.dll" FileName="SYSTE~17.DLL|System.IO.Compression.Native.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Compression.Native.dll" SelfReg="false"/>
+    <ROW File="System.IO.FileSystem.Watcher.dll" Component_="System.IO.FileSystem.Watcher.dll" FileName="SYSTE~18.DLL|System.IO.FileSystem.Watcher.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.FileSystem.Watcher.dll" SelfReg="false"/>
+    <ROW File="System.IO.MemoryMappedFiles.dll" Component_="System.IO.MemoryMappedFiles.dll" FileName="SYSTE~19.DLL|System.IO.MemoryMappedFiles.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.MemoryMappedFiles.dll" SelfReg="false"/>
+    <ROW File="System.IO.Pipelines.dll" Component_="System.IO.Pipelines.dll" FileName="SYSTE~20.DLL|System.IO.Pipelines.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.IO.Pipelines.dll" SelfReg="false"/>
+    <ROW File="System.Linq.dll" Component_="System.Linq.dll" FileName="SYSTE~21.DLL|System.Linq.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Linq.dll" SelfReg="false"/>
+    <ROW File="System.Linq.Expressions.dll" Component_="System.Linq.Expressions.dll" FileName="SYSTE~22.DLL|System.Linq.Expressions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Linq.Expressions.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTE~23.DLL|System.Management.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Management.dll" SelfReg="false"/>
+    <ROW File="System.Memory.dll" Component_="System.Memory.dll" FileName="SYSTE~24.DLL|System.Memory.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Memory.dll" SelfReg="false"/>
+    <ROW File="System.Net.Http.dll" Component_="System.Net.Http.dll" FileName="SYSTE~25.DLL|System.Net.Http.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Http.dll" SelfReg="false"/>
+    <ROW File="System.Net.NameResolution.dll" Component_="System.Net.NameResolution.dll" FileName="SYSTE~26.DLL|System.Net.NameResolution.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.NameResolution.dll" SelfReg="false"/>
+    <ROW File="System.Net.NetworkInformation.dll" Component_="System.Net.NetworkInformation.dll" FileName="SYSTE~27.DLL|System.Net.NetworkInformation.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.NetworkInformation.dll" SelfReg="false"/>
+    <ROW File="System.Net.Primitives.dll" Component_="System.Net.Primitives.dll" FileName="SYSTE~28.DLL|System.Net.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Primitives.dll" SelfReg="false"/>
+    <ROW File="System.Net.Quic.dll" Component_="System.Net.Quic.dll" FileName="SYSTE~29.DLL|System.Net.Quic.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Quic.dll" SelfReg="false"/>
+    <ROW File="System.Net.Requests.dll" Component_="System.Net.Requests.dll" FileName="SYSTE~30.DLL|System.Net.Requests.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Requests.dll" SelfReg="false"/>
+    <ROW File="System.Net.Security.dll" Component_="System.Net.Security.dll" FileName="SYSTE~31.DLL|System.Net.Security.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Security.dll" SelfReg="false"/>
+    <ROW File="System.Net.Sockets.dll" Component_="System.Net.Sockets.dll" FileName="SYSTE~32.DLL|System.Net.Sockets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.Sockets.dll" SelfReg="false"/>
+    <ROW File="System.Net.WebHeaderCollection.dll" Component_="System.Net.WebHeaderCollection.dll" FileName="SYSTE~33.DLL|System.Net.WebHeaderCollection.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebHeaderCollection.dll" SelfReg="false"/>
+    <ROW File="System.Net.WebSockets.Client.dll" Component_="System.Net.WebSockets.Client.dll" FileName="SYSTE~34.DLL|System.Net.WebSockets.Client.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebSockets.Client.dll" SelfReg="false"/>
+    <ROW File="System.Net.WebSockets.dll" Component_="System.Net.WebSockets.dll" FileName="SYSTE~35.DLL|System.Net.WebSockets.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Net.WebSockets.dll" SelfReg="false"/>
+    <ROW File="System.ObjectModel.dll" Component_="System.ObjectModel.dll" FileName="SYSTE~36.DLL|System.ObjectModel.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ObjectModel.dll" SelfReg="false"/>
+    <ROW File="System.Private.CoreLib.dll" Component_="System.Private.CoreLib.dll" FileName="SYSTE~37.DLL|System.Private.CoreLib.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Private.CoreLib.dll" SelfReg="false"/>
+    <ROW File="System.Private.Uri.dll" Component_="System.Private.Uri.dll" FileName="SYSTE~38.DLL|System.Private.Uri.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Private.Uri.dll" SelfReg="false"/>
+    <ROW File="System.Reflection.Metadata.dll" Component_="System.Reflection.Metadata.dll" FileName="SYSTE~39.DLL|System.Reflection.Metadata.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Reflection.Metadata.dll" SelfReg="false"/>
+    <ROW File="System.Runtime.CompilerServices.Unsafe.dll" Component_="System.Runtime.CompilerServices.Unsafe.dll" FileName="SYSTE~40.DLL|System.Runtime.CompilerServices.Unsafe.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.CompilerServices.Unsafe.dll" SelfReg="false"/>
+    <ROW File="System.Runtime.dll" Component_="System.Runtime.dll" FileName="SYSTE~41.DLL|System.Runtime.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.dll" SelfReg="false"/>
+    <ROW File="System.Runtime.InteropServices.RuntimeInformation.dll" Component_="System.Runtime.InteropServices.RuntimeInformation.dll" FileName="SYSTE~42.DLL|System.Runtime.InteropServices.RuntimeInformation.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.InteropServices.RuntimeInformation.dll" SelfReg="false"/>
+    <ROW File="System.Runtime.Numerics.dll" Component_="System.Runtime.Numerics.dll" FileName="SYSTE~43.DLL|System.Runtime.Numerics.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Runtime.Numerics.dll" SelfReg="false"/>
+    <ROW File="System.Security.Claims.dll" Component_="System.Security.Claims.dll" FileName="SYSTE~44.DLL|System.Security.Claims.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Claims.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Algorithms.dll" Component_="System.Security.Cryptography.Algorithms.dll" FileName="SYSTE~45.DLL|System.Security.Cryptography.Algorithms.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Algorithms.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Cng.dll" Component_="System.Security.Cryptography.Cng.dll" FileName="SYSTE~46.DLL|System.Security.Cryptography.Cng.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Cng.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Csp.dll" Component_="System.Security.Cryptography.Csp.dll" FileName="SYSTE~47.DLL|System.Security.Cryptography.Csp.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Csp.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Encoding.dll" Component_="System.Security.Cryptography.Encoding.dll" FileName="SYSTE~48.DLL|System.Security.Cryptography.Encoding.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Encoding.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Primitives.dll" Component_="System.Security.Cryptography.Primitives.dll" FileName="SYSTE~49.DLL|System.Security.Cryptography.Primitives.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.Primitives.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.X509Certificates.dll" Component_="System.Security.Cryptography.X509Certificates.dll" FileName="SYSTE~50.DLL|System.Security.Cryptography.X509Certificates.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Cryptography.X509Certificates.dll" SelfReg="false"/>
+    <ROW File="System.Security.Principal.Windows.dll" Component_="System.Security.Principal.Windows.dll" FileName="SYSTE~51.DLL|System.Security.Principal.Windows.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Security.Principal.Windows.dll" SelfReg="false"/>
+    <ROW File="System.ServiceProcess.ServiceController.dll" Component_="System.ServiceProcess.ServiceController.dll" FileName="SYSTE~52.DLL|System.ServiceProcess.ServiceController.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.ServiceProcess.ServiceController.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encoding.Extensions.dll" Component_="System.Text.Encoding.Extensions.dll" FileName="SYSTE~53.DLL|System.Text.Encoding.Extensions.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Encoding.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTE~54.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTE~55.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="System.Threading.Channels.dll" Component_="System.Threading.Channels.dll" FileName="SYSTE~56.DLL|System.Threading.Channels.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.Channels.dll" SelfReg="false"/>
+    <ROW File="System.Threading.dll" Component_="System.Threading.dll" FileName="SYSTE~57.DLL|System.Threading.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.dll" SelfReg="false"/>
+    <ROW File="System.Threading.ThreadPool.dll" Component_="System.Threading.ThreadPool.dll" FileName="SYSTE~58.DLL|System.Threading.ThreadPool.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\System.Threading.ThreadPool.dll" SelfReg="false"/>
     <ROW File="ucrtbase.dll" Component_="ucrtbase.dll" FileName="ucrtbase.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\ucrtbase.dll" SelfReg="false"/>
     <ROW File="WorkerService.deps.json" Component_="appsettings.Development.json" FileName="WORKER~1.JSO|WorkerService.deps.json" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.deps.json" SelfReg="false"/>
     <ROW File="WorkerService.dll" Component_="WorkerService.dll" FileName="WORKER~1.DLL|WorkerService.dll" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.dll" SelfReg="false"/>
-    <ROW File="WorkerService.exe" Component_="WorkerService.exe" FileName="WORKER~1.EXE|WorkerService.exe" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.exe" SelfReg="false" DigSign="true"/>
     <ROW File="WorkerService.pdb" Component_="WorkerService.exe" FileName="WORKER~1.PDB|WorkerService.pdb" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.pdb" SelfReg="false"/>
     <ROW File="WorkerService.runtimeconfig.json" Component_="appsettings.Development.json" FileName="WORKER~2.JSO|WorkerService.runtimeconfig.json" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\WorkerService.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="appsettings.Development.json" Component_="appsettings.Development.json" FileName="APPSET~1.JSO|appsettings.Development.json" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\appsettings.Development.json" SelfReg="false"/>
     <ROW File="appsettings.json" Component_="appsettings.Development.json" FileName="APPSET~2.JSO|appsettings.json" Attributes="0" SourcePath="..\..\..\Publishes\SelfContained\appsettings.json" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.custcomp.MsiEmbeddedUIComponent">
@@ -396,17 +397,19 @@
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="Setup Files" Languages="en;en_GB;ar" InstallationType="2" CabsLocation="1" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="2" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="Setup Files" Languages="en;en_GB;ar" InstallationType="2" CabsLocation="1" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="2" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
     <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
     <ROW Path="&lt;AI_DICTS&gt;ui_en_GB.ail"/>
     <ROW Path="&lt;AI_DICTS&gt;ui_ar.ail"/>
+    <ROW Path="&lt;AI_REPOSITORY&gt;dictionaries\ui_en_GB.ail"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
     <ROW Fragment="InstallDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\InstallDlg.aip"/>
+    <ROW Fragment="LanguageDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\LanguageDlg.aip"/>
     <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\MaintenanceTypeDlg.aip"/>
     <ROW Fragment="PreparePrereqDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\PreparePrereqDlg.aip"/>
     <ROW Fragment="PrerequisitesDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\PrerequisitesDlg.aip"/>
@@ -423,17 +426,23 @@
     <ROW Fragment="WelcomePrereqDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\WelcomePrereqDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.JsonFileComponent">
-    <ROW JsonFile="appsettings.json" FileName="APPSET~1.JSO|appsettings.json" DirProperty="APPDIR" Component="AI_ExePath" RootProperty="Root" Flags="22" IndentUnits="2"/>
+    <ROW JsonFile="appsettings.Development.json" FileName="APPSET~1.JSO|appsettings.Development.json" DirProperty="APPDIR" Component="AI_ExePath" RootProperty="Root" Flags="22" IndentUnits="2"/>
+    <ROW JsonFile="appsettings.json" FileName="APPSET~2.JSO|appsettings.json" DirProperty="APPDIR" Component="AI_ExePath" RootProperty="Root_3" Flags="22" IndentUnits="2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.JsonPropertyComponent">
-    <ROW JsonProperty="API" Parent="Root" Name="API" Condition="1" Order="1" Flags="57" Value="http://localhost:6060"/>
+    <ROW JsonProperty="API" Parent="Root_3" Name="API" Condition="1" Order="1" Flags="57" Value="http://localhost:6060"/>
     <ROW JsonProperty="Default" Parent="LogLevel" Name="Default" Condition="1" Order="0" Flags="57" Value="Information"/>
-    <ROW JsonProperty="HashKey" Parent="Root" Name="SiteHash" Condition="1" Order="3" Flags="57" Value="[SITE_HASH]"/>
-    <ROW JsonProperty="HubName" Parent="Root" Name="HubName" Condition="1" Order="2" Flags="57" Value="MessagingHub"/>
+    <ROW JsonProperty="Default_3" Parent="LogLevel_3" Name="Default" Condition="1" Order="0" Flags="57" Value="Information"/>
+    <ROW JsonProperty="HubName" Parent="Root_3" Name="HubName" Condition="1" Order="2" Flags="57" Value="MessagingHub"/>
     <ROW JsonProperty="LogLevel" Parent="Logging" Name="LogLevel" Condition="1" Order="0" Flags="60"/>
+    <ROW JsonProperty="LogLevel_3" Parent="Logging_3" Name="LogLevel" Condition="1" Order="0" Flags="60"/>
     <ROW JsonProperty="Logging" Parent="Root" Name="Logging" Condition="1" Order="0" Flags="60"/>
+    <ROW JsonProperty="Logging_3" Parent="Root_3" Name="Logging" Condition="1" Order="0" Flags="60"/>
     <ROW JsonProperty="Microsoft.Hosting.Lifetime" Parent="LogLevel" Name="Microsoft.Hosting.Lifetime" Condition="1" Order="1" Flags="57" Value="Information"/>
+    <ROW JsonProperty="Microsoft.Hosting.Lifetime_3" Parent="LogLevel_3" Name="Microsoft.Hosting.Lifetime" Condition="1" Order="1" Flags="57" Value="Information"/>
     <ROW JsonProperty="Root" Name="Root" Condition="1" Order="0" Flags="60"/>
+    <ROW JsonProperty="Root_3" Name="Root" Condition="1" Order="0" Flags="60"/>
+    <ROW JsonProperty="SiteHash" Parent="Root_3" Name="SiteHash" Condition="1" Order="3" Flags="57" Value="[SITE_HASH]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
     <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
@@ -479,6 +488,8 @@
     <ROW Dialog_="InstallDlg" Control="Next" Type="ImageButton" X="251" Y="359" Width="78" Height="28" Attributes="2" Text="[NextCancelButtons]" TextStyle="[MetroButtonText]" Order="600" MsiKey="InstallDlg#Next" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Next]" ExtDataLocId="-"/>
     <ROW Dialog_="InstallDlg" Control="InstallButton" Type="ImageButton" X="109" Y="326" Width="128" Height="41" Attributes="3" Text="[metroinstallbutton]" TextStyle="[MetroInstallButtonFont]" Order="700" MsiKey="InstallDlg#InstallButton" ExtType="ImageButton" ExtData="INSTALL" ExtDataLocId="Metro.Control.ExtData.VerifyReadyDlg#InstallButton"/>
     <ROW Dialog_="InstallDlg" Control="YouMustAgreeCtrl" Type="Hyperlink" X="17" Y="242" Width="311" Height="33" Attributes="196611" Text="You must agree to the &lt;a href=&quot;&quot;&gt;Licenses terms and conditions&lt;/a&gt; before you can install [ProductName]." TextStyle="[HyperlinkFont]" Order="1000" TextLocId="Metro.Control.Text.WelcomeDlg#YouMustAgreeCtrl" MsiKey="InstallDlg#YouMustAgreeCtrl"/>
+    <ROW Dialog_="LanguageDlg" Control="LangComboBox" Type="ComboBox" X="63" Y="129" Width="220" Height="16" Attributes="196611" Property="AI_BOOTSTRAPPERLANG" Order="800" MsiKey="LanguageDlg#LangComboBox"/>
+    <ROW Dialog_="LanguageDlg" Control="LangText" Type="Text" X="63" Y="105" Width="220" Height="17" Attributes="65539" Property="AI_LANGTEXT_PROP" Text="Select the setup language:" Order="900" TextLocId="Control.Text.LanguageDlg#LangText" MsiKey="LanguageDlg#LangText"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control="Bitmap" Type="Bitmap" X="5" Y="5" Width="345" Height="400" Attributes="1" Text="[Background]" Order="1000" MsiKey="MaintenanceTypeDlg#Bitmap"/>
     <ROW Dialog_="MsiRMFilesInUse" Control="Cancel" Type="ImageButton" X="163" Y="359" Width="78" Height="28" Attributes="2" Text="[NextCancelButtons]" TextStyle="[MetroButtonText]" Order="100" MsiKey="MsiRMFilesInUse#Cancel" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Cancel]" ExtDataLocId="-"/>
     <ROW Dialog_="MsiRMFilesInUse" Control="Bitmap" Type="Bitmap" X="5" Y="5" Width="345" Height="400" Attributes="1" Text="[Background]" Order="200" MsiKey="MsiRMFilesInUse#Bitmap"/>
@@ -521,13 +532,13 @@
     <ROW Dialog_="UserRegistrationDlg" Control="NameLabel" Type="Text" X="17" Y="139" Width="100" Height="15" Attributes="65539" Text="&amp;User Name:" Order="600" TextLocId="Control.Text.UserRegistrationDlg#NameLabel" MsiKey="UserRegistrationDlg#NameLabel"/>
     <ROW Dialog_="UserRegistrationDlg" Control="NameEdit" Type="Edit" X="17" Y="156" Width="314" Height="18" Attributes="3" Property="USERNAME" Text="{80}" Order="700" TextLocId="Control.Text.UserRegistrationDlg#NameEdit" MsiKey="UserRegistrationDlg#NameEdit"/>
     <ROW Dialog_="UserRegistrationDlg" Control="ProductNameTitle" Type="Text" X="83" Y="21" Width="245" Height="50" Attributes="196611" Text="[ProductName]" TextStyle="[ProductNameForSplash]" Order="800" TextLocId="Metro.Control.Text.ProductName" MsiKey="UserRegistrationDlg#ProductNameTitle"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="OrganizationLabel" Type="Text" X="17" Y="184" Width="100" Height="15" Attributes="65539" Text="&amp;Organization:" Order="900" TextLocId="Control.Text.UserRegistrationDlg#OrganizationLabel" MsiKey="UserRegistrationDlg#OrganizationLabel"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="CompanyText" Type="Text" X="83" Y="16" Width="191" Height="12" Attributes="196611" Text="[Manufacturer]" TextStyle="[ManufacturerFont]" Order="1000" TextLocId="Metro.Control.Text.Manufacturer" MsiKey="UserRegistrationDlg#CompanyText"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="ProductLogo" Type="Bitmap" X="17" Y="5" Width="59" Height="63" Attributes="1" Text="[AppLogoIcon]" Order="1100" MsiKey="UserRegistrationDlg#ProductLogo"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="CDKeyLabel" Type="Text" X="17" Y="229" Width="70" Height="15" Attributes="196611" Text="Serial Number:" Order="1200" TextLocId="Control.Text.UserRegistrationDlg#CDKeyLabel" MsiKey="UserRegistrationDlg#CDKeyLabel"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="CDKeyEdit" Type="MaskedEdit" X="17" Y="246" Width="314" Height="18" Attributes="3" Property="PIDKEY" Text="[PIDTemplate]" Order="1300" TextLocId="-" MsiKey="UserRegistrationDlg#CDKeyEdit"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="OrganizationEdit" Type="Edit" X="17" Y="201" Width="314" Height="18" Attributes="3" Property="COMPANYNAME" Text="{80}" Order="1400" TextLocId="Control.Text.UserRegistrationDlg#OrganizationEdit" MsiKey="UserRegistrationDlg#OrganizationEdit"/>
-    <ROW Dialog_="UserRegistrationDlg" Control="AdvInst" Type="Text" X="5" Y="388" Width="74" Height="11" Attributes="196611" Text="Advanced Installer" TextStyle="[BrandingStyle]" Order="1500" MsiKey="UserRegistrationDlg#AdvInst"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="CompanyText" Type="Text" X="83" Y="16" Width="191" Height="12" Attributes="196611" Text="[Manufacturer]" TextStyle="[ManufacturerFont]" Order="900" TextLocId="Metro.Control.Text.Manufacturer" MsiKey="UserRegistrationDlg#CompanyText"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="ProductLogo" Type="Bitmap" X="17" Y="5" Width="59" Height="63" Attributes="1" Text="[AppLogoIcon]" Order="1000" MsiKey="UserRegistrationDlg#ProductLogo"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="CDKeyLabel" Type="Text" X="17" Y="229" Width="70" Height="15" Attributes="196611" Text="Serial Number:" Order="1100" TextLocId="Control.Text.UserRegistrationDlg#CDKeyLabel" MsiKey="UserRegistrationDlg#CDKeyLabel"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="CDKeyEdit" Type="MaskedEdit" X="17" Y="246" Width="314" Height="18" Attributes="3" Property="PIDKEY" Text="[PIDTemplate]" Order="1200" TextLocId="-" MsiKey="UserRegistrationDlg#CDKeyEdit"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="AdvInst" Type="Text" X="5" Y="388" Width="74" Height="11" Attributes="196611" Text="Advanced Installer" TextStyle="[BrandingStyle]" Order="1300" MsiKey="UserRegistrationDlg#AdvInst"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="MachineName" Type="Text" X="17" Y="184" Width="100" Height="15" Attributes="65539" Property="TEXT_1_PROP" Text="&amp;MachineName:" Order="1400" TextLocId="Control.Text.UserRegistrationDlg#MachineName"/>
+    <ROW Dialog_="UserRegistrationDlg" Control="MachineNameEdit" Type="Edit" X="17" Y="201" Width="314" Height="18" Attributes="3" Property="MACHINE_NAME" Text="{888}" Order="1500"/>
     <ROW Dialog_="VerifyReadyDlg" Control="Cancel" Type="ImageButton" X="163" Y="359" Width="78" Height="28" Attributes="2" Text="[NextCancelButtons]" TextStyle="[MetroButtonText]" Order="100" MsiKey="VerifyReadyDlg#Cancel" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Cancel]" ExtDataLocId="-"/>
     <ROW Dialog_="VerifyReadyDlg" Control="Back" Type="PushButton" X="5" Y="381" Width="11" Height="11" Attributes="2" Text="Control.Text.VerifyReadyDlg#Back" Help="Back|" Order="200" TextLocId="Control.Text.VerifyReadyDlg#Back" HelpLocId="Air.Control.Help#Back" MsiKey="VerifyReadyDlg#Back" Options="1" ExtType="PushButton" ExtData="[ButtonText_Back]" ExtDataLocId="-"/>
     <ROW Dialog_="VerifyReadyDlg" Control="Bitmap" Type="Bitmap" X="5" Y="5" Width="345" Height="400" Attributes="1" Text="[Background]" Order="300" MsiKey="VerifyReadyDlg#Bitmap"/>
@@ -545,7 +556,7 @@
     <ROW Dialog_="WelcomePrereqDlg" Control="Bitmap" Type="Bitmap" X="5" Y="5" Width="345" Height="400" Attributes="1" Text="[Background]" Order="200" MsiKey="WelcomePrereqDlg#Bitmap"/>
     <ROW Dialog_="WelcomePrereqDlg" Control="Description" Type="Text" X="17" Y="139" Width="312" Height="79" Attributes="196611" Text="The setup has determined that some of the prerequisites needed to run [ProductName] are missing. This wizard will assist you in getting and installing those prerequisites. Click &quot;[Text_Next]&quot; to continue or &quot;[ButtonText_Cancel]&quot; to exit the [Wizard]." Order="800" TextLocId="Control.Text.WelcomePrereqDlg#Description" MsiKey="WelcomePrereqDlg#Description"/>
     <ROW Dialog_="WelcomePrereqDlg" Control="SubTitle" Type="Text" X="17" Y="105" Width="312" Height="34" Attributes="196611" Text="Welcome to the Prerequisites [Wizard]" TextStyle="[SubTitleStyle]" Order="900" TextLocId="Control.Text.WelcomePrereqDlg#SubTitle" MsiKey="WelcomePrereqDlg#SubTitle"/>
-    <ATTRIBUTE name="DeletedRows" value="InstallDlg.aip"/>
+    <ATTRIBUTE name="DeletedRows" value="UserRegistrationDlg#OrganizationEdit@UserRegistrationDlg#OrganizationLabel"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlConditionComponent">
     <ROW Dialog_="InstallDlg" Control_="InstallButton" Action="Enable" Condition="AGREE_CHECKBOX"/>
@@ -600,6 +611,7 @@
     <ROW Dialog_="PrerequisitesDlg" Control_="Back" Event="NewDialog" Argument="WelcomePrereqDlg" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
     <ROW Dialog_="NewSeqDialog" Control_="Cancel" Event="SpawnDialog" Argument="CancelDlg" Condition="1" Ordering="100"/>
     <ROW Dialog_="UserRegistrationDlg" Control_="Next" Event="[SITE_HASH]" Argument="[PIDKEY]" Condition="AI_INSTALL AND ( SERIAL_VALIDATION=&quot;TRUE&quot; )" Ordering="305"/>
+    <ROW Dialog_="LanguageDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
     <ATTRIBUTE name="DeletedRows" value="InstallDlg#InstallButton#SetTargetPath#APPDIR#AI_INSTALL@InstallDlg#InstallButton#[AiEventsControl]#Next#1@InstallDlg#YouMustAgreeCtrl#[AiLicenseAgreement]#1#AI_INSTALL"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
@@ -809,14 +821,14 @@
     <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Threading.Channels.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Threading.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Threading.ThreadPool.dll"/>
-    <ROW Feature_="MainFeature" Component_="ucrtbase.dll"/>
-    <ROW Feature_="MainFeature" Component_="WorkerService.dll"/>
     <ROW Feature_="MainFeature" Component_="WorkerService.exe"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
     <ROW Feature_="MainFeature" Component_="AI_IA_ENABLE"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="System.Threading.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Threading.ThreadPool.dll"/>
+    <ROW Feature_="MainFeature" Component_="ucrtbase.dll"/>
+    <ROW Feature_="MainFeature" Component_="WorkerService.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>

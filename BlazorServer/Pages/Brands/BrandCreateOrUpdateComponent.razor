@@ -13,13 +13,17 @@
 
     @if (FModel != null)
     {
+        <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
         @if (EditModel == null)
         {
-            <h3>Add New Brand</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>("Add New Brand", "", true));
         }
         else
         {
-            <h3>Edit Brand with id @FModel.Id</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>($"Edit Brand {FModel.Id}", "", true));
         }
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
@@ -45,6 +49,14 @@
 </div>
 
 @code {
+
+    private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Brands", "/Brands", true )
+    };
+
+
     public BrandCreateFM FModel { get; set; } = null;
     [Parameter]
     public BrandCreateFM EditModel { get; set; }

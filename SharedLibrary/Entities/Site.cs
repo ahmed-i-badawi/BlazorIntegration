@@ -25,10 +25,16 @@ public class Site : AuditableEntity
         get { return SiteZones?.Count ?? 0; }
         private set { /* needed for EF */ }
     }
-    public bool IsCallCenter { get; set; }
-    //toDo list of machines
-    public Machine Machine { get; set; }
 
+    public bool IsCallCenter { get; set; }
+    public List<Machine>? Machines { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public int ActualNumberOfMachines
+    {
+        get { return Machines?.Count ?? 0; }
+        private set { /* needed for EF */ }
+    }
+    public int MaxNumberOfMachines { get; set; }
     public string? ApplicationUserId { get; set; }
     public ApplicationUser? ApplicationUser { get; set; }
 }

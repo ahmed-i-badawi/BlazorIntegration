@@ -19,6 +19,8 @@ public class SiteCreateCommand
     public string? UserName { get; set; }
     public string? Password { get; set; }
     public string? Email { get; set; }
+
+    public int MaxNumberOfMachines { get; set; }
 }
 
 public class SiteCreateFM : SiteCreateCommand
@@ -37,5 +39,7 @@ public class SiteCreateFMValidator : AbstractValidator<SiteCreateFM>
         RuleFor(o => o.Email).NotEmpty();
         RuleFor(o => o.UserName).NotEmpty();
         RuleFor(o => o.Password).NotEmpty().When(e=>string.IsNullOrWhiteSpace(e.HashString));
+
+        RuleFor(o => o.MaxNumberOfMachines).NotEmpty();
     }
 }

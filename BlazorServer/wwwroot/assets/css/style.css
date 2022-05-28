@@ -888,7 +888,7 @@ a.dt-button.active:not(.disabled) {
   margin: 0;
   padding: 15px;
   background: transparent;
-  float: right;
+  float: left;
 }
 .main .page-header .breadcrumb li.active {
   font-family: 'Roboto', sans-serif;
@@ -898,7 +898,7 @@ a.dt-button.active:not(.disabled) {
 .main .page-header .breadcrumb li a {
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
-  display: block;
+  /*display: block;*/
 }
 .dropdown-task .progress {
   height: 5px;

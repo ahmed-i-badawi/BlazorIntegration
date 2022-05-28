@@ -6,6 +6,10 @@
 @inject IHttpContextAccessor httpContextAccessor;
 @using SharedLibrary.Constants;
 
+<div>
+    <BreadCrumbComponent Items="BreadCrumbItems" />
+</div>
+
 <div class="col-lg-12 control-section">
     <SfTab CssClass="default-tab" LoadOn="ContentLoad.Demand">
         <TabItems>
@@ -72,5 +76,13 @@
     </SfTab>
 </div>
 @code {
+
+    private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Logs", "/Logs", true )
+    };
+
+
     public string SiteUserId { get; set; }
 }

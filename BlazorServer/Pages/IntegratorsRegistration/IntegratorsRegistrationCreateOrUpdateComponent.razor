@@ -13,13 +13,18 @@
 
     @if (FModel != null)
     {
+        <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
         @if (EditModel == null)
         {
-            <h3>Add New Integrator</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>("Add New Integrator", "", true));
+
         }
         else
         {
-            <h3>Edit Integrator with hash @FModel.Hash</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>($"Edit Integrator {FModel.Hash}", "", true));
         }
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
@@ -45,6 +50,14 @@
 </div>
 
 @code {
+
+    private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Integrators", "/Integrators", true )
+    };
+
+
     public IntegratorsRegistrationCreateFM FModel { get; set; } = null;
     [Parameter]
     public IntegratorsRegistrationCreateFM EditModel { get; set; }

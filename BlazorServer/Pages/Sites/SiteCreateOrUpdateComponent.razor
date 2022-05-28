@@ -15,13 +15,17 @@
 
     @if (FModel != null)
     {
+        <div>
+            <BreadCrumbComponent Items="BreadCrumbItems" />
+        </div>
+
         @if (EditModel == null)
         {
-            <h3>Add New Site</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>("Add New Site", "", true));
         }
         else
         {
-            <h3>Edit Site with Hash @FModel.HashString</h3>
+            BreadCrumbItems.Add(new Tuple<string, string, bool>($"Edit Site{FModel.HashString}", "", true));
         }
 
         <EditForm OnValidSubmit="Submit" Model="FModel">
@@ -65,7 +69,12 @@
                 </div>
 
             </div>
-
+            <div class="row">
+                <div class="col-6">
+                    <InputNumber id="MaxNumberOfMachines" class="form-control" @bind-Value="@FModel.MaxNumberOfMachines" placeholder="MaxNumberOfMachines" /><br />
+                    <ValidationMessage For="() => FModel.MaxNumberOfMachines"></ValidationMessage>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <InputText id="Notes" class="form-control" @bind-Value="@FModel.Notes" placeholder="Notes" /><br />
@@ -81,6 +90,11 @@
 
 @code {
 
+    private List<Tuple<string, string, bool>> BreadCrumbItems { get; set; } = new List<Tuple<string, string, bool>>()
+    {
+        new Tuple<string, string, bool>("Dashboard", "/", false ),
+        new Tuple<string, string, bool>("Sites", "/Sites", true )
+    };
 
     SfTextBox TextPasswordObj;
 

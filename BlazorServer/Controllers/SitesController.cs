@@ -86,7 +86,7 @@ namespace BlazorServer.Controllers
             var query = _context.Sites.AsQueryable();
 
             query = await query.FilterBy(dm);
-            query = query.Include(e => e.Brand).Include(e => e.Machine)
+            query = query.Include(e => e.Brand).Include(e => e.Machines)
                 .Include(e => e.SiteZones).ThenInclude(e => e.Zone).Include(e => e.ApplicationUser);
             int count = await query.CountAsync();
             query = await query.PageBy(dm);
@@ -123,39 +123,31 @@ namespace BlazorServer.Controllers
             {
                 isPasswordAdded = await _identityService.SetUserPasswrod(command.ApplicationUserId, command.Password);
             }
-            if (isPasswordAdded.Value)
-            {
-                Site commnad = _mapper.Map<Site>(command);
-                Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);
 
-                if (db != null)
+            Site commnad = _mapper.Map<Site>(command);
+            Site db = _context.Sites.FirstOrDefault(e => e.Id == command.Id);
+
+            if (db != null)
+            {
+                if (command.MaxNumberOfMachines < db.ActualNumberOfMachines)
                 {
-                    db.Name = command.Name;
-                    db.Notes = command.Notes;
-                    db.Address = command.Address;
-                    db.BrandId = command.BrandId;
+                    return Ok(false);
                 }
 
-                await _context.SaveChangesAsync();
-                return Ok(true);
+                db.Name = command.Name;
+                db.Notes = command.Notes;
+                db.Address = command.Address;
+                db.BrandId = command.BrandId;
+                db.MaxNumberOfMachines = command.MaxNumberOfMachines;
             }
+
+            await _context.SaveChangesAsync();
+            return Ok(true);
 
             return Ok(false);
         }
 
-        private async Task SendSiteRegisterationMail(Site dbSite)
-        {
-            if (string.IsNullOrWhiteSpace(dbSite.ApplicationUser.Email))
-            {
-                return;
-            }
-            EmailMessageModel mailMessage = new EmailMessageModel(
-       dbSite.ApplicationUser.Email,
-       $"Site registeration details",
-       $"you have registered with hash: {dbSite.Hash}, User Name: {dbSite.ApplicationUser.UserName}, Password: 11111111");
 
-            await _emailService.SendEmail(mailMessage);
-        }
 
         [HttpPost]
         public async Task<ActionResult<bool>> PostSite(SiteCreateCommand command)
@@ -179,7 +171,7 @@ namespace BlazorServer.Controllers
                 _context.Sites.Add(Site);
                 await _context.SaveChangesAsync();
 
-                await SendSiteRegisterationMail(Site);
+                await _emailService.SendSiteRegisterationMail(Site);
 
                 return Ok(true);
             }

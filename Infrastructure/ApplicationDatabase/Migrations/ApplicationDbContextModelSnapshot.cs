@@ -319,7 +319,7 @@ namespace ApplicationDatabase.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SiteId")
+                    b.Property<int>("SiteId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -328,9 +328,7 @@ namespace ApplicationDatabase.Migrations
                         .IsUnique()
                         .HasFilter("[FingerPrint] IS NOT NULL");
 
-                    b.HasIndex("SiteId")
-                        .IsUnique()
-                        .HasFilter("[SiteId] IS NOT NULL");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("Machines");
                 });
@@ -342,6 +340,10 @@ namespace ApplicationDatabase.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ActualNumberOfMachines")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -372,6 +374,9 @@ namespace ApplicationDatabase.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxNumberOfMachines")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -511,8 +516,10 @@ namespace ApplicationDatabase.Migrations
             modelBuilder.Entity("SharedLibrary.Entities.Machine", b =>
                 {
                     b.HasOne("SharedLibrary.Entities.Site", "Site")
-                        .WithOne("Machine")
-                        .HasForeignKey("SharedLibrary.Entities.Machine", "SiteId");
+                        .WithMany("Machines")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Site");
                 });
@@ -565,8 +572,7 @@ namespace ApplicationDatabase.Migrations
 
             modelBuilder.Entity("SharedLibrary.Entities.Site", b =>
                 {
-                    b.Navigation("Machine")
-                        .IsRequired();
+                    b.Navigation("Machines");
 
                     b.Navigation("SiteZones");
                 });
