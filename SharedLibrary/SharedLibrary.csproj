@@ -10,6 +10,8 @@
 	  <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
 	  <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
+	  <PackageReference Include="Syncfusion.Blazor.Data" Version="18.4.0.39" />
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 
 </Project>

@@ -62,7 +62,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
 		<PackageReference Include="System.Management" Version="6.0.0" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
 		<PackageReference Include="FluentValidation" Version="9.5.4" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="9.5.4" />
 		<PackageReference Include="Accelist.FluentValidation.Blazor" Version="4.0.0" />

@@ -19,7 +19,6 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddTransient<IDateTime, DateTimeService>();
-        services.AddTransient<IIdentityService, IdentityService>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(

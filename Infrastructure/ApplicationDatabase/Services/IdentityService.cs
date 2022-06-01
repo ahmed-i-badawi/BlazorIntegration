@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Models;
 using SharedLibrary.Entities;
+using Syncfusion.Blazor;
+using SharedLibrary.Dto;
+using SharedLibrary.Extensions;
+using AutoMapper;
+using SharedLibrary.Enums;
 
 namespace Infrastructure.ApplicationDatabase.Services;
 
@@ -12,15 +17,17 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
+    private readonly IMapper _mapper;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService)
+        IAuthorizationService authorizationService, IMapper mapper)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
+        _mapper = mapper;
     }
 
     public async Task<string> GetUserNameAsync(string userId)
@@ -30,6 +37,19 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
+    public async Task<ResultDto<ApplicationUserDto>> GetUsers(DataManagerRequest dm)
+    {
+        var query = _userManager.Users.AsQueryable();
+
+        query = await query.FilterBy(dm);
+        int count = await query.CountAsync();
+        query = await query.PageBy(dm);
+        List<ApplicationUserDto> data = _mapper.Map<List<ApplicationUserDto>>(query.ToList());
+        ResultDto<ApplicationUserDto> res = new ResultDto<ApplicationUserDto>(data, count);
+
+        return res;
+    }
+
     public async Task<bool> IsUserNameOrMailExist(string userName, string mail)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName || u.Email == mail);
@@ -37,13 +57,16 @@ public class IdentityService : IIdentityService
         return user != null;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, bool isEmailConfirmed = true, string mail = default)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(
+        string userName, string password, bool isEmailConfirmed = true, string mail = default, bool isActive = false, string fullName = default)
     {
         var user = new ApplicationUser
         {
             UserName = userName,
             Email = !string.IsNullOrWhiteSpace(mail) ? userName + "@mail.com" : mail,
-            EmailConfirmed = isEmailConfirmed
+            EmailConfirmed = isEmailConfirmed,
+            IsActive = isActive,
+            FullName = fullName
         };
         try
         {
@@ -55,7 +78,6 @@ public class IdentityService : IIdentityService
         }
         catch (Exception ex)
         {
-
             throw;
         }
 

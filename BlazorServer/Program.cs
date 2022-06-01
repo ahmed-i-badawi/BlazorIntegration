@@ -29,6 +29,7 @@ using Infrastructure.ApplicationDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase.Common.Interfaces;
 using Infrastructure.LogDatabase;
 using System.Security.Principal;
+using Infrastructure.ApplicationDatabase.Services;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
@@ -187,6 +188,8 @@ builder.Services
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<PlaceHolderClass>();
+builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddTransient<ILookupService, LookupService>();
 
 
 var emailConfig = configuration

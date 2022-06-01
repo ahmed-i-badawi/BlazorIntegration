@@ -12,3 +12,10 @@ public enum MachineStatus
     Closed = 2,
 }
 
+public enum UserType
+{
+    NotDefined = 0,
+    Site = 1,
+    Integrator = 2,
+}
+
