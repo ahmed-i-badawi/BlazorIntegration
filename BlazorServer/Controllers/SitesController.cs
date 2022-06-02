@@ -202,7 +202,7 @@ namespace BlazorServer.Controllers
             return Ok(false);
         }
 
-
+             
 
         [HttpPost]
         public async Task<ActionResult<bool>> PostSite(SiteCreateCommand command)
@@ -227,9 +227,9 @@ namespace BlazorServer.Controllers
                 await _context.SaveChangesAsync();
 
                 await _emailService.SendSiteRegisterationMail(
-                    Site.ApplicationUser.Email,
+                    command.Email,
                     Site.HashString,
-                    Site.ApplicationUser.UserName,
+                    command.UserName,
                     command.Password);
 
                 return Ok(true);

@@ -83,9 +83,9 @@ public class IdentityService : IIdentityService
         try
         {
             //var result = await _userManager.CreateAsync(user, password);
-            var result = _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(user, password);
 
-            return (result.Result.ToApplicationResult(), user.Id);
+            return (result.ToApplicationResult(), user.Id);
             //return (result.ToApplicationResult(), user.Id);
         }
         catch (Exception ex)
