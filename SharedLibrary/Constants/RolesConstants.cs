@@ -10,5 +10,6 @@ namespace SharedLibrary.Constants
     {
         public const string Admin = "ADMINISTRATOR";
         public const string Site = "SITE";
+        public const string Integrator = "INTEGRATOR";
     }
 }

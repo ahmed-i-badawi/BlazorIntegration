@@ -7,6 +7,7 @@
 @using AutoMapper;
 @using SharedLibrary.Arguments
 @inject IMapper _mapper
+@using SharedLibrary.Enums
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 
@@ -58,7 +59,6 @@
                     </div>
                     <ValidationMessage For="() => FModel.ConfirmPassword"></ValidationMessage>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-6">
@@ -70,15 +70,44 @@
                     <ValidationMessage For="() => FModel.IsActive"></ValidationMessage>
                 </div>
             </div>
-        @*    <div class="row">
+            <div class="row">
                 <div class="col-6">
                     <SfDropDownList TValue="int" TItem="LookupDto" @bind-Value="@FModel.UserType" AllowFiltering="true" Placeholder="Select a User Type">
                         <SfDataManager Url="@($"api/Lookup/GetLookup?Key={(int)LookupEnums.UserTypes}")" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                         <DropDownListFieldSettings Text="Name" Value="Id" />
+                        <DropDownListEvents TValue="int" TItem="LookupDto" ValueChange="UserTypeOnChange"></DropDownListEvents>
                     </SfDropDownList>
                     <ValidationMessage For="() => FModel.UserType"></ValidationMessage>
                 </div>
-            </div>*@
+                <div class="col-6">
+                    @if (FModel.UserType == (int)UserType.Site)
+                    {
+                        <SfDropDownList TValue="int?" TItem="SiteDto" @bind-Value="@FModel.SiteId" AllowFiltering="true" Query="SiteRemoteDataQuery" Placeholder="Select a Site">
+                            <SfDataManager Url="api/UsersManagement/GetSitesDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                            <DropDownListFieldSettings Text="Name" Value="Id" />
+                        </SfDropDownList>
+                        <ValidationMessage For="() => FModel.SiteId"></ValidationMessage>
+                    }
+                    else if (FModel.UserType == (int)UserType.Integrator)
+                    {
+                        <SfDropDownList TValue="string" TItem="IntegratorsDto" @bind-Value="@FModel.IntegratorHash" AllowFiltering="true" Query="IntegratorRemoteDataQuery" Placeholder="Select an Integrator">
+                            <SfDataManager Url="api/UsersManagement/GetIntegratorsDropDownList" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                            <DropDownListFieldSettings Text="Name" Value="Hash" />
+                        </SfDropDownList>
+                        <ValidationMessage For="() => FModel.IntegratorHash"></ValidationMessage>
+                    }
+                </div>
+            </div>
+              <div class="row">
+                <div class="col-6">
+                </div>
+                <div class="col-6">
+                    <input readonly="@IsEdit" type="checkbox" id="IsSendMail" class="form-control" @bind-value="@FModel.IsSendMail" placeholder="IsSendMail" /><br />
+                    <ValidationMessage For="() => FModel.IsSendMail"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                </div>
+            </div>
 
             <button id="Save" type="submit" class="btn btn-primary">Submit</button>
             <button id="Cancel" type="button" @onclick="CancelClick" class="btn btn-danger">Cancel</button>
@@ -133,8 +162,14 @@
 
     public bool IsEdit { get; set; } = false;
 
+    public Query SiteRemoteDataQuery = new Query();
+    public Query IntegratorRemoteDataQuery = new Query();
+
     protected override async Task OnInitializedAsync()
     {
+        SiteRemoteDataQuery.AddParams("take", 6);
+        IntegratorRemoteDataQuery.AddParams("take", 6);
+
         if (EditModel == null)
         {
             IsEdit = false;
@@ -144,8 +179,19 @@
         {
             IsEdit = true;
             FModel = _mapper.Map<UserCreateFM>(EditModel);
+            SiteRemoteDataQuery.AddParams("selectedId", FModel.SiteId);
+            IntegratorRemoteDataQuery.AddParams("selectedId", FModel.IntegratorHash);
         }
     }
+
+    public async Task UserTypeOnChange(ChangeEventArgs<int, LookupDto> args)
+    {
+        FModel.IntegratorHash = null;
+        FModel.SiteId = null;
+
+        //var obj = args.ItemData;
+    }
+
     public async Task CancelClick()
     {
         OnCancelClicked.InvokeAsync();

@@ -58,7 +58,9 @@ public class IdentityService : IIdentityService
     }
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(
-        string userName, string password, bool isEmailConfirmed = true, string mail = default, bool isActive = false, string fullName = default)
+        string userName, string password, bool isEmailConfirmed = true, string mail = default,
+        bool isActive = false, string fullName = default, UserType userType = UserType.NotDefined,
+        int? siteId = null, string integratorId = default)
     {
         var user = new ApplicationUser
         {
@@ -66,8 +68,18 @@ public class IdentityService : IIdentityService
             Email = !string.IsNullOrWhiteSpace(mail) ? userName + "@mail.com" : mail,
             EmailConfirmed = isEmailConfirmed,
             IsActive = isActive,
-            FullName = fullName
+            FullName = fullName,
         };
+
+        if (userType == UserType.Site && siteId != null)
+        {
+            user.SiteId = siteId;
+        }
+        else if (userType == UserType.Integrator && !string.IsNullOrWhiteSpace(integratorId))
+        {
+            user.IntegratorId = integratorId;
+        }
+
         try
         {
             //var result = await _userManager.CreateAsync(user, password);
@@ -137,9 +149,21 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<Result> DeleteUserAsync(string userId)
+    public async Task<Result> DeleteUserAsync(string userId, bool checkOnUserType = false)
     {
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+
+        if (checkOnUserType)
+        {
+            if (user.UserType == UserType.Site)
+            {
+                return Result.Failure(new List<string>() { "User is a site" });
+            }
+            else if (user.UserType == UserType.Integrator)
+            {
+                return Result.Failure(new List<string>() { "User is an integrator" });
+            }
+        }
 
         return user != null ? await DeleteUserAsync(user) : Result.Success();
     }

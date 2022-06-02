@@ -17,4 +17,7 @@ public class Integrator : AuditableEntity
 
     public string Name { get; set; }
     public string? Notes { get; set; }
+
+    public string? ApplicationUserId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
 }

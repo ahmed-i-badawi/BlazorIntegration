@@ -11,11 +11,11 @@ public class ApplicationUser : IdentityUser
     {
         get
         {
-            if (Site != null)
+            if (SiteId != null)
             {
                 return UserType.Site;
             }
-            else if (Integrator != null)
+            else if (IntegratorId != null)
             {
                 return UserType.Integrator;
             }
@@ -25,7 +25,10 @@ public class ApplicationUser : IdentityUser
         private set { }
     }
 
+    public int? SiteId { get; set; }
     public Site? Site { get; set; }
+
+    public string? IntegratorId { get; set; }
     public Integrator? Integrator { get; set; }
 
 }

@@ -12,7 +12,8 @@ public interface IEmailService
 {
     Task SendEmail(EmailMessageModel message);
     Task SendMachineRegisterationMail(Machine dbMachine);
-    Task SendSiteRegisterationMail(Site dbSite);
+    Task SendSiteRegisterationMail(string email, string hash, string userName, string password);
+    Task SendIntegratorRegisterationMail(string email, string hash, string userName, string password);
 
 }
 
@@ -25,16 +26,31 @@ public class EmailService : IEmailService
         _emailConfig = emailConfig;
     }
 
-    public async Task SendSiteRegisterationMail(Site dbSite)
+    public async Task SendIntegratorRegisterationMail(string email, string hash, string userName, string password)
     {
-        if (string.IsNullOrWhiteSpace(dbSite.ApplicationUser.Email))
+        if (string.IsNullOrWhiteSpace(email))
         {
             return;
         }
         EmailMessageModel mailMessage = new EmailMessageModel(
-   dbSite.ApplicationUser.Email,
+   email,
+   $"Integrator registeration details",
+   $"you have registered with hash: {hash}, User Name: {userName}, Password: {password}");
+
+        await this.SendEmail(mailMessage);
+    }
+
+
+    public async Task SendSiteRegisterationMail(string email, string hash, string userName, string password)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return;
+        }
+        EmailMessageModel mailMessage = new EmailMessageModel(
+   email,
    $"Site registeration details",
-   $"you have registered with hash: {dbSite.Hash}, User Name: {dbSite.ApplicationUser.UserName}, Password: 11111111");
+   $"you have registered with hash: {hash}, User Name: {userName}, Password: {password}");
 
         await this.SendEmail(mailMessage);
     }

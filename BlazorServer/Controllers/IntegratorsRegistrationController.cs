@@ -34,6 +34,62 @@ namespace BlazorServer.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
+        public object GetIntegratorsDropDownList([FromQuery] string Name)
+        {
+            var query = _context.Integrators.AsQueryable().AsNoTracking();
+            var queryString = Request.Query;
+
+            int.TryParse(queryString["take"], out int take);
+            string selectedId = queryString["selectedId"];
+            string filter = queryString["$filter"];
+
+            if (filter != null) // to handle filter opertaion 
+            {
+                var newfiltersplits = filter;
+                var filtersplits = newfiltersplits.Split('(', ')', ' ', '\'');
+                var filterfield = filtersplits[2];
+                var filtervalue = filtersplits[4];
+
+                if (filtersplits.Length == 7)
+                {
+                    if (filtersplits[2] == "tolower")
+                    {
+                        filterfield = filter.Split('(', ')', '\'')[3];
+                        filtervalue = filter.Split('(', ')', '\'')[5];
+                    }
+                }
+                switch (filterfield)
+                {
+                    case "Name":
+                        query = query.Where(x => x.Name.ToLower().Contains(filtervalue.ToString()));
+                        break;
+                }
+            }
+
+            List<IntegratorsDto> data = new List<IntegratorsDto>();
+
+            if (!string.IsNullOrWhiteSpace(selectedId))
+            {
+                var selectedObj = query.FirstOrDefault(x => x.Hash == selectedId);
+
+                query = query.Take(take - 1);
+
+                var dbData = query.ToList();
+                dbData.Insert(0, selectedObj);
+                data = _mapper.Map<List<IntegratorsDto>>(dbData);
+            }
+            else
+            {
+                query = query.Take(take);
+                data = _mapper.Map<List<IntegratorsDto>>(query.ToList());
+            }
+
+
+            return data;
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> GetIntegrators([FromBody] DataManagerRequest dm)
         {
